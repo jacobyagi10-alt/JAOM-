@@ -1,49 +1,26 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>JAOM – VERIFIED PREMIUM • JUBA ESCROW 🇸🇸</title>
-<style>
-*{box-sizing:border-box;font-family:Arial} body{margin:0;background:#fff;color:#111}
-header{background:#fff;border-bottom:3px solid #C9A227;padding:12px;text-align:center;position:sticky;top:0;z-index:10}
-.logo{font-size:28px;font-weight:900;letter-spacing:2px}.logo span{color:#C9A227}
-.gold{background:#C9A227;color:#fff;border:none;padding:12px;border-radius:10px;width:100%;font-weight:bold;margin:6px 0}
-.black{background:#111;color:#fff;border:none;padding:12px;border-radius:10px;width:100%;font-weight:bold;margin:6px 0}
-.card{border:1.5px solid #C9A227;border-radius:14px;padding:12px;margin:10px}
-input,select{width:100%;padding:11px;margin:6px 0;border:1.5px solid #C9A227;border-radius:10px}
-.badge{background:#C9A227;color:#fff;padding:3px 8px;border-radius:20px;font-size:12px}
-.nav{display:flex;gap:6px;padding:10px;overflow:auto} .nav button{flex:1;background:#111;color:#fff;border:none;padding:10px;border-radius:20px;white-space:nowrap}
-.nav button.active{background:#C9A227} .hidden{display:none} .flex{display:flex;justify-content:space-between}
-.escrow{background:#FFF8DC;border:1px dashed #C9A227;padding:10px;border-radius:10px;margin:10px 0;font-size:13px}
-</style></head>
-<body>
-<header><div class="logo">JA<span>OM</span> 🇸🇸</div><div style="font-size:11px;letter-spacing:1px">VERIFIED PREMIUM • JUBA ESCROW</div>
-<div class="flex" style="margin-top:8px"><select id="lang" onchange="setLang()"><option value="en">English</option><option value="ar">Arabic - العربية</option><option value="sw">Kiswahili</option></select>
-<select id="cur" onchange="render()"><option value="SSP">SSP - South Sudanese Pound</option><option value="USD">USD - US Dollar</option></select></div></header>
-
-<div id="auth" class="card">
-<h3 id="t-login">Login / Create Account</h3>
-<input id="phone" placeholder="Phone: +211 9XX XXX XXX"><input id="pin" type="password" placeholder="PIN / Password (4+ digits)">
-<button class="black" onclick="login()">Login</button>
-<button class="gold" onclick="sendOTP()">Send OTP Code</button>
-<input id="otp" placeholder="Enter OTP - Demo: 1234">
-<button class="black" onclick="verifyOTP()">Verify OTP</button>
-<p><a href="#" onclick="forgot()">Forgot Password / PIN?</a> | <a href="#" onclick="recover()">Account Recovery</a></p>
-<p id="authMsg" style="color:green"></p><p style="font-size:12px;color:#888">Security: Locked after 3 wrong attempts. Demo OTP is 1234 until real SMS is connected.</p>
-</div>
-
-<div class="nav">
-<button onclick="show('market',this)" class="active">Marketplace</button>
-<button onclick="show('deals',this)">My Deals</button>
-<button onclick="show('sellers',this)">Verified Sellers</button>
-<button onclick="show('escrow',this)">Escrow</button>
-<button onclick="show('admin',this)">Admin</button>
-</div>
-
-<div id="market">
-<div class="card"><input id="search" placeholder="🔍 Search products..." oninput="render()"><select id="cat" onchange="render()"><option value="All">All Categories</option><option>Phones</option><option>Clothes</option><option>Food</option><option>Electronics</option></select>
-<select id="filterPrice" onchange="render()"><option value="All">All Prices</option><option value="low">Low to High</option><option value="high">High to Low</option></select></div>
-<div id="products"></div>
-</div>
-
-<div id="deals" class="hidden"><div class="card"><h3>My Deals</h3><div id="dealsList">No orders yet. Buy something to see it here.</div><button class="gold" onclick="alert('Receipt downloaded (Demo)')">Download Receipt</button></div></div>
-
-<div id="sellers" class="hidden"><div class="card"><h3>Verified Sellers ✓</h3><p><b>Ahmed Store Juba</b> <span class="badge">✓ VERIFIED</span> ⭐ 4.9 (120 sales) - Juba, Konyo Konyo - +211 920 000 111 <button onclick="alert('Seller reported. Admin will review.')">Report</button></p><p><b>Mama
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JAOM 🇸🇸</title>
+<style>body{margin:0;font-family:Arial;background:#fff}header{text-align:center;padding:12px;border-bottom:3px solid #C9A227}.logo{font-size:32px;font-weight:900}.logo b{color:#C9A227}.card{border:1.5px solid #C9A227;border-radius:14px;padding:12px;margin:10px}input,select{width:100%;padding:12px;margin:6px 0;border:1.5px solid #C9A227;border-radius:10px;box-sizing:border-box}.gold{background:#C9A227;color:#fff;border:none;padding:13px;width:100%;border-radius:10px;font-weight:bold}.black{background:#111;color:#fff;border:none;padding:13px;width:100%;border-radius:10px;font-weight:bold}.nav{display:flex;gap:6px;padding:10px;overflow:auto}.nav button{background:#111;color:#fff;border:none;padding:10px 14px;border-radius:20px;white-space:nowrap}.nav button.on{background:#C9A227}.hide{display:none}</style></head>
+<body><header><div class="logo">JA<b>OM</b> 🇸🇸</div><div>VERIFIED PREMIUM • JUBA ESCROW</div><div style="display:flex;gap:6px;margin-top:8px"><select id="lang"><option>English</option><option>العربية - Arabic</option><option>Kiswahili</option></select><select id="cur" onchange="showP()"><option>SSP</option><option>USD</option></select></div></header>
+<div class="card"><h3>Login / Create Account</h3><input id="ph" placeholder="Phone: +211 9XX XXX XXX"><input id="pin" type="password" placeholder="PIN (4+ digits) - Demo: 1234"><button class="black" onclick="doLogin()">Login</button><button class="gold" onclick="doOTP()">Send OTP Code</button><input id="otp" placeholder="Enter OTP - Demo: 1234"><button class="black" onclick="doVerify()">Verify OTP</button><p><a href="#" onclick="doForgot();return false">Forgot Password / PIN?</a> | <a href="#" onclick="doRec();return false">Account Recovery</a></p><p id="msg" style="color:green"></p></div>
+<div class="nav"><button id="b1" class="on" onclick="tab('m','b1')">Marketplace</button><button id="b2" onclick="tab('d','b2')">My Deals</button><button id="b3" onclick="tab('s','b3')">Verified Sellers</button><button id="b4" onclick="tab('e','b4')">Escrow</button><button id="b5" onclick="tab('a','b5')">Admin</button></div>
+<div id="m"><div class="card"><input id="sr" placeholder="🔍 Search products..." oninput="showP()"><select id="ct" onchange="showP()"><option>All Categories</option><option>Phones</option><option>Clothes</option><option>Food</option><option>Electronics</option></select></div><div id="plist"></div></div>
+<div id="d" class="hide"><div class="card"><h3>My Deals</h3><div id="deals">No orders yet.</div><button class="gold" onclick="alert('Receipt - JAOM Juba Escrow')">Download Receipt</button></div></div>
+<div id="s" class="hide"><div class="card"><h3>Verified Sellers ✓</h3><p><b>Ahmed Store Juba</b> ⭐ 4.9 - 120 sales - Juba <button onclick="alert('Seller reported to Admin')">Report</button></p><p><b>Mama Market</b> ⭐ 4.8 - 89 sales</p><h4>Become Verified Seller</h4><input placeholder="Your Name"><input placeholder="ID / Business Name"><button class="black" onclick="alert('Verification submitted!')">Submit Verification</button></div></div>
+<div id="e" class="hide"><div class="card"><h3>JAOM Escrow Protection</h3><p style="background:#FFF8DC;padding:10px;border:1px dashed #C9A227">Demo Mode: Real escrow activates when payment is connected.</p><p>1. Buyer pays → JAOM holds money<br>2. Seller delivers<br>3. Buyer confirms receipt<br>4. JAOM releases to seller - 5% commission</p><p><b>Fee: 5% only.</b></p><button class="gold" onclick="confirmR()">I Received Product - Release Payment</button><button class="black" onclick="alert('Dispute opened. Admin will contact you.')">Dispute / Refund</button><p id="estat">Payment: Waiting</p></div></div>
+<div id="a" class="hide"><div class="card"><h3>Admin Dashboard</h3><p>Users: 245 | Buyers: 180 | Sellers: 65</p><p>Products: <span id="ap">5</span> | Completed: <span id="ac">0</span></p><p>JAOM Commission (5%): <b id="acom">0 SSP</b></p><button class="gold" onclick="alert('Seller Approved')">Approve Seller</button><button class="black" onclick="alert('Dispute resolved')">Manage Disputes</button></div></div>
+<div class="card"><button class="black" onclick="location.reload()">Secure Logout</button><p style="text-align:center;font-size:11px">JAOM © 2026 Juba 🇸🇸</p></div>
+<script>
+var P=[{n:"iPhone 13 Pro",p:850000,c:"Phones",l:"Juba - Hai Cinema",d:"256GB, Battery 89%",e:"📱",s:"In Stock"},{n:"Samsung A54",p:420000,c:"Phones",l:"Juba - Konyo Konyo",d:"128GB, Dual SIM",e:"📱",s:"In Stock"},{n:"Men Jacket",p:45000,c:"Clothes",l:"Juba - Atlabara",d:"Premium Jacket",e:"🧥",s:"In Stock"},{n:"Rice 50kg",p:95000,c:"Food",l:"Juba - Custom",d:"Quality Rice",e:"🍚",s:"Low Stock"},{n:"Solar Panel 200W",p:180000,c:"Electronics",l:"Juba - Munuki",d:"With controller",e:"🔋",s:"In Stock"}];
+var orders=[],comm=0;
+function fmt(v){return document.getElementById('cur').value==='USD'?'$'+(v/3800).toFixed(2)+' USD':v.toLocaleString()+' SSP';}
+function showP(){var q=document.getElementById('sr').value.toLowerCase();var ct=document.getElementById('ct').value;var html='';for(var i=0;i<P.length;i++){var p=P[i];if((p.n.toLowerCase().indexOf(q)>-1||p.d.toLowerCase().indexOf(q)>-1)&&(ct==='All Categories'||p.c===ct)){html+='<div class="card"><div style="font-size:36px">'+p.e+'</div><b>'+p.n+'</b> - '+p.s+'<p>'+p.d+'</p><p>'+p.c+' | 📍 '+p.l+'</p><h3>'+fmt(p.p)+'</h3><p style="font-size:12px">Commission 5%: '+fmt(p.p*0.05)+' | Seller Gets: '+fmt(p.p*0.95)+'</p><button class="gold" onclick="buy('+i+')">Buy with Escrow</button></div>';}}document.getElementById('plist').innerHTML=html||'<div class="card">No products found</div>';}
+function buy(i){var p=P[i];if(!confirm('Confirm?\n'+p.n+'\nPrice: '+fmt(p.p)+'\nCommission 5%: '+fmt(p.p*0.05)+'\nSeller Gets: '+fmt(p.p*0.95)+'\nPayment held in Escrow until you confirm.'))return;orders.push(p);comm+=p.p*0.05;document.getElementById('deals').innerHTML=orders.map(function(o){return '<p>✅ '+o.n+' - '+fmt(o.p)+' - Held in Escrow - Pending</p>'}).join('');document.getElementById('acom').innerText=fmt(comm);document.getElementById('ac').innerText=orders.length;document.getElementById('estat').innerText='Payment: Held in Escrow';alert('Order confirmed! Payment held in Escrow.');}
+function tab(id,bid){['m','d','s','e','a'].forEach(function(x){document.getElementById(x).classList.add('hide')});document.getElementById(id).classList.remove('hide');['b1','b2','b3','b4','b5'].forEach(function(x){document.getElementById(x).classList.remove('on')});document.getElementById(bid).classList.add('on');}
+function doLogin(){var pin=document.getElementById('pin').value;if(pin.length<4){alert('PIN must be 4+ digits');return;}if(pin==='1234'){document.getElementById('msg').innerText='Welcome to JAOM! Logged in ✓';alert('Welcome to JAOM!');}else{alert('Wrong PIN. Try 1234 for demo');}}
+function doOTP(){alert('OTP sent to '+document.getElementById('ph').value+' - Demo code is 1234');}
+function doVerify(){if(document.getElementById('otp').value==='1234'){document.getElementById('msg').innerText='Phone verified ✓';alert('Phone verified ✓');}else{alert('Wrong OTP. Try 1234');}}
+function doForgot(){var n=prompt('Enter new PIN:');if(n)alert('PIN reset! Use new PIN to login.');}
+function doRec(){alert('Recovery: Admin will contact you in 24h.');}
+function confirmR(){if(orders.length===0){alert('No pending order');return;}alert('Payment released to seller! Thank you.');document.getElementById('estat').innerText='Payment: Released to Seller ✓';}
+showP();
+</script></body></html>
