@@ -2,43 +2,80 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>JAOM - VERIFIED PREMIUM</title>
+<title>JAOM</title>
 </head>
 <body style="margin:0;font-family:Arial;background:white">
 
 <div style="text-align:center;padding:12px;border-bottom:3px solid #C9A227">
-<h1 style="margin:0;font-size:32px">JA<span style="color:#C9A227">OM</span> 🇸🇸</h1>
-<p style="margin:2px;font-size:11px;letter-spacing:1px">VERIFIED PREMIUM • JUBA ESCROW</p>
-<div style="display:flex;gap:6px;margin-top:8px">
-<select id="lang" onchange="setLang()" style="flex:1;padding:10px;border:1.5px solid #C9A227;border-radius:10px">
-<option value="en">English</option>
-<option value="ar">Arabic - العربية</option>
-<option value="sw">Kiswahili</option>
-</select>
-<select id="cur" onchange="showP()" style="flex:1;padding:10px;border:1.5px solid #C9A227;border-radius:10px">
-<option value="SSP">SSP - South Sudanese Pound</option>
-<option value="USD">USD - US Dollar</option>
-</select>
-</div>
+<h1 style="margin:0">JA<span style="color:#C9A227">OM</span> 🇸🇸</h1>
+<p style="margin:2px;font-size:11px">VERIFIED PREMIUM • JUBA ESCROW</p>
 </div>
 
-<!-- 1. ACCOUNT SECURITY -->
+<!-- STATUS BOX - ALL BUTTONS WILL TALK HERE, NO POPUPS -->
+<div id="status" style="background:#111;color:#FFD700;padding:12px;margin:10px;border-radius:12px;text-align:center;font-weight:bold">👋 Welcome to JAOM! Tap any button to test.</div>
+
 <div style="border:1.5px solid #C9A227;border-radius:14px;padding:12px;margin:10px">
-<h3>1. Login / Create Account</h3>
+<h3>1. Login / Account Security</h3>
 <input id="ph" placeholder="Phone: +211 9XX XXX XXX" style="width:95%;padding:12px;margin:5px 0;border:1.5px solid #C9A227;border-radius:10px">
-<input id="pin" type="password" placeholder="PIN / Password (4+ digits) - Demo: 1234" style="width:95%;padding:12px;margin:5px 0;border:1.5px solid #C9A227;border-radius:10px">
+<input id="pin" type="password" placeholder="PIN - Demo: 1234" style="width:95%;padding:12px;margin:5px 0;border:1.5px solid #C9A227;border-radius:10px">
 <button onclick="doLogin()" style="width:100%;padding:13px;background:#111;color:white;border:none;border-radius:10px;font-weight:bold">Login</button>
 <button onclick="doOTP()" style="width:100%;padding:13px;background:#C9A227;color:white;border:none;border-radius:10px;font-weight:bold;margin-top:6px">Send OTP Code</button>
-<input id="otp" placeholder="Enter OTP - Demo: 1234" style="width:95%;padding:12px;margin:6px 0;border:1.5px solid #C9A227;border-radius:10px">
+<input id="otp" placeholder="OTP - Demo: 1234" style="width:95%;padding:12px;margin:6px 0;border:1.5px solid #C9A227;border-radius:10px">
 <button onclick="doVerify()" style="width:100%;padding:13px;background:#111;color:white;border:none;border-radius:10px;font-weight:bold">Verify OTP</button>
-<p><a href="#" onclick="doForgot();return false">Forgot Password / PIN?</a> | <a href="#" onclick="doRec();return false">Account Recovery</a></p>
-<p id="msg" style="color:green"></p>
-<p style="font-size:12px;color:#888">Locked after 3 wrong attempts. Demo OTP is 1234 until real SMS is connected.</p>
-<button onclick="doLogout()" style="width:100%;padding:10px;background:#fff;border:1.5px solid #111;border-radius:10px">Secure Logout</button>
+<button onclick="doForgot()" style="width:100%;padding:12px;background:white;border:1.5px solid #C9A227;border-radius:10px;margin-top:6px">Forgot Password / PIN?</button>
+<button onclick="doRec()" style="width:100%;padding:12px;background:white;border:1.5px solid #C9A227;border-radius:10px;margin-top:6px">Account Recovery</button>
+<button onclick="doLogout()" style="width:100%;padding:12px;background:#fff;border:1.5px solid #111;border-radius:10px;margin-top:6px">Secure Logout</button>
 </div>
 
-<!-- 3. MARKETPLACE -->
 <div style="border:1.5px solid #C9A227;border-radius:14px;padding:12px;margin:10px">
 <h3>2. Marketplace</h3>
-<input id="sr" placeholder="🔍 Search products..." oninput="showP()" style="width:95%;padding:12px;border:1.5px solid #C9A227;border-radius:10px">
-<select id="ct" onchange="showP()" style="width:100
+<select id="cur" onchange="showP()" style="width:100%;padding:11px;border:1.5px solid #C9A227;border-radius:10px"><option value="SSP">SSP</option><option value="USD">USD</option></select>
+<input id="sr" placeholder="🔍 Search..." oninput="showP()" style="width:95%;padding:12px;margin-top:6px;border:1.5px solid #C9A227;border-radius:10px">
+<div id="plist"></div>
+</div>
+
+<div style="border:1.5px solid #C9A227;border-radius:14px;padding:12px;margin:10px">
+<h3>3. My Deals</h3>
+<div id="dealsBox">No orders yet.</div>
+<button onclick="confirmR()" style="width:100%;padding:13px;background:#C9A227;color:white;border:none;border-radius:10px;font-weight:bold;margin-top:6px">I Received Product - Release Payment</button>
+<button onclick="openDispute()" style="width:100%;padding:13px;background:#111;color:white;border:none;border-radius:10px;margin-top:6px">Dispute / Refund</button>
+</div>
+
+<div style="border:1.5px solid #C9A227;border-radius:14px;padding:12px;margin:10px">
+<h3>4. Verified Sellers ✓ + Escrow + Admin</h3>
+<p><b>Ahmed Store Juba ✓ VERIFIED</b> ⭐ 4.9</p>
+<p><b>Mama Market ✓ VERIFIED</b> ⭐ 4.8</p>
+<button onclick="reportSeller()" style="width:100%;padding:12px;background:#C9A227;color:white;border:none;border-radius:10px">Report Seller</button>
+<button onclick="verifySeller()" style="width:100%;padding:12px;background:#111;color:white;border:none;border-radius:10px;margin-top:6px">Submit Seller Verification</button>
+<p style="background:#FFF8DC;padding:10px;border:1px dashed #C9A227;margin-top:10px"><b>Escrow:</b> Buyer pays → JAOM holds → Seller delivers → Buyer confirms → JAOM pays seller - 5% fee. <b>Demo Mode:</b> Real escrow activates when payment is connected.</p>
+<p><b>Admin:</b> Users: 245 | Products: 5 | Completed: <span id="acount">0</span> | Commission: <b id="acom">0 SSP</b></p>
+</div>
+
+<p style="text-align:center;font-size:11px">JAOM © 2026 Juba 🇸🇸</p>
+
+<script>
+var P=[
+{n:"iPhone 13 Pro",p:850000,d:"256GB, Battery 89%",e:"📱",s:"In Stock",loc:"Juba",seller:"Ahmed Store ✓"},
+{n:"Samsung A54",p:420000,d:"128GB, Dual SIM",e:"📱",s:"In Stock",loc:"Konyo Konyo",seller:"Mama Market ✓"},
+{n:"Men Jacket",p:45000,d:"Premium Jacket",e:"🧥",s:"In Stock",loc:"Juba",seller:"Ahmed Store ✓"},
+{n:"Rice 50kg",p:95000,d:"Quality Rice",e:"🍚",s:"Low Stock",loc:"Juba",seller:"Mama Market ✓"}
+];
+var orders=[],comm=0,attempts=0;
+function say(t){document.getElementById('status').innerHTML=t; document.getElementById('status').scrollIntoView();}
+function fmt(v){return document.getElementById('cur').value==='USD'?'$'+(v/3800).toFixed(2)+' USD':v.toLocaleString()+' SSP';}
+function showP(){var q=document.getElementById('sr').value.toLowerCase();var h='';for(var i=0;i<P.length;i++){var p=P[i];if(p.n.toLowerCase().indexOf(q)>-1||p.d.toLowerCase().indexOf(q)>-1){h+='<div style="border:1px solid #C9A227;border-radius:12px;padding:10px;margin-top:8px"><div style="font-size:32px">'+p.e+'</div><b>'+p.n+'</b> - '+p.s+'<p>'+p.d+' | 📍 '+p.loc+'</p><p>Seller: '+p.seller+'</p><h3>'+fmt(p.p)+'</h3><p style="font-size:12px">Commission 5%: '+fmt(p.p*0.05)+' | Seller Net: '+fmt(p.p*0.95)+'</p><button onclick="buy('+i+')" style="width:100%;padding:12px;background:#C9A227;color:white;border:none;border-radius:10px;font-weight:bold">Buy with Escrow</button></div>';}}document.getElementById('plist').innerHTML=h||'<p>No products found</p>';}
+function buy(i){var p=P[i];orders.push(p);comm+=p.p*0.05;document.getElementById('dealsBox').innerHTML=orders.map(function(o){return '<p>✅ '+o.n+' - '+fmt(o.p)+' - Payment: Held in Escrow - Delivery: Pending</p>'}).join('');document.getElementById('acom').innerText=fmt(comm);document.getElementById('acount').innerText=orders.length;say('✅ ORDER CONFIRMED! '+p.n+' - Payment held in Escrow. Seller will deliver now.');}
+function doLogin(){var pin=document.getElementById('pin').value;if(pin.length<4){say('⚠️ PIN must be 4+ digits');return;}if(pin==='1234'){say('✅ Welcome to JAOM! Logged in securely.');attempts=0;}else{attempts++;if(attempts>=3){say('🔒 Locked after 3 attempts. Tap Forgot Password.');}else{say('❌ Wrong PIN. Attempt '+attempts+'/3 - Try 1234');}}}
+function doOTP(){say('📲 OTP sent to '+document.getElementById('ph').value+' - Your demo code is 1234 - Type it below.');}
+function doVerify(){if(document.getElementById('otp').value==='1234'){say('✅ Phone verified!');}else{say('❌ Wrong OTP. Try 1234');}}
+function doForgot(){say('🔑 PIN RESET: Your new PIN is now 1234. Try logging in with 1234.');}
+function doRec(){say('🛟 Recovery: Admin will contact you in 24h on '+document.getElementById('ph').value);}
+function doLogout(){say('👋 Logged out securely. Refresh page to login again.');}
+function confirmR(){if(orders.length===0){say('⚠️ No pending order to confirm. Buy something first.');return;}say('✅ Thank you! Payment RELEASED to seller. Transaction completed.');}
+function openDispute(){say('⚖️ Dispute opened. Admin will contact you. Refund in review.');}
+function reportSeller(){say('🚩 Seller reported. Admin will review in 24h.');}
+function verifySeller(){say('📋 Verification submitted! Admin will review in 24h.');}
+showP();
+</script>
+</body>
+</html>
