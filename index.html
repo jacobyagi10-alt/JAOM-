@@ -1,15 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JAOM - VERIFIED PREMIUM</title>
+</head>
+<body style="margin:0;font-family:Arial;background:white">
 
-<button onclick="show('escrow',this)">Escrow</button>
-<button onclick="show('admin',this)">Admin</button>
+<div style="text-align:center;padding:12px;border-bottom:3px solid #C9A227">
+<h1 style="margin:0;font-size:32px">JA<span style="color:#C9A227">OM</span> 🇸🇸</h1>
+<p style="margin:2px;font-size:11px;letter-spacing:1px">VERIFIED PREMIUM • JUBA ESCROW</p>
+<div style="display:flex;gap:6px;margin-top:8px">
+<select id="lang" onchange="setLang()" style="flex:1;padding:10px;border:1.5px solid #C9A227;border-radius:10px">
+<option value="en">English</option>
+<option value="ar">Arabic - العربية</option>
+<option value="sw">Kiswahili</option>
+</select>
+<select id="cur" onchange="showP()" style="flex:1;padding:10px;border:1.5px solid #C9A227;border-radius:10px">
+<option value="SSP">SSP - South Sudanese Pound</option>
+<option value="USD">USD - US Dollar</option>
+</select>
+</div>
 </div>
 
-<div id="market">
-<div class="card"><input id="search" placeholder="🔍 Search products..." oninput="render()"><select id="cat" onchange="render()"><option value="All">All Categories</option><option>Phones</option><option>Clothes</option><option>Food</option><option>Electronics</option></select>
-<select id="filterPrice" onchange="render()"><option value="All">All Prices</option><option value="low">Low to High</option><option value="high">High to Low</option></select></div>
-<div id="products"></div>
+<!-- 1. ACCOUNT SECURITY -->
+<div style="border:1.5px solid #C9A227;border-radius:14px;padding:12px;margin:10px">
+<h3>1. Login / Create Account</h3>
+<input id="ph" placeholder="Phone: +211 9XX XXX XXX" style="width:95%;padding:12px;margin:5px 0;border:1.5px solid #C9A227;border-radius:10px">
+<input id="pin" type="password" placeholder="PIN / Password (4+ digits) - Demo: 1234" style="width:95%;padding:12px;margin:5px 0;border:1.5px solid #C9A227;border-radius:10px">
+<button onclick="doLogin()" style="width:100%;padding:13px;background:#111;color:white;border:none;border-radius:10px;font-weight:bold">Login</button>
+<button onclick="doOTP()" style="width:100%;padding:13px;background:#C9A227;color:white;border:none;border-radius:10px;font-weight:bold;margin-top:6px">Send OTP Code</button>
+<input id="otp" placeholder="Enter OTP - Demo: 1234" style="width:95%;padding:12px;margin:6px 0;border:1.5px solid #C9A227;border-radius:10px">
+<button onclick="doVerify()" style="width:100%;padding:13px;background:#111;color:white;border:none;border-radius:10px;font-weight:bold">Verify OTP</button>
+<p><a href="#" onclick="doForgot();return false">Forgot Password / PIN?</a> | <a href="#" onclick="doRec();return false">Account Recovery</a></p>
+<p id="msg" style="color:green"></p>
+<p style="font-size:12px;color:#888">Locked after 3 wrong attempts. Demo OTP is 1234 until real SMS is connected.</p>
+<button onclick="doLogout()" style="width:100%;padding:10px;background:#fff;border:1.5px solid #111;border-radius:10px">Secure Logout</button>
 </div>
 
-<div id="deals" class="hidden"><div class="card"><h3>My Deals</h3><div id="dealsList">No orders yet. Buy something to see it here.</div><button class="gold" onclick="alert('Receipt downloaded (Demo)')">Download Receipt</button></div></div>
-
-<div id="sellers" class="hidden"><div class="card"><h3>Verified Sellers ✓</h3><p><b>Ahmed Store Juba</b> <span class="badge">✓ VERIFIED</span> ⭐ 4.9 (120 sales) - Juba, Konyo Konyo - +211 920 000 111 <button onclick="alert('Seller reported. Admin will review.')">Report</button></p><p><b>Mama
-
+<!-- 3. MARKETPLACE -->
+<div style="border:1.5px solid #C9A227;border-radius:14px;padding:12px;margin:10px">
+<h3>2. Marketplace</h3>
+<input id="sr" placeholder="🔍 Search products..." oninput="showP()" style="width:95%;padding:12px;border:1.5px solid #C9A227;border-radius:10px">
+<select id="ct" onchange="showP()" style="width:100
