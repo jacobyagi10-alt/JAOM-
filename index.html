@@ -1,39 +1,110 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>JAOM - Juba Escrow</title>
-<style>body{font-family:Arial;background:#0f172a;color:#fff;margin:0;padding:14px} .card{background:#1e293b;padding:16px;border-radius:14px;margin:12px 0} input,select{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:0;box-sizing:border-box} button{padding:12px;width:100%;border:0;border-radius:10px;font-weight:bold;margin-top:6px} .green{background:#22c55e} .blue{background:#3b82f6;color:#fff} .red{background:#ef4444;color:#fff} .yellow{background:#eab308} h1{color:#22c55e;margin:0} .small{color:#94a3b8;font-size:13px} .deal{background:#0f172a;padding:12px;border-radius:10px;margin:8px 0} .top{display:flex;justify-content:space-between;align-items:center} .badge{background:#22c55e;color:#000;padding:4px 8px;border-radius:20px;font-size:12px}</style></head>
+<style>
+*{box-sizing:border-box}
+body{background:#fdfbf7;color:#1a1a1a;font-family:sans-serif;margin:0;padding:0}
+.top{background:#fff;padding:18px 16px 12px;text-align:center;border-bottom:3px solid #d4af37;position:sticky;top:0;z-index:10}
+.logo{font-size:32px;font-weight:900;letter-spacing:1px}
+.logo span{color:#d4af37}
+.badge{display:inline-block;background:linear-gradient(135deg,#d4af37,#f5d76e,#b8860b);color:#fff;font-size:12px;font-weight:900;padding:4px 12px;border-radius:20px;margin-top:6px;box-shadow:0 2px 8px rgba(212,175,55,.4)}
+.sub{color:#666;font-size:13px;margin-top:6px}
+.wrap{padding:16px}
+.card{background:#fff;border:1px solid #f0e6c8;border-radius:20px;padding:18px;margin:0 0 16px;box-shadow:0 8px 24px rgba(0,0,0,.06)}
+.wallet{background:linear-gradient(135deg,#111,#2b2b2b);color:#fff;border:2px solid #d4af37}
+.wallet h2{color:#f5d76e;margin:0}
+.gold{color:#d4af37;font-weight:900}
+h2{margin:0 0 10px;font-size:19px}
+input,select{width:100%;padding:15px;border-radius:12px;border:2px solid #eee;margin:7px 0;font-size:16px;background:#fdfbf7;outline:none}
+input:focus{border-color:#d4af37}
+button{width:100%;padding:15px;border:0;border-radius:12px;font-size:17px;font-weight:900;cursor:pointer}
+.create{background:linear-gradient(135deg,#d4af37,#f5d76e);color:#111;box-shadow:0 6px 16px rgba(212,175,55,.4)}
+.clear{background:#fff;color:#ef4444;border:2px solid #fee2e2;margin-top:10px}
+.deal{background:#fdfbf7;border:1px solid #f0e6c8;border-left:5px solid #d4af37;border-radius:14px;padding:14px;margin:10px 0}
+.pill{display:inline-block;background:#fef3c7;color:#92400e;font-size:11px;font-weight:900;padding:3px 10px;border-radius:20px}
+.premium{border:2px solid #d4af37;background:linear-gradient(180deg,#fff,#fffbe6)}
+.tick{color:#d4af37}
+.small{color:#888;font-size:13px}
+.row{display:flex;gap:10px} .row div{flex:1;background:#fdfbf7;border-radius:12px;padding:10px;text-align:center;border:1px solid #f0e6c8}
+.big{font-size:20px;font-weight:900}
+</style></head>
 <body>
-<div class="top"><h1>JAOM 🇸🇸</h1><span class="badge">JUBA ESCROW</span></div>
-<p class="small">Safe trade in South Sudan. Money held until delivery confirmed.</p>
+<div class="top">
+<div class="logo">JAOM <span>🇸🇸</span></div>
+<div class="badge">⭐ VERIFIED PREMIUM • JUBA ESCROW</div>
+<div class="sub">Safe trade in South Sudan • Money held until delivery</div>
+</div>
 
-<div class="card"><h3>💰 Wallet</h3><p>Balance: <b id="bal">0 SSP</b> | Deals: <b id="count">0</b> | Protected: <b id="prot">0 SSP</b></p></div>
+<div class="wrap">
+<div class="card wallet">
+<h2>💰 JAOM Wallet</h2>
+<p id="wallet" style="font-size:15px">Loading...</p>
+<div class="row" style="margin-top:12px">
+<div><div class="small">PROTECTED</div><div class="big gold" id="prot">0 SSP</div></div>
+<div><div class="small">DEALS</div><div class="big" id="count">0</div></div>
+<div><div class="small">FEE</div><div class="big gold">2%</div></div>
+</div>
+</div>
 
-<div class="card"><h3>➕ Create New Deal</h3>
-<input id="buyer" placeholder="Buyer Name / Phone">
-<input id="seller" placeholder="Seller Name / Phone">
-<input id="item" placeholder="Item - e.g. iPhone 13, Land, Car">
-<input id="amount" type="number" placeholder="Amount in SSP" oninput="calc()">
-<p class="small" id="feeText">Fee 2% = 0 SSP | Seller gets = 0 SSP</p>
-<select id="pay"><option>MTN MoMo</option><option>Airtel Money</option><option>Cash in Juba</option><option>Bank Transfer</option></select>
-<button class="green" onclick="createDeal()">🔒 Create Secure Deal</button></div>
+<div class="card premium">
+<h2>✨ + Create New Deal <span class="pill">PREMIUM</span></h2>
+<input id="buyer" placeholder="👤 Buyer Name / Phone">
+<input id="seller" placeholder="👤 Seller Name / Phone">
+<input id="item" placeholder="📦 Item - e.g. iPhone 13, Land, Car">
+<input id="amount" type="number" placeholder="💵 Amount in SSP" oninput="calc()">
+<p class="small" id="fee">Fee 2% = 0 SSP | Seller gets = 0 SSP</p>
+<select id="pay"><option>MTN MoMo</option><option>Airtel Money</option><option>Zain Cash</option><option>Cash in Juba</option><option>Bank Transfer</option></select>
+<button class="create" onclick="createDeal()">🔒 CREATE SECURE DEAL</button>
+<p style="text-align:center;font-size:12px;color:#888;margin:8px 0 0">🛡️ Protected by JAOM Escrow • 100% Secure</p>
+</div>
 
-<div class="card"><h3>📋 My Deals</h3><div id="deals">No deals yet.</div>
-<button class="red" onclick="clearAll()">Clear All Deals</button></div>
+<div class="card"><h2>📋 My Deals</h2><div id="list">No deals yet.</div>
+<button class="clear" onclick="clearAll()">🗑️ Clear All Deals</button></div>
 
-<div class="card"><h3>❓ How It Works</h3><p class="small">1. Buyer pays to JAOM<br>2. Seller delivers in Juba<br>3. Buyer clicks Confirm Delivery<br>4. JAOM releases money to seller<br>5. If problem → Dispute, JAOM team helps</p>
-<a href="https://wa.me/211920000000"><button class="blue">💬 WhatsApp Support</button></a>
-<p class="small" style="text-align:center">JAOM © 2026 - Juba, South Sudan | Fee 2%</p></div>
+<div class="card premium"><h2>🏆 Why JAOM Premium?</h2>
+<p><span class="tick">✔</span> <b>Verified Badge</b> - Trusted sellers only<br>
+<span class="tick">✔</span> <b>Money Held Safe</b> - No scam<br>
+<span class="tick">✔</span> <b>Fast Release</b> - Seller paid after delivery<br>
+<span class="tick">✔</span> <b>24/7 Support in Juba</b></p>
+<div style="text-align:center;background:#111;color:#f5d76e;padding:10px;border-radius:10px;font-weight:900">⭐ JAOM GOLD MEMBER • TRUSTED IN JUBA ⭐</div>
+</div>
+
+<div class="card"><h2>❓ How It Works</h2><p>1️⃣ Buyer pays to JAOM<br>2️⃣ Seller delivers in Juba<br>3️⃣ Buyer confirms ✅<br>4️⃣ Seller gets paid - JAOM keeps 2%</p></div>
+</div>
 
 <script>
-let deals=JSON.parse(localStorage.getItem('jaom')||'[]');
-function calc(){let a=+amount.value||0;feeText.innerText=`Fee 2% = ${a*0.02} SSP | Seller gets = ${a*0.98} SSP`}
-function save(){localStorage.setItem('jaom',JSON.stringify(deals));render()}
-function createDeal(){let b=buyer.value,s=seller.value,i=item.value,a=amount.value,p=pay.value;if(!b||!s||!i||!a){alert('Fill all fields');return}let id='JAOM-'+Math.floor(1000+Math.random()*9000);deals.unshift({id,b,s,i,a,p,status:'WAITING PAYMENT'});buyer.value=seller.value=item.value=amount.value='';save();alert('Deal '+id+' created!')}
-function setStatus(idx,st){deals[idx].status=st;save();alert('Deal updated to: '+st)}
-function dispute(idx){deals[idx].status='DISPUTED - JAOM TEAM REVIEWING';save()}
-function del(idx){deals.splice(idx,1);save()}
-function clearAll(){if(confirm('Clear all?')){deals=[];save()}}
-function render(){let t=0;deals.forEach(d=>{if(d.status!=='RELEASED')t+=+d.a});bal.innerText=(deals.reduce((x,d)=>x+(d.status==='RELEASED'?+d.a:0),0))+' SSP';count.innerText=deals.length;prot.innerText=t+' SSP';
-deals.innerHTML=deals.length?deals.map((d,i)=>`<div class="deal"><b>${d.id}</b> - ${d.status}<br>${d.i} - ${d.a} SSP (${d.p})<br><span class="small">Buyer: ${d.b} | Seller: ${d.s}</span><br><button class="yellow" onclick="setStatus(${i},'PAID - WAITING DELIVERY')">Mark Paid</button><button class="green" onclick="setStatus(${i},'DELIVERED')">Confirm Delivery</button><button class="blue" onclick="setStatus(${i},'RELEASED ✅ MONEY SENT TO SELLER')">Release Money</button><button class="red" onclick="dispute(${i})">Dispute</button><button onclick="del(${i})">Delete</button></div>`).join(''):'No deals yet.'}
-render();
+let deals = JSON.parse(localStorage.getItem('jaom')||'[]');
+function calc(){
+ let a = Number(document.getElementById('amount').value||0);
+ document.getElementById('fee').innerText = 'Fee 2% = '+(a*0.02)+' SSP | Seller gets = '+(a*0.98)+' SSP';
+}
+function createDeal(){
+ let b=document.getElementById('buyer').value.trim();
+ let s=document.getElementById('seller').value.trim();
+ let it=document.getElementById('item').value.trim();
+ let am=document.getElementById('amount').value.trim();
+ let pay=document.getElementById('pay').value;
+ if(!b){alert('Please type Buyer Name');return}
+ if(!s){alert('Please type Seller Name');return}
+ if(!it){alert('Please type Item');return}
+ if(!am || Number(am)<=0){alert('Please type Amount');return}
+ deals.push({buyer:b,seller:s,item:it,amount:Number(am),pay:pay,status:'Waiting for Payment'});
+ localStorage.setItem('jaom',JSON.stringify(deals));
+ ['buyer','seller','item','amount'].forEach(id=>document.getElementById(id).value='');
+ calc(); render(); alert('Deal Created! ✅ GOLD PROTECTED');
+}
+function render(){
+ let prot=0; let html = deals.length? '' : 'No deals yet. Create your first Gold deal above.';
+ deals.forEach((d,i)=>{
+   prot+=d.amount;
+   html+=`<div class="deal"><span class="pill">⭐ GOLD PROTECTED</span><br><br><b>${d.item} - ${d.amount} SSP</b><br><span class="small">Buyer: ${d.buyer} | Seller: ${d.seller}<br>Pay: ${d.pay} | Status: ${d.status}</span><br><br><button style="background:#111;color:#f5d76e" onclick="done(${i})">✅ Confirm Delivery & Pay Seller</button></div>`;
+ });
+ document.getElementById('list').innerHTML=html;
+ document.getElementById('prot').innerText=prot+' SSP';
+ document.getElementById('count').innerText=deals.length;
+ document.getElementById('wallet').innerText=`Balance: 0 SSP | Deals: ${deals.length} | Protected: ${prot} SSP`;
+}
+function done(i){ deals[i].status='Completed ✅'; localStorage.setItem('jaom',JSON.stringify(deals)); render(); alert('Seller Paid! 💰'); }
+function clearAll(){ deals=[]; localStorage.removeItem('jaom'); render(); }
+calc(); render();
 </script></body></html>
