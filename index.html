@@ -1,422 +1,665 @@
+
 import React, { useState } from "react";
 import {
-  SafeAreaView, View, Text, TextInput, ScrollView,
-  TouchableOpacity, Image, StyleSheet, Alert
+  SafeAreaView,
+  View,
+  Text,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  Alert,
+  StyleSheet,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
-const GOLD = "#C49A42";
+const GOLD = "#C9A227";
 const DARK = "#171717";
-const MUTED = "#777";
 
-const translations = {
-  English: {
-    home: "Home", search: "Search products...", cart: "Cart",
-    sell: "Sell", orders: "My Orders", account: "Account",
-    admin: "Admin", categories: "Categories", featured: "Featured products",
-    add: "Add to cart", checkout: "Checkout", photo: "Choose product photo",
-    publish: "Publish product", price: "Price", name: "Product name",
-    empty: "Your cart is empty", studio: "AI Photo Studio",
-    studioInfo: "Prepare clean product photos for your shop.",
-    login: "Sign in / Register", welcome: "Welcome to JAOM"
-  },
-  Kiswahili: {
-    home: "Nyumbani", search: "Tafuta bidhaa...", cart: "Kikapu",
-    sell: "Uza", orders: "Oda Zangu", account: "Akaunti",
-    admin: "Msimamizi", categories: "Makundi", featured: "Bidhaa maalum",
-    add: "Ongeza kikapuni", checkout: "Lipa", photo: "Chagua picha ya bidhaa",
-    publish: "Chapisha bidhaa", price: "Bei", name: "Jina la bidhaa",
-    empty: "Kikapu chako hakina bidhaa", studio: "Studio ya Picha ya AI",
-    studioInfo: "Andaa picha safi za bidhaa zako.",
-    login: "Ingia / Jisajili", welcome: "Karibu JAOM"
-  },
-  Arabic: {
-    home: "الرئيسية", search: "ابحث عن المنتجات...", cart: "السلة",
-    sell: "بيع", orders: "طلباتي", account: "الحساب",
-    admin: "الإدارة", categories: "الفئات", featured: "منتجات مميزة",
-    add: "أضف إلى السلة", checkout: "إتمام الطلب", photo: "اختر صورة المنتج",
-    publish: "نشر المنتج", price: "السعر", name: "اسم المنتج",
-    empty: "سلتك فارغة", studio: "استوديو الصور بالذكاء الاصطناعي",
-    studioInfo: "جهّز صور منتجات واضحة لمتجرك.",
-    login: "تسجيل الدخول / إنشاء حساب", welcome: "مرحباً بك في JAOM"
-  }
-};
-
-const initialProducts = [
-  { id: 1, name: "Premium Smartphone", price: 450, category: "Electronics", emoji: "📱", seller: "JAOM Store", rating: 4.8 },
-  { id: 2, name: "Classic Wrist Watch", price: 85, category: "Fashion", emoji: "⌚", seller: "Golden Shop", rating: 4.7 },
-  { id: 3, name: "Wireless Headphones", price: 35, category: "Electronics", emoji: "🎧", seller: "Tech House", rating: 4.6 },
-  { id: 4, name: "Travel Backpack", price: 28, category: "Accessories", emoji: "🎒", seller: "City Market", rating: 4.5 },
-  { id: 5, name: "Running Shoes", price: 55, category: "Fashion", emoji: "👟", seller: "Fashion Hub", rating: 4.9 },
-  { id: 6, name: "Home Coffee Maker", price: 70, category: "Home", emoji: "☕", seller: "Home Plus", rating: 4.6 }
+const products = [
+  { id: "1", name: "Premium Smartphone", price: 450, category: "Electronics", emoji: "📱" },
+  { id: "2", name: "Classic Wrist Watch", price: 85, category: "Fashion", emoji: "⌚" },
+  { id: "3", name: "Wireless Headphones", price: 35, category: "Electronics", emoji: "🎧" },
+  { id: "4", name: "Travel Backpack", price: 28, category: "Accessories", emoji: "🎒" },
+  { id: "5", name: "Luxury Perfume", price: 55, category: "Fashion", emoji: "🧴" },
+  { id: "6", name: "Home Coffee Maker", price: 70, category: "Home", emoji: "☕" },
 ];
+
+const categories = ["All", "Electronics", "Fashion", "Accessories", "Home"];
 
 export default function App() {
   const [page, setPage] = useState("Home");
-  const [currency, setCurrency] = useState("USD");
-  const [language, setLanguage] = useState("English");
-  const [products, setProducts] = useState(initialProducts);
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [listing, setListing] = useState(products);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
-  const [productName, setProductName] = useState("");
-  const [productPrice, setProductPrice] = useState("");
-  const [productCategory, setProductCategory] = useState("General");
+  const [currency, setCurrency] = useState("USD");
+  const [language, setLanguage] = useState("English");
   const [photo, setPhoto] = useState(null);
-  const [user, setUser] = useState("");
-  const [role, setRole] = useState("Buyer");
-  const [review, setReview] = useState("");
+  const [newName, setNewName] = useState("");
+  const [newPrice, setNewPrice] = useState("");
 
-  const t = translations[language];
-  const rate = currency === "USD" ? 1 : 4500;
-  const money = value =>
-    `${currency === "USD" ? "$" : "SSP "}${(value * rate).toLocaleString()}`;
+  const rate = 4500;
+  const commission = 0.05;
 
-  const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-  const commission = subtotal * 0.05;
-  const total = subtotal + commission;
+  const money = (amount) => {
+    const value = currency === "SSP" ? amount * rate : amount;
+    return `${currency} ${value.toLocaleString()}`;
+  };
 
-  const addToCart = product => {
-    setCart([...cart, product]);
+  const addToCart = (product) => {
+    setCart((current) => [...current, product]);
     Alert.alert("JAOM", "Product added to your cart.");
   };
 
-  const choosePhoto = async () => {
-    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permission.granted) {
-      Alert.alert("Permission needed", "Allow photo access to select a product image.");
-      return;
-    }
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      quality: 0.8
-    });
-    if (!result.canceled) setPhoto(result.assets[0].uri);
+  const removeFromCart = (index) => {
+    setCart((current) => current.filter((_, i) => i !== index));
   };
 
-  const publishProduct = () => {
-    if (!productName.trim() || !productPrice || Number(productPrice) <= 0) {
-      Alert.alert("Missing details", "Enter a product name and a valid price.");
-      return;
-    }
-    setProducts([{
-      id: Date.now(),
-      name: productName,
-      price: Number(productPrice) / rate,
-      category: productCategory,
-      emoji: "🛍️",
-      image: photo,
-      seller: user || "Demo Seller",
-      rating: 5
-    }, ...products]);
-    setProductName("");
-    setProductPrice("");
-    setPhoto(null);
-    Alert.alert("JAOM", "Your demo listing has been published.");
-    setPage("Home");
-  };
+  const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+  const platformFee = subtotal * commission;
 
   const checkout = () => {
-    if (!cart.length) return;
-    setOrders([{
-      id: "JAOM-" + Date.now(),
-      items: cart,
-      total,
-      status: "Order received"
-    }, ...orders]);
+    if (cart.length === 0) {
+      Alert.alert("Your cart is empty", "Add a product before checkout.");
+      return;
+    }
+
+    const order = {
+      id: Date.now().toString(),
+      items: [...cart],
+      total: subtotal,
+      status: "Order received",
+    };
+
+    setOrders((current) => [order, ...current]);
     setCart([]);
     Alert.alert(
-      "Demo checkout",
-      "Your order was created locally. No real payment has been collected."
+      "Order created",
+      "Your demo order has been created. No real payment has been collected."
     );
     setPage("Orders");
   };
 
-  const filtered = products.filter(p =>
-    p.name.toLowerCase().includes(search.toLowerCase()) &&
-    (category === "All" || p.category === category)
-  );
+  const choosePhoto = async () => {
+    const permission =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-  const Button = ({ title, onPress, secondary = false }) => (
-    <TouchableOpacity
-      onPress={onPress}
-      style={[styles.button, secondary && styles.secondaryButton]}
-    >
-      <Text style={[styles.buttonText, secondary && styles.secondaryText]}>
-        {title}
-      </Text>
-    </TouchableOpacity>
-  );
+    if (!permission.granted) {
+      Alert.alert("Permission needed", "Please allow photo access.");
+      return;
+    }
 
-  const Heading = ({ children }) => (
-    <Text style={styles.heading}>{children}</Text>
-  );
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      quality: 0.8,
+    });
 
-  const ProductCard = ({ item }) => (
-    <View style={styles.product}>
-      <TouchableOpacity onPress={() => {
-        Alert.alert(item.name, `${money(item.price)}\nSold by ${item.seller}\nRating: ${item.rating} stars`);
-      }}>
-        {item.image
-          ? <Image source={{ uri: item.image }} style={styles.productImage} />
-          : <View style={styles.productEmoji}><Text style={{fontSize: 48}}>{item.emoji}</Text></View>
-        }
-        <Text style={styles.productName}>{item.name}</Text>
-        <Text style={styles.price}>{money(item.price)}</Text>
-        <Text style={styles.small}>★ {item.rating} · {item.seller}</Text>
-      </TouchableOpacity>
-      <Button title={t.add} onPress={() => addToCart(item)} />
-    </View>
-  );
-
-  const Home = () => (
-    <>
-      <View style={styles.hero}>
-        <Text style={styles.heroSmall}>🇸🇸 VERIFIED PREMIUM • JUBA ESCROW</Text>
-        <Text style={styles.logo}>JAOM</Text>
-        <Text style={styles.tagline}>Your marketplace. Your choice.</Text>
-        <Text style={styles.heroSmall}>SHOP • SELL • DISCOVER</Text>
-      </View>
-      <TextInput
-        style={styles.search}
-        placeholder={t.search}
-        value={search}
-        onChangeText={setSearch}
-      />
-      <Heading>{t.categories}</Heading>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {["All", "Electronics", "Fashion", "Accessories", "Home", "General"].map(c => (
-          <TouchableOpacity
-            key={c}
-            onPress={() => setCategory(c)}
-            style={[styles.category, category === c && styles.activeCategory]}
-          >
-            <Text style={category === c ? styles.activeCategoryText : styles.categoryText}>{c}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-      <Heading>{t.featured}</Heading>
-      <View style={styles.grid}>
-        {filtered.map(item => <ProductCard key={item.id} item={item} />)}
-      </View>
-    </>
-  );
-
-  const Sell = () => (
-    <>
-      <Heading>Seller Centre</Heading>
-      <Text style={styles.description}>Create a listing and display your products on JAOM.</Text>
-      <TextInput style={styles.input} placeholder={t.name} value={productName} onChangeText={setProductName} />
-      <TextInput style={styles.input} placeholder={`${t.price} (${currency})`} keyboardType="decimal-pad" value={productPrice} onChangeText={setProductPrice} />
-      <TextInput style={styles.input} placeholder="Category (e.g. Fashion)" value={productCategory} onChangeText={setProductCategory} />
-      <Button title={t.photo} onPress={choosePhoto} secondary />
-      {photo && <Image source={{uri: photo}} style={styles.preview} />}
-      <Button title={t.publish} onPress={publishProduct} />
-      <View style={styles.panel}>
-        <Text style={styles.panelTitle}>Seller information</Text>
-        <Text style={styles.description}>Seller verification: Demo status</Text>
-        <Text style={styles.description}>Commission: 5% of eligible sale value</Text>
-        <Text style={styles.description}>Seller earnings estimate: {money(subtotal * 0.95)}</Text>
-      </View>
-    </>
-  );
-
-  const Cart = () => (
-    <>
-      <Heading>{t.cart}</Heading>
-      {!cart.length && <Text style={styles.description}>{t.empty}</Text>}
-      {cart.map((item, i) => (
-        <View key={i} style={styles.listRow}>
-          <Text style={styles.rowText}>{item.emoji} {item.name}</Text>
-          <Text style={styles.price}>{money(item.price)}</Text>
-          <TouchableOpacity onPress={() => setCart(cart.filter((_, index) => index !== i))}>
-            <Text style={styles.remove}>Remove</Text>
-          </TouchableOpacity>
-        </View>
-      ))}
-      {!!cart.length && (
-        <View style={styles.panel}>
-          <Text style={styles.rowText}>Subtotal: {money(subtotal)}</Text>
-          <Text style={styles.rowText}>5% platform commission: {money(commission)}</Text>
-          <Text style={styles.total}>Total: {money(total)}</Text>
-          <Text style={styles.small}>Demo calculation only. Actual fee handling depends on your payment and seller agreement.</Text>
-          <Button title={t.checkout} onPress={checkout} />
-        </View>
-      )}
-    </>
-  );
-
-  const Orders = () => (
-    <>
-      <Heading>{t.orders}</Heading>
-      {!orders.length && <Text style={styles.description}>Your orders will appear here.</Text>}
-      {orders.map(order => (
-        <View style={styles.panel} key={order.id}>
-          <Text style={styles.panelTitle}>{order.id}</Text>
-          <Text style={styles.description}>Status: {order.status}</Text>
-          <Text style={styles.price}>{money(order.total)}</Text>
-          <Text style={styles.small}>Tracking updates will require a delivery-service integration.</Text>
-        </View>
-      ))}
-    </>
-  );
-
-  const Studio = () => (
-    <>
-      <Heading>{t.studio}</Heading>
-      <Text style={styles.description}>{t.studioInfo}</Text>
-      <Button title="Choose a photo" onPress={choosePhoto} secondary />
-      {photo && <Image source={{uri: photo}} style={styles.preview} />}
-      <View style={styles.panel}>
-        <Text style={styles.panelTitle}>AI background removal</Text>
-        <Text style={styles.description}>
-          Photo selection is enabled. Automatic background removal needs an AI image service connected through a secure backend.
-        </Text>
-        <Button title="AI background removal — setup required" onPress={() =>
-          Alert.alert("AI Photo Studio", "Connect an image-processing API through your backend to enable this feature.")
-        } />
-      </View>
-    </>
-  );
-
-  const Account = () => (
-    <>
-      <Heading>{t.account}</Heading>
-      <TextInput style={styles.input} placeholder="Your name or email" value={user} onChangeText={setUser} />
-      <Text style={styles.description}>Demo profile name: {user || "Guest"}</Text>
-      <Heading>Account type</Heading>
-      {["Buyer", "Seller", "Admin"].map(r => (
-        <Button key={r} title={`${role === r ? "✓ " : ""}${r}`} secondary onPress={() => setRole(r)} />
-      ))}
-      <Heading>Language / Lugha / اللغة</Heading>
-      {["English", "Kiswahili", "Arabic"].map(l => (
-        <Button key={l} title={`${language === l ? "✓ " : ""}${l}`} secondary onPress={() => setLanguage(l)} />
-      ))}
-      <Heading>Currency</Heading>
-      <View style={styles.horizontal}>
-        <Button title="USD $" secondary onPress={() => setCurrency("USD")} />
-        <Button title="SSP" secondary onPress={() => setCurrency("SSP")} />
-      </View>
-      <View style={styles.panel}>
-        <Text style={styles.panelTitle}>JAOM account security</Text>
-        <Text style={styles.description}>This is a demo profile. Secure login, password recovery and identity verification need a backend authentication service.</Text>
-      </View>
-    </>
-  );
-
-  const Admin = () => (
-    <>
-      <Heading>JAOM Admin Dashboard</Heading>
-      <View style={styles.stats}>
-        <View style={styles.stat}><Text style={styles.statNumber}>{products.length}</Text><Text style={styles.small}>Listings</Text></View>
-        <View style={styles.stat}><Text style={styles.statNumber}>{orders.length}</Text><Text style={styles.small}>Demo orders</Text></View>
-        <View style={styles.stat}><Text style={styles.statNumber}>5%</Text><Text style={styles.small}>Commission</Text></View>
-      </View>
-      <Heading>Marketplace management</Heading>
-      <Button title="Review product listings" onPress={() => Alert.alert("Listings", `${products.length} demo listings are available.`)} secondary />
-      <Button title="Seller verification queue" onPress={() => Alert.alert("Verification", "Connect identity verification and admin approval services.")} secondary />
-      <Button title="Disputes and refunds" onPress={() => Alert.alert("Disputes", "A backend dispute and refund workflow is required.")} secondary />
-      <Button title="Payment and escrow settings" onPress={() => Alert.alert("Payments", "Connect a supported payment provider and secure escrow workflow.")} secondary />
-      <Button title="Manage reviews" onPress={() => Alert.alert("Reviews", "Review moderation needs persistent database records.")} secondary />
-      <Text style={styles.small}>Admin access is simulated. Real role permissions must be enforced on the server, not by this screen.</Text>
-    </>
-  );
-
-  const renderPage = () => {
-    switch (page) {
-      case "Sell": return <Sell />;
-      case "Cart": return <Cart />;
-      case "Orders": return <Orders />;
-      case "Studio": return <Studio />;
-      case "Account": return <Account />;
-      case "Admin": return <Admin />;
-      default: return <Home />;
+    if (!result.canceled) {
+      setPhoto(result.assets[0].uri);
     }
   };
 
-  const navItems = [
-    ["Home", "⌂"], ["Sell", "＋"], ["Cart", "🛒"],
-    ["Orders", "▤"], ["Account", "●"]
-  ];
+  const publishProduct = () => {
+    const price = Number(newPrice);
+
+    if (!newName.trim() || !newPrice.trim() || price <= 0) {
+      Alert.alert("Missing information", "Enter a product name and valid price.");
+      return;
+    }
+
+    const product = {
+      id: Date.now().toString(),
+      name: newName.trim(),
+      price,
+      category: "General",
+      emoji: "🛍️",
+      photo,
+    };
+
+    setListing((current) => [product, ...current]);
+    setNewName("");
+    setNewPrice("");
+    setPhoto(null);
+
+    Alert.alert("JAOM", "Your demo product has been listed.");
+    setPage("Home");
+  };
+
+  const filteredProducts = listing.filter((product) => {
+    const matchesSearch = product.name
+      .toLowerCase()
+      .includes(search.toLowerCase());
+
+    const matchesCategory =
+      category === "All" || product.category === category;
+
+    return matchesSearch && matchesCategory;
+  });
+
+  const ProductCard = ({ item }) => (
+    <View style={styles.product}>
+      {item.photo ? (
+        <Image source={{ uri: item.photo }} style={styles.productPhoto} />
+      ) : (
+        <View style={styles.productEmoji}>
+          <Text style={{ fontSize: 42 }}>{item.emoji}</Text>
+        </View>
+      )}
+
+      <Text style={styles.productName}>{item.name}</Text>
+      <Text style={styles.price}>{money(item.price)}</Text>
+
+      <TouchableOpacity
+        style={styles.goldButton}
+        onPress={() => addToCart(item)}
+      >
+        <Text style={styles.goldButtonText}>Add to cart</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const Header = () => (
+    <View style={styles.header}>
+      <View>
+        <Text style={styles.logo}>JAOM</Text>
+        <Text style={styles.tagline}>VERIFIED PREMIUM • JUBA</Text>
+      </View>
+
+      <TouchableOpacity
+        style={styles.currencyButton}
+        onPress={() =>
+          setCurrency((current) => (current === "USD" ? "SSP" : "USD"))
+        }
+      >
+        <Text style={styles.currencyText}>{currency} ▾</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const Navigation = () => (
+    <View style={styles.navigation}>
+      {[
+        ["Home", "🏠"],
+        ["Cart", "🛒"],
+        ["Sell", "🏪"],
+        ["Orders", "📦"],
+        ["Account", "👤"],
+      ].map(([name, icon]) => (
+        <TouchableOpacity
+          key={name}
+          style={styles.navItem}
+          onPress={() => setPage(name)}
+        >
+          <Text style={{ fontSize: 19 }}>{icon}</Text>
+          <Text style={[styles.navText, page === name && styles.activeNav]}>
+            {name}
+          </Text>
+          {name === "Cart" && cart.length > 0 && (
+            <Text style={styles.cartCount}>{cart.length}</Text>
+          )}
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.topbar}>
-        <Text style={styles.topLogo}>JAOM <Text style={styles.flag}>🇸🇸</Text></Text>
-        <TouchableOpacity onPress={() => setPage("Studio")}>
-          <Text style={styles.topAction}>✦ AI Studio</Text>
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView style={styles.container}>
+      <Header />
 
-      <ScrollView style={styles.content} contentContainerStyle={{paddingBottom: 30}}>
-        {renderPage()}
+      <ScrollView contentContainerStyle={styles.content}>
+        {page === "Home" && (
+          <>
+            <View style={styles.hero}>
+              <Text style={styles.heroSmall}>WELCOME TO JAOM 🇸🇸</Text>
+              <Text style={styles.heroTitle}>Shop smarter.</Text>
+              <Text style={styles.heroTitle}>Shop with confidence.</Text>
+              <Text style={styles.heroSubtitle}>
+                Discover products from sellers in South Sudan.
+              </Text>
+            </View>
+
+            <TextInput
+              style={styles.search}
+              placeholder="Search products..."
+              placeholderTextColor="#888"
+              value={search}
+              onChangeText={setSearch}
+            />
+
+            <Text style={styles.sectionTitle}>Categories</Text>
+
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {categories.map((item) => (
+                <TouchableOpacity
+                  key={item}
+                  style={[
+                    styles.categoryButton,
+                    category === item && styles.selectedCategory,
+                  ]}
+                  onPress={() => setCategory(item)}
+                >
+                  <Text
+                    style={[
+                      styles.categoryText,
+                      category === item && styles.selectedCategoryText,
+                    ]}
+                  >
+                    {item}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+
+            <Text style={styles.sectionTitle}>Featured products</Text>
+
+            <View style={styles.productGrid}>
+              {filteredProducts.map((item) => (
+                <ProductCard key={item.id} item={item} />
+              ))}
+            </View>
+
+            {filteredProducts.length === 0 && (
+              <Text style={styles.empty}>No products found.</Text>
+            )}
+          </>
+        )}
+
+        {page === "Cart" && (
+          <>
+            <Text style={styles.pageTitle}>My Shopping Cart</Text>
+
+            {cart.length === 0 ? (
+              <Text style={styles.empty}>Your cart is empty.</Text>
+            ) : (
+              cart.map((item, index) => (
+                <View style={styles.cartItem} key={`${item.id}-${index}`}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.productName}>{item.name}</Text>
+                    <Text style={styles.price}>{money(item.price)}</Text>
+                  </View>
+                  <TouchableOpacity onPress={() => removeFromCart(index)}>
+                    <Text style={styles.remove}>Remove</Text>
+                  </TouchableOpacity>
+                </View>
+              ))
+            )}
+
+            <View style={styles.summary}>
+              <Text style={styles.summaryText}>Subtotal: {money(subtotal)}</Text>
+              <Text style={styles.summaryText}>
+                Platform commission (5%): {money(platformFee)}
+              </Text>
+              <Text style={styles.total}>Total: {money(subtotal)}</Text>
+            </View>
+
+            <TouchableOpacity style={styles.goldButton} onPress={checkout}>
+              <Text style={styles.goldButtonText}>Place demo order</Text>
+            </TouchableOpacity>
+          </>
+        )}
+
+        {page === "Sell" && (
+          <>
+            <Text style={styles.pageTitle}>Sell on JAOM</Text>
+            <Text style={styles.subtitle}>
+              List your products and reach more customers.
+            </Text>
+
+            <TouchableOpacity style={styles.photoButton} onPress={choosePhoto}>
+              <Text style={styles.photoButtonText}>
+                {photo ? "Change product photo" : "Choose product photo"}
+              </Text>
+            </TouchableOpacity>
+
+            {photo && (
+              <Image source={{ uri: photo }} style={styles.previewPhoto} />
+            )}
+
+            <TextInput
+              style={styles.input}
+              placeholder="Product name"
+              value={newName}
+              onChangeText={setNewName}
+            />
+
+            <TextInput
+              style={styles.input}
+              placeholder="Price in USD"
+              keyboardType="decimal-pad"
+              value={newPrice}
+              onChangeText={setNewPrice}
+            />
+
+            <Text style={styles.info}>
+              JAOM platform commission: 5% of the sale price.
+            </Text>
+
+            <TouchableOpacity
+              style={styles.goldButton}
+              onPress={publishProduct}
+            >
+              <Text style={styles.goldButtonText}>Publish product</Text>
+            </TouchableOpacity>
+          </>
+        )}
+
+        {page === "Orders" && (
+          <>
+            <Text style={styles.pageTitle}>My Orders</Text>
+
+            {orders.length === 0 ? (
+              <Text style={styles.empty}>You have no orders yet.</Text>
+            ) : (
+              orders.map((order) => (
+                <View style={styles.orderCard} key={order.id}>
+                  <Text style={styles.productName}>
+                    Order #{order.id.slice(-6)}
+                  </Text>
+                  <Text style={styles.summaryText}>
+                    {order.items.length} product(s)
+                  </Text>
+                  <Text style={styles.price}>{money(order.total)}</Text>
+                  <Text style={styles.info}>{order.status}</Text>
+                </View>
+              ))
+            )}
+          </>
+        )}
+
+        {page === "Account" && (
+          <>
+            <Text style={styles.pageTitle}>My Account</Text>
+            <Text style={styles.subtitle}>Welcome to JAOM.</Text>
+
+            <Text style={styles.sectionTitle}>Language</Text>
+
+            {["English", "Kiswahili", "Arabic"].map((item) => (
+              <TouchableOpacity
+                key={item}
+                style={styles.languageButton}
+                onPress={() => {
+                  setLanguage(item);
+                  Alert.alert("Language", `${item} selected.`);
+                }}
+              >
+                <Text style={styles.languageText}>
+                  {item} {language === item ? "✓" : ""}
+                </Text>
+              </TouchableOpacity>
+            ))}
+
+            <Text style={styles.info}>
+              Selected currency: {currency}
+            </Text>
+            <Text style={styles.info}>
+              JAOM marketplace demo account.
+            </Text>
+          </>
+        )}
       </ScrollView>
 
-      <View style={styles.nav}>
-        {navItems.map(([name, symbol]) => (
-          <TouchableOpacity key={name} style={styles.navItem} onPress={() => setPage(name)}>
-            <Text style={[styles.navIcon, page === name && styles.selected]}>{symbol}</Text>
-            <Text style={[styles.navText, page === name && styles.selected]}>{t[name.toLowerCase()] || name}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      {role === "Admin" && (
-        <TouchableOpacity style={styles.adminBar} onPress={() => setPage("Admin")}>
-          <Text style={styles.adminBarText}>OPEN ADMIN DASHBOARD</Text>
-        </TouchableOpacity>
-      )}
+      <Navigation />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#FFFFFF" },
-  topbar: { height: 58, paddingHorizontal: 18, flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderBottomWidth: 1, borderColor: "#EEE" },
-  topLogo: { fontSize: 23, fontWeight: "900", color: DARK, letterSpacing: 2 },
-  flag: { fontSize: 17 },
-  topAction: { color: GOLD, fontWeight: "800" },
-  content: { flex: 1, paddingHorizontal: 16 },
-  hero: { backgroundColor: DARK, borderRadius: 18, padding: 24, marginTop: 18, alignItems: "center" },
-  heroSmall: { color: GOLD, fontSize: 10, fontWeight: "800", letterSpacing: 1.5 },
-  logo: { color: "#FFF", fontSize: 48, fontWeight: "900", letterSpacing: 7, marginTop: 10 },
-  tagline: { color: "#E7D5AC", marginVertical: 8, fontSize: 14 },
-  search: { backgroundColor: "#F5F5F5", padding: 15, borderRadius: 12, marginTop: 18, color: DARK },
-  heading: { fontSize: 19, fontWeight: "900", color: DARK, marginTop: 22, marginBottom: 12 },
-  category: { paddingHorizontal: 16, paddingVertical: 10, borderRadius: 22, backgroundColor: "#F3F3F3", marginRight: 8, marginBottom: 8 },
-  activeCategory: { backgroundColor: DARK },
-  categoryText: { color: DARK, fontWeight: "600" },
-  activeCategoryText: { color: GOLD, fontWeight: "800" },
-  grid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" },
-  product: { width: "48%", backgroundColor: "#FFF", borderWidth: 1, borderColor: "#EEE", borderRadius: 14, padding: 10, marginBottom: 14 },
-  productEmoji: { height: 110, backgroundColor: "#F7F5F0", borderRadius: 10, alignItems: "center", justifyContent: "center" },
-  productImage: { height: 110, width: "100%", borderRadius: 10, resizeMode: "cover" },
-  productName: { fontSize: 13, fontWeight: "800", color: DARK, marginTop: 9 },
-  price: { color: GOLD, fontSize: 15, fontWeight: "900", marginTop: 5 },
-  small: { color: MUTED, fontSize: 10, marginTop: 5 },
-  button: { backgroundColor: GOLD, padding: 13, borderRadius: 10, alignItems: "center", marginTop: 10 },
-  buttonText: { color: "#171717", fontWeight: "900", fontSize: 12 },
-  secondaryButton: { backgroundColor: "#F5F1E8", borderWidth: 1, borderColor: "#E8D8B5" },
-  secondaryText: { color: DARK },
-  input: { backgroundColor: "#F5F5F5", borderRadius: 10, padding: 14, marginBottom: 10, color: DARK },
-  description: { color: MUTED, lineHeight: 21, marginVertical: 7 },
-  preview: { width: "100%", height: 210, resizeMode: "contain", marginVertical: 12, backgroundColor: "#F5F5F5", borderRadius: 12 },
-  panel: { backgroundColor: "#FAF8F3", padding: 16, borderRadius: 13, marginTop: 15, borderWidth: 1, borderColor: "#EEE4D1" },
-  panelTitle: { fontWeight: "900", fontSize: 16, color: DARK, marginBottom: 7 },
-  listRow: { paddingVertical: 13, borderBottomWidth: 1, borderColor: "#EEE" },
-  rowText: { color: DARK, fontWeight: "700", marginVertical: 4 },
-  remove: { color: "#B33A32", marginTop: 6, fontSize: 12 },
-  total: { color: DARK, fontWeight: "900", fontSize: 19, marginTop: 10 },
-  horizontal: { flexDirection: "row", gap: 10 },
-  stats: { flexDirection: "row", justifyContent: "space-between" },
-  stat: { backgroundColor: "#F7F3EA", padding: 15, borderRadius: 12, width: "31%" },
-  statNumber: { fontSize: 22, color: GOLD, fontWeight: "900" },
-  nav: { flexDirection: "row", justifyContent: "space-around", borderTopWidth: 1, borderColor: "#EEE", paddingVertical: 9, backgroundColor: "#FFF" },
-  navItem: { alignItems: "center", flex: 1 },
-  navIcon: { fontSize: 19, color: MUTED },
-  navText: { fontSize: 10, color: MUTED, marginTop: 3 },
-  selected: { color: GOLD, fontWeight: "900" },
-  adminBar: { backgroundColor: DARK, padding: 12, alignItems: "center" },
-  adminBarText: { color: GOLD, fontWeight: "900", fontSize: 11 }
+  container: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+  },
+  header: {
+    backgroundColor: DARK,
+    paddingHorizontal: 18,
+    paddingVertical: 15,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  logo: {
+    color: GOLD,
+    fontSize: 29,
+    fontWeight: "900",
+    letterSpacing: 3,
+  },
+  tagline: {
+    color: "#FFFFFF",
+    fontSize: 9,
+    letterSpacing: 1,
+    marginTop: 3,
+  },
+  currencyButton: {
+    borderWidth: 1,
+    borderColor: GOLD,
+    padding: 10,
+    borderRadius: 8,
+  },
+  currencyText: {
+    color: GOLD,
+    fontWeight: "bold",
+  },
+  content: {
+    padding: 16,
+    paddingBottom: 30,
+  },
+  hero: {
+    backgroundColor: DARK,
+    padding: 22,
+    borderRadius: 15,
+    marginBottom: 18,
+  },
+  heroSmall: {
+    color: GOLD,
+    fontWeight: "bold",
+    marginBottom: 12,
+  },
+  heroTitle: {
+    color: "#FFFFFF",
+    fontSize: 26,
+    fontWeight: "900",
+  },
+  heroSubtitle: {
+    color: "#DDDDDD",
+    marginTop: 10,
+    lineHeight: 21,
+  },
+  search: {
+    backgroundColor: "#F5F5F5",
+    padding: 14,
+    borderRadius: 10,
+    marginBottom: 20,
+    color: DARK,
+  },
+  sectionTitle: {
+    fontSize: 19,
+    fontWeight: "bold",
+    color: DARK,
+    marginTop: 15,
+    marginBottom: 12,
+  },
+  categoryButton: {
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 20,
+    backgroundColor: "#F1F1F1",
+    marginRight: 8,
+  },
+  selectedCategory: {
+    backgroundColor: GOLD,
+  },
+  categoryText: {
+    color: DARK,
+    fontWeight: "600",
+  },
+  selectedCategoryText: {
+    color: "#FFFFFF",
+  },
+  productGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+  },
+  product: {
+    width: "48%",
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#EEEEEE",
+    borderRadius: 12,
+    padding: 10,
+    marginBottom: 13,
+  },
+  productEmoji: {
+    height: 105,
+    backgroundColor: "#F7F5EF",
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  productPhoto: {
+    height: 105,
+    width: "100%",
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  productName: {
+    color: DARK,
+    fontSize: 14,
+    fontWeight: "bold",
+    marginBottom: 6,
+  },
+  price: {
+    color: GOLD,
+    fontSize: 16,
+    fontWeight: "900",
+    marginBottom: 10,
+  },
+  goldButton: {
+    backgroundColor: GOLD,
+    padding: 13,
+    borderRadius: 9,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  goldButtonText: {
+    color: DARK,
+    fontWeight: "900",
+  },
+  pageTitle: {
+    fontSize: 25,
+    fontWeight: "900",
+    color: DARK,
+    marginBottom: 15,
+  },
+  subtitle: {
+    color: "#666666",
+    marginBottom: 15,
+    lineHeight: 21,
+  },
+  empty: {
+    color: "#777777",
+    textAlign: "center",
+    marginVertical: 30,
+  },
+  cartItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: "#EEEEEE",
+  },
+  remove: {
+    color: "#B3261E",
+    fontWeight: "bold",
+  },
+  summary: {
+    backgroundColor: "#F7F5EF",
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 18,
+  },
+  summaryText: {
+    color: DARK,
+    marginBottom: 8,
+  },
+  total: {
+    color: DARK,
+    fontSize: 19,
+    fontWeight: "900",
+    marginTop: 5,
+  },
+  photoButton: {
+    borderWidth: 1,
+    borderColor: GOLD,
+    borderRadius: 10,
+    padding: 15,
+    alignItems: "center",
+    marginVertical: 12,
+  },
+  photoButtonText: {
+    color: DARK,
+    fontWeight: "bold",
+  },
+  previewPhoto: {
+    width: "100%",
+    height: 180,
+    borderRadius: 10,
+    marginBottom: 15,
+  },
+  input: {
+    backgroundColor: "#F5F5F5",
+    borderRadius: 9,
+    padding: 14,
+    marginVertical: 8,
+    color: DARK,
+  },
+  info: {
+    color: "#777777",
+    fontSize: 13,
+    marginTop: 10,
+    lineHeight: 19,
+  },
+  orderCard: {
+    backgroundColor: "#F7F5EF",
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 12,
+  },
+  languageButton: {
+    padding: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: "#EEEEEE",
+  },
+  languageText: {
+    color: DARK,
+    fontWeight: "bold",
+  },
+  navigation: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderTopColor: "#EEEEEE",
+    backgroundColor: "#FFFFFF",
+  },
+  navItem: {
+    alignItems: "center",
+    minWidth: 55,
+  },
+  navText: {
+    color: "#777777",
+    fontSize: 11,
+    marginTop: 3,
+  },
+  activeNav: {
+    color: GOLD,
+    fontWeight: "900",
+  },
+  cartCount: {
+    color: "#B3261E",
+    fontWeight: "bold",
+    fontSize: 10,
+  },
 });
