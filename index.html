@@ -1,110 +1,85 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>JAOM - Juba Escrow</title>
+<title>JAOM - Juba Marketplace</title>
 <style>
-*{box-sizing:border-box}
-body{background:#fdfbf7;color:#1a1a1a;font-family:sans-serif;margin:0;padding:0}
-.top{background:#fff;padding:18px 16px 12px;text-align:center;border-bottom:3px solid #d4af37;position:sticky;top:0;z-index:10}
-.logo{font-size:32px;font-weight:900;letter-spacing:1px}
-.logo span{color:#d4af37}
-.badge{display:inline-block;background:linear-gradient(135deg,#d4af37,#f5d76e,#b8860b);color:#fff;font-size:12px;font-weight:900;padding:4px 12px;border-radius:20px;margin-top:6px;box-shadow:0 2px 8px rgba(212,175,55,.4)}
-.sub{color:#666;font-size:13px;margin-top:6px}
-.wrap{padding:16px}
-.card{background:#fff;border:1px solid #f0e6c8;border-radius:20px;padding:18px;margin:0 0 16px;box-shadow:0 8px 24px rgba(0,0,0,.06)}
-.wallet{background:linear-gradient(135deg,#111,#2b2b2b);color:#fff;border:2px solid #d4af37}
-.wallet h2{color:#f5d76e;margin:0}
-.gold{color:#d4af37;font-weight:900}
-h2{margin:0 0 10px;font-size:19px}
-input,select{width:100%;padding:15px;border-radius:12px;border:2px solid #eee;margin:7px 0;font-size:16px;background:#fdfbf7;outline:none}
-input:focus{border-color:#d4af37}
-button{width:100%;padding:15px;border:0;border-radius:12px;font-size:17px;font-weight:900;cursor:pointer}
-.create{background:linear-gradient(135deg,#d4af37,#f5d76e);color:#111;box-shadow:0 6px 16px rgba(212,175,55,.4)}
-.clear{background:#fff;color:#ef4444;border:2px solid #fee2e2;margin-top:10px}
-.deal{background:#fdfbf7;border:1px solid #f0e6c8;border-left:5px solid #d4af37;border-radius:14px;padding:14px;margin:10px 0}
-.pill{display:inline-block;background:#fef3c7;color:#92400e;font-size:11px;font-weight:900;padding:3px 10px;border-radius:20px}
-.premium{border:2px solid #d4af37;background:linear-gradient(180deg,#fff,#fffbe6)}
-.tick{color:#d4af37}
-.small{color:#888;font-size:13px}
-.row{display:flex;gap:10px} .row div{flex:1;background:#fdfbf7;border-radius:12px;padding:10px;text-align:center;border:1px solid #f0e6c8}
-.big{font-size:20px;font-weight:900}
+body{margin:0;font-family:Arial;background:#fdfbf7;color:#111}
+.top{text-align:center;padding:18px;background:#fff;border-bottom:3px solid #d4af37;position:sticky;top:0;z-index:10}
+.top h1{font-size:36px;margin:0}
+.badge{display:inline-block;background:linear-gradient(90deg,#e8c85a,#b8860b);color:#fff;padding:7px 16px;border-radius:20px;font-weight:bold;font-size:13px}
+.card{margin:12px;background:#fff;border:2px solid #d4af37;border-radius:18px;padding:14px}
+input,select,textarea{width:100%;padding:13px;margin:7px 0;border:1.5px solid #eee;border-radius:12px;font-size:15px;box-sizing:border-box}
+button{width:100%;padding:14px;background:linear-gradient(90deg,#e8c85a,#d4af37);border:none;border-radius:12px;font-size:16px;font-weight:bold;margin:5px 0}
+.btn2{background:#111;color:#e8c85a}
+.tabs{display:flex;gap:8px;margin:12px}
+.tabs button{flex:1;background:#fff;border:2px solid #d4af37;color:#111}
+.tabs button.active{background:#111;color:#e8c85a}
+.product{border:1px solid #eee;border-radius:16px;padding:10px;margin:10px 0;background:#fffdf5}
+.product img{width:100%;height:180px;object-fit:cover;border-radius:12px;background:#eee}
+.goldtag{background:#f7e8b0;padding:4px 10px;border-radius:10px;font-size:12px;font-weight:bold}
+.small{font-size:13px;color:#888;text-align:center}
+.hidden{display:none}
 </style></head>
 <body>
-<div class="top">
-<div class="logo">JAOM <span>🇸🇸</span></div>
-<div class="badge">⭐ VERIFIED PREMIUM • JUBA ESCROW</div>
-<div class="sub">Safe trade in South Sudan • Money held until delivery</div>
+<div class="top"><h1>JAOM 🇸🇸</h1><div class="badge">⭐ VERIFIED PREMIUM • JUBA ESCROW</div><p id="who" class="small">Not logged in</p></div>
+
+<div class="tabs">
+<button id="t1" class="active" onclick="show('login')">🔑 Login</button>
+<button id="t2" onclick="show('market')">🛍️ Market</button>
+<button id="t3" onclick="show('sell')">📸 Sell</button>
+<button id="t4" onclick="show('deals')">📋 My Deals</button>
 </div>
 
-<div class="wrap">
-<div class="card wallet">
-<h2>💰 JAOM Wallet</h2>
-<p id="wallet" style="font-size:15px">Loading...</p>
-<div class="row" style="margin-top:12px">
-<div><div class="small">PROTECTED</div><div class="big gold" id="prot">0 SSP</div></div>
-<div><div class="small">DEALS</div><div class="big" id="count">0</div></div>
-<div><div class="small">FEE</div><div class="big gold">2%</div></div>
-</div>
-</div>
-
-<div class="card premium">
-<h2>✨ + Create New Deal <span class="pill">PREMIUM</span></h2>
-<input id="buyer" placeholder="👤 Buyer Name / Phone">
-<input id="seller" placeholder="👤 Seller Name / Phone">
-<input id="item" placeholder="📦 Item - e.g. iPhone 13, Land, Car">
-<input id="amount" type="number" placeholder="💵 Amount in SSP" oninput="calc()">
-<p class="small" id="fee">Fee 2% = 0 SSP | Seller gets = 0 SSP</p>
-<select id="pay"><option>MTN MoMo</option><option>Airtel Money</option><option>Zain Cash</option><option>Cash in Juba</option><option>Bank Transfer</option></select>
-<button class="create" onclick="createDeal()">🔒 CREATE SECURE DEAL</button>
-<p style="text-align:center;font-size:12px;color:#888;margin:8px 0 0">🛡️ Protected by JAOM Escrow • 100% Secure</p>
+<!-- LOGIN -->
+<div id="page-login" class="card">
+<h2>🔑 Login / Sign Up</h2>
+<input id="uName" placeholder="👤 Your Name">
+<input id="uPhone" placeholder="📱 Phone - e.g. 0921234567">
+<select id="uRole"><option value="buyer">I am a BUYER 🛒</option><option value="seller">I am a SELLER 🏪</option></select>
+<input id="uPass" type="password" placeholder="🔒 Create Password (4 digits)">
+<button onclick="signup()">✅ CREATE ACCOUNT / LOGIN</button>
+<p class="small">Buyer = can buy products<br>Seller = can post products<br>Same phone + password = login again</p>
+<button class="btn2" onclick="logout()">Logout</button>
 </div>
 
-<div class="card"><h2>📋 My Deals</h2><div id="list">No deals yet.</div>
-<button class="clear" onclick="clearAll()">🗑️ Clear All Deals</button></div>
-
-<div class="card premium"><h2>🏆 Why JAOM Premium?</h2>
-<p><span class="tick">✔</span> <b>Verified Badge</b> - Trusted sellers only<br>
-<span class="tick">✔</span> <b>Money Held Safe</b> - No scam<br>
-<span class="tick">✔</span> <b>Fast Release</b> - Seller paid after delivery<br>
-<span class="tick">✔</span> <b>24/7 Support in Juba</b></p>
-<div style="text-align:center;background:#111;color:#f5d76e;padding:10px;border-radius:10px;font-weight:900">⭐ JAOM GOLD MEMBER • TRUSTED IN JUBA ⭐</div>
+<!-- MARKET -->
+<div id="page-market" class="card hidden">
+<h2>🛍️ Marketplace - Juba</h2>
+<input id="search" placeholder="🔍 Search iPhone, Land, Car..." oninput="renderProducts()">
+<div id="plist"></div>
 </div>
 
-<div class="card"><h2>❓ How It Works</h2><p>1️⃣ Buyer pays to JAOM<br>2️⃣ Seller delivers in Juba<br>3️⃣ Buyer confirms ✅<br>4️⃣ Seller gets paid - JAOM keeps 2%</p></div>
+<!-- SELL -->
+<div id="page-sell" class="card hidden">
+<h2>📸 Seller - Post Product</h2>
+<p id="sellMsg" class="small">You must login as SELLER to post</p>
+<input id="pName" placeholder="📦 Product Name - e.g. iPhone 13">
+<input id="pPrice" type="number" placeholder="💵 Price in SSP">
+<input id="pImg" placeholder="🖼️ Photo Link (optional) - paste image link or leave empty">
+<textarea id="pDesc" placeholder="📝 Description - condition, location in Juba..."></textarea>
+<button onclick="postProduct()">🚀 POST PRODUCT FOR SALE</button>
+</div>
+
+<!-- DEALS -->
+<div id="page-deals" class="card hidden">
+<h2>📋 My Deals - Escrow Protected</h2>
+<div id="dlist"></div>
 </div>
 
 <script>
-let deals = JSON.parse(localStorage.getItem('jaom')||'[]');
-function calc(){
- let a = Number(document.getElementById('amount').value||0);
- document.getElementById('fee').innerText = 'Fee 2% = '+(a*0.02)+' SSP | Seller gets = '+(a*0.98)+' SSP';
+let users=JSON.parse(localStorage.getItem('jaom_users')||'[]');
+let products=JSON.parse(localStorage.getItem('jaom_products')||'[]');
+let deals=JSON.parse(localStorage.getItem('jaom_deals')||'[]');
+let me=JSON.parse(localStorage.getItem('jaom_me')||'null');
+if(products.length==0){products=[{name:'iPhone 13 Pro - Like New',price:850000,seller:'Ahmed - Juba',desc:'256GB, Battery 92%, Hai Cinema',img:'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600',phone:'0921112222'},{name:'Land in Gudele - 20x20',price:4500000,seller:'Mary - Gudele',desc:'With documents, near main road',img:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600',phone:'0923334444'},{name:'Toyota Corolla 2015',price:12000000,seller:'John - Munuki',desc:'Clean, automatic, full papers',img:'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=600',phone:'0925556666'}];localStorage.setItem('jaom_products',JSON.stringify(products));}
+function show(p){
+ ['login','market','sell','deals'].forEach(x=>document.getElementById('page-'+x).classList.add('hidden'));
+ document.getElementById('page-'+p).classList.remove('hidden');
+ ['t1','t2','t3','t4'].forEach(x=>document.getElementById(x).classList.remove('active'));
+ if(p=='login')document.getElementById('t1').classList.add('active');
+ if(p=='market')document.getElementById('t2').classList.add('active');
+ if(p=='sell')document.getElementById('t3').classList.add('active');
+ if(p=='deals')document.getElementById('t4').classList.add('active');
+ if(p=='market')renderProducts(); if(p=='deals')renderDeals();
 }
-function createDeal(){
- let b=document.getElementById('buyer').value.trim();
- let s=document.getElementById('seller').value.trim();
- let it=document.getElementById('item').value.trim();
- let am=document.getElementById('amount').value.trim();
- let pay=document.getElementById('pay').value;
- if(!b){alert('Please type Buyer Name');return}
- if(!s){alert('Please type Seller Name');return}
- if(!it){alert('Please type Item');return}
- if(!am || Number(am)<=0){alert('Please type Amount');return}
- deals.push({buyer:b,seller:s,item:it,amount:Number(am),pay:pay,status:'Waiting for Payment'});
- localStorage.setItem('jaom',JSON.stringify(deals));
- ['buyer','seller','item','amount'].forEach(id=>document.getElementById(id).value='');
- calc(); render(); alert('Deal Created! ✅ GOLD PROTECTED');
-}
-function render(){
- let prot=0; let html = deals.length? '' : 'No deals yet. Create your first Gold deal above.';
- deals.forEach((d,i)=>{
-   prot+=d.amount;
-   html+=`<div class="deal"><span class="pill">⭐ GOLD PROTECTED</span><br><br><b>${d.item} - ${d.amount} SSP</b><br><span class="small">Buyer: ${d.buyer} | Seller: ${d.seller}<br>Pay: ${d.pay} | Status: ${d.status}</span><br><br><button style="background:#111;color:#f5d76e" onclick="done(${i})">✅ Confirm Delivery & Pay Seller</button></div>`;
- });
- document.getElementById('list').innerHTML=html;
- document.getElementById('prot').innerText=prot+' SSP';
- document.getElementById('count').innerText=deals.length;
- document.getElementById('wallet').innerText=`Balance: 0 SSP | Deals: ${deals.length} | Protected: ${prot} SSP`;
-}
-function done(i){ deals[i].status='Completed ✅'; localStorage.setItem('jaom',JSON.stringify(deals)); render(); alert('Seller Paid! 💰'); }
-function clearAll(){ deals=[]; localStorage.removeItem('jaom'); render(); }
-calc(); render();
-</script></body></html>
+function updateWho(){document.getElementById('who').innerText=me?('👋 Hello '+me.name+' • '+me.role.toUpperCase()+' • '+me.phone):'Not logged in - Please Login';}
+function signup
