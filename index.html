@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JAOM - Juba Escrow</title>
+<style>body{font-family:Arial;background:#0f172a;color:#fff;margin:0;padding:14px} .card{background:#1e293b;padding:16px;border-radius:14px;margin:12px 0} input,select{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:0;box-sizing:border-box} button{padding:12px;width:100%;border:0;border-radius:10px;font-weight:bold;margin-top:6px} .green{background:#22c55e} .blue{background:#3b82f6;color:#fff} .red{background:#ef4444;color:#fff} .yellow{background:#eab308} h1{color:#22c55e;margin:0} .small{color:#94a3b8;font-size:13px} .deal{background:#0f172a;padding:12px;border-radius:10px;margin:8px 0} .top{display:flex;justify-content:space-between;align-items:center} .badge{background:#22c55e;color:#000;padding:4px 8px;border-radius:20px;font-size:12px}</style></head>
+<body>
+<div class="top"><h1>JAOM 🇸🇸</h1><span class="badge">JUBA ESCROW</span></div>
+<p class="small">Safe trade in South Sudan. Money held until delivery confirmed.</p>
+
+<div class="card"><h3>💰 Wallet</h3><p>Balance: <b id="bal">0 SSP</b> | Deals: <b id="count">0</b> | Protected: <b id="prot">0 SSP</b></p></div>
+
+<div class="card"><h3>➕ Create New Deal</h3>
+<input id="buyer" placeholder="Buyer Name / Phone">
+<input id="seller" placeholder="Seller Name / Phone">
+<input id="item" placeholder="Item - e.g. iPhone 13, Land, Car">
+<input id="amount" type="number" placeholder="Amount in SSP" oninput="calc()">
+<p class="small" id="feeText">Fee 2% = 0 SSP | Seller gets = 0 SSP</p>
+<select id="pay"><option>MTN MoMo</option><option>Airtel Money</option><option>Cash in Juba</option><option>Bank Transfer</option></select>
+<button class="green" onclick="createDeal()">🔒 Create Secure Deal</button></div>
+
+<div class="card"><h3>📋 My Deals</h3><div id="deals">No deals yet.</div>
+<button class="red" onclick="clearAll()">Clear All Deals</button></div>
+
+<div class="card"><h3>❓ How It Works</h3><p class="small">1. Buyer pays to JAOM<br>2. Seller delivers in Juba<br>3. Buyer clicks Confirm Delivery<br>4. JAOM releases money to seller<br>5. If problem → Dispute, JAOM team helps</p>
+<a href="https://wa.me/211920000000"><button class="blue">💬 WhatsApp Support</button></a>
+<p class="small" style="text-align:center">JAOM © 2026 - Juba, South Sudan | Fee 2%</p></div>
+
+<script>
+let deals=JSON.parse(localStorage.getItem('jaom')||'[]');
+function calc(){let a=+amount.value||0;feeText.innerText=`Fee 2% = ${a*0.02} SSP | Seller gets = ${a*0.98} SSP`}
+function save(){localStorage.setItem('jaom',JSON.stringify(deals));render()}
+function createDeal(){let b=buyer.value,s=seller.value,i=item.value,a=amount.value,p=pay.value;if(!b||!s||!i||!a){alert('Fill all fields');return}let id='JAOM-'+Math.floor(1000+Math.random()*9000);deals.unshift({id,b,s,i,a,p,status:'WAITING PAYMENT'});buyer.value=seller.value=item.value=amount.value='';save();alert('Deal '+id+' created!')}
+function setStatus(idx,st){deals[idx].status=st;save();alert('Deal updated to: '+st)}
+function dispute(idx){deals[idx].status='DISPUTED - JAOM TEAM REVIEWING';save()}
+function del(idx){deals.splice(idx,1);save()}
+function clearAll(){if(confirm('Clear all?')){deals=[];save()}}
+function render(){let t=0;deals.forEach(d=>{if(d.status!=='RELEASED')t+=+d.a});bal.innerText=(deals.reduce((x,d)=>x+(d.status==='RELEASED'?+d.a:0),0))+' SSP';count.innerText=deals.length;prot.innerText=t+' SSP';
+deals.innerHTML=deals.length?deals.map((d,i)=>`<div class="deal"><b>${d.id}</b> - ${d.status}<br>${d.i} - ${d.a} SSP (${d.p})<br><span class="small">Buyer: ${d.b} | Seller: ${d.s}</span><br><button class="yellow" onclick="setStatus(${i},'PAID - WAITING DELIVERY')">Mark Paid</button><button class="green" onclick="setStatus(${i},'DELIVERED')">Confirm Delivery</button><button class="blue" onclick="setStatus(${i},'RELEASED ✅ MONEY SENT TO SELLER')">Release Money</button><button class="red" onclick="dispute(${i})">Dispute</button><button onclick="del(${i})">Delete</button></div>`).join(''):'No deals yet.'}
+render();
+</script></body></html>
