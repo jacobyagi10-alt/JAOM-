@@ -21,15 +21,12 @@ button{width:100%;padding:14px;background:linear-gradient(90deg,#e8c85a,#d4af37)
 </style></head>
 <body>
 <div class="top"><h1>JAOM 🇸🇸</h1><div class="badge">⭐ VERIFIED PREMIUM • JUBA ESCROW</div><p id="who" class="small">Not logged in</p></div>
-
 <div class="tabs">
 <button id="t1" class="active" onclick="show('login')">🔑 Login</button>
 <button id="t2" onclick="show('market')">🛍️ Market</button>
 <button id="t3" onclick="show('sell')">📸 Sell</button>
 <button id="t4" onclick="show('deals')">📋 My Deals</button>
 </div>
-
-<!-- LOGIN -->
 <div id="page-login" class="card">
 <h2>🔑 Login / Sign Up</h2>
 <input id="uName" placeholder="👤 Your Name">
@@ -40,46 +37,37 @@ button{width:100%;padding:14px;background:linear-gradient(90deg,#e8c85a,#d4af37)
 <p class="small">Buyer = can buy products<br>Seller = can post products<br>Same phone + password = login again</p>
 <button class="btn2" onclick="logout()">Logout</button>
 </div>
-
-<!-- MARKET -->
 <div id="page-market" class="card hidden">
 <h2>🛍️ Marketplace - Juba</h2>
 <input id="search" placeholder="🔍 Search iPhone, Land, Car..." oninput="renderProducts()">
 <div id="plist"></div>
 </div>
-
-<!-- SELL -->
 <div id="page-sell" class="card hidden">
 <h2>📸 Seller - Post Product</h2>
-<p id="sellMsg" class="small">You must login as SELLER to post</p>
+<p class="small">You must login as SELLER to post</p>
 <input id="pName" placeholder="📦 Product Name - e.g. iPhone 13">
 <input id="pPrice" type="number" placeholder="💵 Price in SSP">
-<input id="pImg" placeholder="🖼️ Photo Link (optional) - paste image link or leave empty">
+<input id="pImg" placeholder="🖼️ Photo Link (optional)">
 <textarea id="pDesc" placeholder="📝 Description - condition, location in Juba..."></textarea>
 <button onclick="postProduct()">🚀 POST PRODUCT FOR SALE</button>
 </div>
-
-<!-- DEALS -->
 <div id="page-deals" class="card hidden">
 <h2>📋 My Deals - Escrow Protected</h2>
 <div id="dlist"></div>
 </div>
-
 <script>
 let users=JSON.parse(localStorage.getItem('jaom_users')||'[]');
 let products=JSON.parse(localStorage.getItem('jaom_products')||'[]');
-let deals=JSON.parse(localStorage.getItem('jaom_deals')||'[]');
+let deals=JSON.parse(localStorage.getItem('jaom_deals2')||'[]');
 let me=JSON.parse(localStorage.getItem('jaom_me')||'null');
 if(products.length==0){products=[{name:'iPhone 13 Pro - Like New',price:850000,seller:'Ahmed - Juba',desc:'256GB, Battery 92%, Hai Cinema',img:'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600',phone:'0921112222'},{name:'Land in Gudele - 20x20',price:4500000,seller:'Mary - Gudele',desc:'With documents, near main road',img:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600',phone:'0923334444'},{name:'Toyota Corolla 2015',price:12000000,seller:'John - Munuki',desc:'Clean, automatic, full papers',img:'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=600',phone:'0925556666'}];localStorage.setItem('jaom_products',JSON.stringify(products));}
-function show(p){
- ['login','market','sell','deals'].forEach(x=>document.getElementById('page-'+x).classList.add('hidden'));
- document.getElementById('page-'+p).classList.remove('hidden');
- ['t1','t2','t3','t4'].forEach(x=>document.getElementById(x).classList.remove('active'));
- if(p=='login')document.getElementById('t1').classList.add('active');
- if(p=='market')document.getElementById('t2').classList.add('active');
- if(p=='sell')document.getElementById('t3').classList.add('active');
- if(p=='deals')document.getElementById('t4').classList.add('active');
- if(p=='market')renderProducts(); if(p=='deals')renderDeals();
-}
+function show(p){['login','market','sell','deals'].forEach(x=>document.getElementById('page-'+x).classList.add('hidden'));document.getElementById('page-'+p).classList.remove('hidden');['t1','t2','t3','t4'].forEach(x=>document.getElementById(x).classList.remove('active'));if(p=='login')document.getElementById('t1').classList.add('active');if(p=='market')document.getElementById('t2').classList.add('active');if(p=='sell')document.getElementById('t3').classList.add('active');if(p=='deals')document.getElementById('t4').classList.add('active');if(p=='market')renderProducts();if(p=='deals')renderDeals();}
 function updateWho(){document.getElementById('who').innerText=me?('👋 Hello '+me.name+' • '+me.role.toUpperCase()+' • '+me.phone):'Not logged in - Please Login';}
-function signup
+function signup(){let name=document.getElementById('uName').value.trim(),phone=document.getElementById('uPhone').value.trim(),role=document.getElementById('uRole').value,pass=document.getElementById('uPass').value.trim();if(!name||!phone||!pass){alert('Fill name, phone and password');return;}let found=users.find(u=>u.phone==phone);if(found){if(found.pass!==pass){alert('Wrong password for this phone');return;}me=found;}else{me={name,phone,role,pass};users.push(me);localStorage.setItem('jaom_users',JSON.stringify(users));}localStorage.setItem('jaom_me',JSON.stringify(me));updateWho();alert('Welcome '+me.name+'! You are logged in as '+me.role.toUpperCase());show('market');}
+function logout(){me=null;localStorage.removeItem('jaom_me');updateWho();alert('Logged out');show('login');}
+function postProduct(){if(!me){alert('Login first as SELLER');show('login');return;}if(me.role!=='seller'){alert('Only SELLER can post. Create a seller account!');return;}let name=document.getElementById('pName').value.trim(),price=document.getElementById('pPrice').value.trim(),img=document.getElementById('pImg').value.trim(),desc=document.getElementById('pDesc').value.trim();if(!name||!price){alert('Fill product name and price');return;}products.unshift({name,price:Number(price),seller:me.name+' - Juba',desc:desc||'Good condition',img:img||'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600',phone:me.phone});localStorage.setItem('jaom_products',JSON.stringify(products));document.getElementById('pName').value='';document.getElementById('pPrice').value='';document.getElementById('pImg').value='';document.getElementById('pDesc').value='';alert('Product Posted! ✅ Everyone can see it now');show('market');}
+function renderProducts(){let q=(document.getElementById('search').value||'').toLowerCase();let list=products.filter(p=>p.name.toLowerCase().includes(q));document.getElementById('plist').innerHTML=list.map((p,i)=>`<div class="product"><img src="${p.img}"><span class="goldtag">⭐ GOLD PROTECTED • JAOM ESCROW</span><h3>${p.name}</h3><p><b>${p.price} SSP</b> • Seller: ${p.seller}<br>${p.desc}</p><button onclick="buyProduct(${products.indexOf(p)})">🛒 BUY NOW - JAOM Protects You</button></div>`).join('')||'<p>No products found</p>';}
+function buyProduct(i){if(!me){alert('Login first as BUYER');show('login');return;}let p=products[i];let fee=Math.round(p.price*0.02);if(!confirm('Buy '+p.name+' for '+p.price+' SSP?\nFee 2% = '+fee+' SSP\nJAOM will hold money until you get item. OK?'))return;deals.push({item:p.name,amount:p.price,buyer:me.name,seller:p.seller,method:'MTN MoMo',status:'WAITING PAYMENT'});localStorage.setItem('jaom_deals2',JSON.stringify(deals));alert('Deal Created! ✅ JAOM is holding money. Contact seller: '+p.phone);show('deals');}
+function renderDeals(){document.getElementById('dlist').innerHTML=deals.map((d,i)=>`<div class="product"><span class="goldtag">⭐ GOLD PROTECTED</span><h3>${d.item} - ${d.amount} SSP</h3><p>Buyer: ${d.buyer} | Seller: ${d.seller}<br>Status: ${d.status}</p></div>`).join('')||'<p>No deals yet. Go buy something!</p>';}
+updateWho();renderProducts();renderDeals();
+</script></body></html>
