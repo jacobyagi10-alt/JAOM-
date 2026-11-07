@@ -1,125 +1,50 @@
 <!DOCTYPE html>
-<html lang="en" id="htmlTag">
+<html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>JAOM - Shop Smart. Shop with Confidence.</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--gold:#D4AF37;--black:#111;--white:#fff}
-*{box-sizing:border-box}body{margin:0;background:#fff;color:#111;font-family:sans-serif}
-header{background:#111;color:#fff;padding:14px;text-align:center;border-bottom:4px solid var(--gold)}
-.logo{font-size:32px;font-weight:900;letter-spacing:3px}.logo span{color:var(--gold)}
-.tag{color:var(--gold);font-size:12px}
-.topbar{display:flex;gap:6px;padding:10px;background:#f8f5e8}
-.topbar select,.topbar button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--gold);background:#fff}
-.tabs{display:flex;gap:6px;padding:10px}.tabs button{flex:1;padding:12px;border-radius:12px;background:#111;color:var(--gold);font-weight:bold;border:none}
-.card{background:#fff;border:1px solid #eee;border-radius:16px;padding:14px;margin:10px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
-.card img{width:100%;border-radius:12px}
-.gold{background:var(--gold);color:#000;border:none;padding:12px;width:100%;border-radius:10px;font-weight:bold}
-input,select,textarea{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:1px solid #ddd;background:#fff}
-.badge{background:var(--gold);padding:4px 8px;border-radius:20px;font-size:11px;font-weight:bold}
-.flag{font-size:22px}
-[dir="rtl"]{text-align:right}
+*{box-sizing:border-box}body{margin:0;background:#f5f3eb;font-family:sans-serif;padding-bottom:80px}
+header{background:#111;color:#fff;padding:12px 14px;position:sticky;top:0;z-index:10}
+.top{display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:26px;font-weight:900;letter-spacing:2px}.logo b{color:#D4AF37}
+.search{display:flex;gap:6px;margin-top:10px;background:#fff;border-radius:12px;padding:6px}
+.search input{flex:1;border:none;outline:none;padding:10px}
+.search button{background:#D4AF37;border:none;padding:10px 14px;border-radius:10px;font-weight:bold}
+.hero{background:linear-gradient(135deg,#111,#3a2d00);color:#fff;padding:18px;border-radius:16px;margin:12px}
+.hero h2{margin:0;color:#D4AF37}.hero p{font-size:13px;color:#ddd}
+.cats{display:flex;gap:10px;overflow:auto;padding:0 12px}
+.cat{background:#fff;border:1px solid #eee;border-radius:14px;min-width:78px;text-align:center;padding:10px 6px;font-size:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
+.card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.card img{width:100%;height:140px;object-fit:cover}
+.card .in{padding:10px}.price{color:#111;font-weight:900}.old{color:#999;text-decoration:line-through;font-size:12px}
+.gold{background:#D4AF37;border:none;padding:9px;width:100%;border-radius:10px;font-weight:bold;margin-top:6px}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#111;display:flex;padding:10px;gap:6px}
+.bottom button{flex:1;background:#222;color:#D4AF37;border:none;padding:10px;border-radius:12px;font-weight:bold}
+.bottom button.active{background:#D4AF37;color:#000}
+.section{padding:0 12px}.section h3{margin:12px 0 6px}
+input,select,textarea{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:1px solid #ddd}
+.white-card{background:#fff;border-radius:16px;padding:14px;margin:12px}
 </style>
 </head>
 <body>
 <header>
-<div class="logo">JA<span>OM</span> 🇸🇸</div>
-<div class="tag">Shop Smart. Shop with Confidence.</div>
-<div style="font-size:11px;margin-top:6px">South Sudan's Premium Online Marketplace • Custom • Konyo Konyo • Munuki • Gudele</div>
+<div class="top"><div class="logo">JA<b>OM</b> 🇸🇸</div><div>📍 Juba <select id="currency" style="width:auto;padding:6px;border-radius:8px"><option>SSP</option><option>USD</option></select> <select id="lang" style="width:auto;padding:6px;border-radius:8px"><option>EN</option><option>AR</option><option>SW</option></select></div></div>
+<div class="search"><input id="searchInput" placeholder="Search phones, food, clothes in Juba..." oninput="filterProducts(this.value)"><button>🔍</button></div>
 </header>
 
-<div class="topbar">
-<select id="lang" onchange="setLang(this.value)"><option value="en">English</option><option value="ar">العربية</option><option value="sw">Kiswahili</option></select>
-<select id="currency" onchange="loadProducts()"><option value="SSP">SSP</option><option value="USD">USD</option></select>
-<button onclick="showTab('admin')">👑 Admin</button>
+<div id="marketPage">
+<div class="hero"><h2>Shop Smart. Shop with Confidence.</h2><p>Escrow protects you • AI photos honest • 5% JAOM • Custom • Konyo Konyo • Munuki • Gudele</p><button style="background:#D4AF37;border:none;padding:10px 16px;border-radius:10px;font-weight:bold;margin-top:8px" onclick="showPage('sellPage')">+ Sell Now - FREE</button></div>
+<div class="section"><h3>Categories</h3></div>
+<div class="cats"><div class="cat">📱<br>Phones</div><div class="cat">🍲<br>Food</div><div class="cat">👕<br>Fashion</div><div class="cat">🏠<br>Home</div><div class="cat">💻<br>Electronics</div><div class="cat">💄<br>Beauty</div></div>
+<div class="section"><h3>🔥 Trending in Juba</h3></div>
+<div class="grid" id="productGrid"></div>
 </div>
 
-<div class="tabs">
-<button onclick="showTab('market')">🛒 Market</button>
-<button onclick="showTab('food')">🍲 Food</button>
-<button onclick="showTab('sell')">➕ Sell</button>
-<button onclick="showTab('cart')">🛒 Cart (<span id="cartCount">0</span>)</button>
-<button onclick="showTab('escrow')">🛡️ Escrow</button>
-</div>
-
-<div id="market"></div>
-<div id="food" style="display:none"><div class="card"><h3>🍲 JAOM FOOD</h3><p id="foodTxt">Order from Mama shops & Restaurants. Same Escrow protects you.</p><div id="foodList"></div></div></div>
-
-<div id="sell" style="display:none">
-<div class="card"><h3>➕ Seller Studio + AI Photo Studio</h3>
-<p>AI removes background, creates clean studio background. NEVER hides scratches.</p>
-<input id="title" placeholder="Product Title">
-<input id="price" type="number" placeholder="Price">
-<select id="curr2"><option>SSP</option><option>USD</option></select>
-<input id="photo" placeholder="Photo URL">
-<textarea id="desc" placeholder="Description - Be honest!"></textarea>
-<label><input type="checkbox" id="scratches"> Has Scratches?</label>
-<button class="gold" onclick="previewAI()">✨ AI Clean Background - Preview</button>
-<div id="aiPreview"></div>
-<p><b>JAOM Commission 5%:</b> <span id="calc">Enter price to see</span></p>
-<button class="gold" onclick="addProduct()">Publish Product</button><p id="sellMsg"></p>
-</div>
-</div>
-
-<div id="cart" style="display:none"><div class="card"><h3>🛒 Your Cart</h3><div id="cartList"></div><button class="gold" onclick="checkout()">Secure Checkout with Escrow</button><p>Payment: MTN MoMo / Airtel Money / Cash - Provider must confirm before success.</p></div></div>
-
-<div id="escrow" style="display:none"><div class="card"><h3>🛡️ JAOM Escrow</h3><p>1. Buyer Pays → HELD in JAOM<br>2. Seller Delivers<br>3. Buyer Confirms → Seller Paid - 5% Commission<br>4. Dispute → Refund. No Scam!</p><p><b>QR Papers:</b> FREE in Custom + Konyo Konyo - Scan to download</p></div></div>
-
-<div id="admin" style="display:none"><div class="card"><h3>👑 Admin Dashboard - Protected</h3><p>Manage Buyers, Sellers, Verify Sellers, Approve/Reject, Manage Products, Monitor Orders, 5% Commission, Disputes, Refunds, Notifications. <b>Requires real server-side permissions in Supabase RLS.</b></p><div id="adminStats"></div></div></div>
-
-<div class="card" style="text-align:center"><p>⭐ Trust: Verified Sellers • Reviews & Ratings • Report & Dispute • Secure Auth</p><p>AI Price: NOW FREE • Later 5,000 SSP/month OR 500 SSP / 1 product</p></div>
-
-<script>
-// === PASTE YOUR SUPABASE IP HERE ===
-const SUPABASE_URL = "PASTE_YOUR_SUPABASE_URL_HERE";
-const SUPABASE_KEY = "PASTE_YOUR_SUPABASE_ANON_KEY_HERE";
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-let cart = [];
-let rate = 4500; // Configurable - fetch from real API in production, NOT hard-coded forever
-
-const texts = {
-  en:{food:"Order from Mama shops & Restaurants. Same Escrow protects you."},
-  ar:{food:"اطلب من متاجر ومطاعم جوبا. نفس الضمان يحميك."},
-  sw:{food:"Agiza kutoka kwa maduka na migahawa ya Juba. Escrow ile ile inakulinda."}
-};
-function setLang(l){
-  document.getElementById('htmlTag').dir = l==='ar' ? 'rtl' : 'ltr';
-  document.getElementById('foodTxt').innerText = texts[l].food;
-}
-function showTab(t){['market','food','sell','cart','escrow','admin'].forEach(id=>document.getElementById(id).style.display=id===t?'block':'none')}
-function previewAI(){
-  const url=document.getElementById('photo').value;
-  const price=parseInt(document.getElementById('price').value||0);
-  const commission = price*0.05;
-  document.getElementById('aiPreview').innerHTML = url?`<img src="${url}"><p>✨ AI: Background Cleaned - Studio Look. Scratches KEPT if checked ✅</p>`:'Add photo URL first';
-  document.getElementById('calc').innerText = `Sale ${price} | JAOM 5% = ${commission} | Seller Gets ${price-commission}`;
-}
-async function loadProducts(){
-  const curr=document.getElementById('currency').value;
-  const {data} = await supabaseClient.from('products').select('*').order('created_at',{ascending:false});
-  let html='<div class="card"><h3>🔥 Products in Juba - Search & Filter</h3><input placeholder="🔍 Search products..." oninput="filterProducts(this.value)"></div>';
-  if(data) data.forEach(p=>{
-    let displayPrice = curr==='USD' ? (p.price/rate).toFixed(2)+' USD' : p.price+' SSP';
-    html+=`<div class="card product" data-title="${p.title.toLowerCase()}">${p.photo_url?`<img src="${p.photo_url}">`:''}<h3>${p.title}</h3><p><b>${displayPrice}</b> • ${p.description||''}</p><p>${p.has_scratches?'⚠️ Has Scratches - Honest ✅':'✅ No Scratches'} • ⭐ 4.8 Seller Rating</p><button class="gold" onclick="addToCart('${p.id}','${p.title}',${p.price})">Add to Cart</button> <button onclick="buyProduct('${p.id}')">Buy with Escrow</button></div>`;
-  });
-  document.getElementById('market').innerHTML=html;
-  document.getElementById('foodList').innerHTML=html;
-}
-function filterProducts(q){document.querySelectorAll('.product').forEach(el=>el.style.display=el.dataset.title.includes(q.toLowerCase())?'block':'none')}
-function addToCart(id,title,price){cart.push({id,title,price});document.getElementById('cartCount').innerText=cart.length;document.getElementById('cartList').innerHTML=cart.map(c=>`<p>${c.title} - ${c.price} SSP</p>`).join('');alert('Added to Cart ✅')}
-async function addProduct(){
-  const title=document.getElementById('title').value; const price=document.getElementById('price').value;
-  const photo_url=document.getElementById('photo').value; const description=document.getElementById('desc').value;
-  const has_scratches=document.getElementById('scratches').checked;
-  if(!title||!price){document.getElementById('sellMsg').innerText='Add title + price';return;}
-  const {error}=await supabaseClient.from('products').insert([{title,price:parseInt(price),photo_url,description,has_scratches}]);
-  document.getElementById('sellMsg').innerText=error?'Error: '+error.message:'✅ Published! AI cleaned background, scratches kept!';
-  loadProducts();
-}
-async function buyProduct(id){alert('Escrow Started! Money HELD until you confirm delivery.');await supabaseClient.from('orders').insert([{product_id:id,status:'waiting'}])}
-function checkout(){if(!cart.length){alert('Cart empty');return;}alert('Checkout: Payment provider must confirm. Escrow will HOLD money until delivery confirmed.');}
-loadProducts();
-</script>
-</body>
-  </html>
+<div id="sellPage" style="display:none">
+<div class="white-card"><h3>➕ Sell on JAOM - AI Studio</h3><p>AI cleans background, creates studio photo. NEVER hides scratches.</p>
+<input id="title" placeholder="Product Title"><input id="price" type="number" placeholder="Price in SSP"><input id="photo" placeholder="Photo URL - or use demo photo"><textarea id="desc" placeholder="Description - Be honest about scratches"></textarea>
+<label><input type="checkbox" id="scratches" style="width:auto"> Has Scratches?</label>
+<button class="gold" onclick="addProduct()">Publish Product</button
