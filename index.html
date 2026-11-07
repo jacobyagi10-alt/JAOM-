@@ -1,50 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>JAOM - Shop Smart. Shop with Confidence.</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JAOM - Juba Marketplace</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f5f3eb;font-family:sans-serif;padding-bottom:80px}
-header{background:#111;color:#fff;padding:12px 14px;position:sticky;top:0;z-index:10}
-.top{display:flex;align-items:center;justify-content:space-between}
-.logo{font-size:26px;font-weight:900;letter-spacing:2px}.logo b{color:#D4AF37}
-.search{display:flex;gap:6px;margin-top:10px;background:#fff;border-radius:12px;padding:6px}
-.search input{flex:1;border:none;outline:none;padding:10px}
-.search button{background:#D4AF37;border:none;padding:10px 14px;border-radius:10px;font-weight:bold}
-.hero{background:linear-gradient(135deg,#111,#3a2d00);color:#fff;padding:18px;border-radius:16px;margin:12px}
-.hero h2{margin:0;color:#D4AF37}.hero p{font-size:13px;color:#ddd}
-.cats{display:flex;gap:10px;overflow:auto;padding:0 12px}
-.cat{background:#fff;border:1px solid #eee;border-radius:14px;min-width:78px;text-align:center;padding:10px 6px;font-size:12px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
-.card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.card img{width:100%;height:140px;object-fit:cover}
-.card .in{padding:10px}.price{color:#111;font-weight:900}.old{color:#999;text-decoration:line-through;font-size:12px}
-.gold{background:#D4AF37;border:none;padding:9px;width:100%;border-radius:10px;font-weight:bold;margin-top:6px}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#111;display:flex;padding:10px;gap:6px}
-.bottom button{flex:1;background:#222;color:#D4AF37;border:none;padding:10px;border-radius:12px;font-weight:bold}
-.bottom button.active{background:#D4AF37;color:#000}
-.section{padding:0 12px}.section h3{margin:12px 0 6px}
-input,select,textarea{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:1px solid #ddd}
-.white-card{background:#fff;border-radius:16px;padding:14px;margin:12px}
+body{font-family:Arial;background:#f6f6f6;margin:0;padding:15px}
+h1{color:#111;text-align:center} .card{background:#fff;padding:15px;border-radius:12px;margin:10px 0;box-shadow:0 2px 8px #0001}
+input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid #ddd;border-radius:8px}
+button{background:#111;color:#fff;padding:11px;border:none;border-radius:8px;width:100%;font-weight:bold}
+img{width:100%;border-radius:10px}
 </style>
 </head>
 <body>
-<header>
-<div class="top"><div class="logo">JA<b>OM</b> 🇸🇸</div><div>📍 Juba <select id="currency" style="width:auto;padding:6px;border-radius:8px"><option>SSP</option><option>USD</option></select> <select id="lang" style="width:auto;padding:6px;border-radius:8px"><option>EN</option><option>AR</option><option>SW</option></select></div></div>
-<div class="search"><input id="searchInput" placeholder="Search phones, food, clothes in Juba..." oninput="filterProducts(this.value)"><button>🔍</button></div>
-</header>
+<h1>JAOM 🇸🇸</h1>
+<p style="text-align:center">Buy & Sell in Juba</p>
 
-<div id="marketPage">
-<div class="hero"><h2>Shop Smart. Shop with Confidence.</h2><p>Escrow protects you • AI photos honest • 5% JAOM • Custom • Konyo Konyo • Munuki • Gudele</p><button style="background:#D4AF37;border:none;padding:10px 16px;border-radius:10px;font-weight:bold;margin-top:8px" onclick="showPage('sellPage')">+ Sell Now - FREE</button></div>
-<div class="section"><h3>Categories</h3></div>
-<div class="cats"><div class="cat">📱<br>Phones</div><div class="cat">🍲<br>Food</div><div class="cat">👕<br>Fashion</div><div class="cat">🏠<br>Home</div><div class="cat">💻<br>Electronics</div><div class="cat">💄<br>Beauty</div></div>
-<div class="section"><h3>🔥 Trending in Juba</h3></div>
-<div class="grid" id="productGrid"></div>
+<div class="card">
+<h3>Login / Sign Up</h3>
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+<button onclick="signup()">Sign Up</button><br><br>
+<button onclick="login()">Login</button>
+<p id="authMsg"></p>
 </div>
 
-<div id="sellPage" style="display:none">
-<div class="white-card"><h3>➕ Sell on JAOM - AI Studio</h3><p>AI cleans background, creates studio photo. NEVER hides scratches.</p>
-<input id="title" placeholder="Product Title"><input id="price" type="number" placeholder="Price in SSP"><input id="photo" placeholder="Photo URL - or use demo photo"><textarea id="desc" placeholder="Description - Be honest about scratches"></textarea>
-<label><input type="checkbox" id="scratches" style="width:auto"> Has Scratches?</label>
-<button class="gold" onclick="addProduct()">Publish Product</button
+<div class="card">
+<h3>Sell Something</h3>
+<input id="title" placeholder="What are you selling? e.g. iPhone 13">
+<input id="price" type="number" placeholder="Price in SSP">
+<input id="image" placeholder="Image link (optional)">
+<textarea id="desc" placeholder="Description"></textarea>
+<select id="category"><option>Electronics</option><option>Fashion</option><option>Food</option><option>Home</option><option>Other</option></select>
+<button onclick="addProduct()">Post Product</button>
+</div>
+
+<div class="card"><h3>Marketplace</h3><div id="list">Loading...</div></div>
+
+<script>
+const SUPABASE_URL = "https://ucprmvnjvqbpddozxtno.supabase.co";
+const SUPABASE_KEY = "sb_publishable_eIygYOGjioGPzyZYjFIe1w_UxRBsWVz";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function signup(){
+  const {error} = await supabaseClient.auth.signUp({email:email.value, password:password.value});
+  document.getElementById('authMsg').innerText = error ? error.message : "Check email to confirm! Then Login";
+}
+async function login(){
+  const {error} = await supabaseClient.auth.signInWithPassword({email:email.value, password:password.value});
+  document.getElementById('authMsg').innerText = error ? error.message : "Logged in! ✅";
+  load();
+}
+async function addProduct(){
+  const {data:{user}} = await supabaseClient.auth.getUser();
+  if(!user) return alert("Login first!");
+  const {error} = await supabaseClient.from('products').insert({
+    seller_id: user.id,
+    title: title.value,
+    description: desc.value,
+    price: price.value,
+    category: category.value,
+    image_url: image.value || null,
+    is_available: true
+  });
+  alert(error ? error.message : "Posted! ✅");
+  load();
+}
+async function load(){
+  const {data} = await supabaseClient.from('products').select('*').order('created_at',{ascending:false});
+  document.getElementById('list').innerHTML = (data||[]).map(p=>`
+    <div class="card"><b>${p.title}</b><br>${p.price} SSP<br>${p.description||''}<br>
+    <button onclick="buy('${p.id}','${p.seller_id}',${p.price})">Buy Now</button></div>`).join('') || "No products yet - be first!";
+}
+async function buy(id, seller, price){
+  const {data:{user}} = await supabaseClient.auth.getUser();
+  if(!user) return alert("Login first!");
+  const {error} = await supabaseClient.from('orders').insert({buyer_id:user.id, seller_id:seller, product_id:id, total_amount:price, status:'pending'});
+  alert(error ? error.message : "Order placed! Seller will contact you ✅");
+}
+load();
+</script>
+</body>
+</html>
