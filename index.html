@@ -3,83 +3,87 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>JAOM - Juba Marketplace</title>
+<title>JAOM ESCROW</title>
+<link rel="manifest" href="manifest.json?v=2">
+<meta name="theme-color" content="#C9A227">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-body{font-family:Arial;background:#f6f6f6;margin:0;padding:15px}
-h1{color:#111;text-align:center} .card{background:#fff;padding:15px;border-radius:12px;margin:10px 0;box-shadow:0 2px 8px #0001}
-input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid #ddd;border-radius:8px}
-button{background:#111;color:#fff;padding:11px;border:none;border-radius:8px;width:100%;font-weight:bold}
-img{width:100%;border-radius:10px}
+*{box-sizing:border-box} body{font-family:Arial;background:#FFFDF5;margin:0;padding:0;padding-bottom:80px}
+.top{background:linear-gradient(#8A6D00,#C9A227);color:#fff;padding:22px 16px 16px;text-align:center;border-radius:0 0 22px 22px}
+.crown{font-size:52px;line-height:1} .logo{font-size:32px;letter-spacing:3px;font-weight:900;color:#fff;margin:4px 0 0}
+.sub{font-size:11px;letter-spacing:4px;opacity:.9}
+.badgeBox{background:#FFF8DC;color:#333;margin:14px;border-radius:14px;padding:12px;text-align:center;box-shadow:0 2px 8px #0001}
+.badgeBox b{font-size:15px} .badgeBox p{margin:5px 0 0;font-size:12px;color:#777}
+.wrap{padding:0 14px;max-width:600px;margin:auto}
+.search{width:100%;padding:13px 14px;border:1px solid #E8D88A;border-radius:12px;font-size:14px;margin:10px 0;background:#fff}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:4px 0}
+.cat{background:#fff;border:1.5px solid #C9A227;color:#8A6D00;padding:8px 16px;border-radius:20px;white-space:nowrap;font-weight:bold;cursor:pointer}
+.cat.active{background:#C9A227;color:#fff}
+h2{font-size:19px;margin:16px 0 10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pcard{background:#fff;border:1px solid #F0E6B0;border-radius:14px;overflow:hidden;position:relative;box-shadow:0 2px 8px #0001}
+.pcard img{width:100%;height:150px;object-fit:cover;background:#f9f9f9}
+.pcard .in{padding:10px;text-align:center}
+.pcard b{font-size:14px} .pdetail{font-size:11px;color:#777;margin:4px 0} .price{color:#9A7B00;font-weight:900;font-size:15px;margin:5px 0}
+.tag{position:absolute;top:8px;right:8px;background:#C9A227;color:#fff;font-size:10px;font-weight:bold;padding:4px 8px;border-radius:6px}
+.buyBtn{border:1.5px solid #C9A227;color:#8A6D00;background:#fff;padding:6px 10px;border-radius:8px;font-weight:bold;font-size:12px;width:100%}
+.card{background:#fff;padding:14px;border-radius:14px;margin:12px 0;box-shadow:0 2px 10px #0001;border:1px solid #F0E6B0}
+input,select,textarea{width:100%;padding:11px;margin:6px 0;border:1px solid #ddd;border-radius:10px}
+button.main{background:#111;color:#fff;padding:12px;border:none;border-radius:10px;width:100%;font-weight:bold}
+button.gold{background:#C9A227;color:#fff;padding:12px;border:none;border-radius:10px;width:100%;font-weight:bold}
+button:disabled{opacity:.5}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:10px 0 14px;border-top:1px solid #eee;z-index:99}
+.nav div{text-align:center;font-size:11px;color:#999;cursor:pointer} .nav div.active{color:#C9A227;font-weight:bold} .nav span{font-size:22px;display:block}
+.hidden{display:none} .escrowBox{background:#FFF8DC;border:1px solid #C9A227;padding:12px;border-radius:12px;font-size:13px;line-height:1.6}
+.version{text-align:center;font-size:11px;color:#aaa;margin:20px 0}
 </style>
 </head>
 <body>
-<h1>JAOM 🇸🇸</h1>
-<p style="text-align:center">Buy & Sell in Juba</p>
 
-<div class="card">
-<h3>Login / Sign Up</h3>
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
-<button onclick="signup()">Sign Up</button><br><br>
-<button onclick="login()">Login</button>
-<p id="authMsg"></p>
+<div class="top">
+<div class="crown">👑</div>
+<div class="logo">JAOM ESCROW</div>
+<div class="sub">ESCROW • SECURE • TRUSTED</div>
 </div>
 
+<div id="tab-home">
+<div class="badgeBox"><b>Marketplace • Electronics Only</b><p>🛡️ Verified Escrow • Secure Payment</p></div>
+<div class="wrap">
+<input class="search" id="searchBox" placeholder="🔍 Search iPhones, Samsung, TVs, Solar..." oninput="load()">
+<div class="cats">
+<span class="cat active" onclick="setCat('All',this)">All</span>
+<span class="cat" onclick="setCat('iPhones',this)">iPhones</span>
+<span class="cat" onclick="setCat('Samsung',this)">Samsung</span>
+<span class="cat" onclick="setCat('TVs',this)">TVs</span>
+<span class="cat" onclick="setCat('Solar',this)">Solar</span>
+</div>
+<h2>⭐ Featured Products</h2>
+<div class="grid" id="list">Loading...</div>
+
 <div class="card">
-<h3>Sell Something</h3>
-<input id="title" placeholder="What are you selling? e.g. iPhone 13">
+<h3>📦 Sell on JAOM Escrow</h3>
+<input id="title" placeholder="e.g. iPhone 15 Pro Max">
 <input id="price" type="number" placeholder="Price in SSP">
+<input id="phone" placeholder="WhatsApp Number e.g. 211920000000">
 <input id="image" placeholder="Image link (optional)">
-<textarea id="desc" placeholder="Description"></textarea>
-<select id="category"><option>Electronics</option><option>Fashion</option><option>Food</option><option>Home</option><option>Other</option></select>
-<button onclick="addProduct()">Post Product</button>
+<input type="file" accept="image/*" onchange="previewImg(event)">
+<img id="preview" style="display:none;width:100%;border-radius:10px">
+<textarea id="desc" placeholder="256GB • Natural Titanium • Juba"></textarea>
+<select id="category"><option>iPhones</option><option>Samsung</option><option>TVs</option><option>Solar</option><option>Other</option></select>
+<button class="gold" onclick="addProduct()">🚀 Post Product</button>
+</div>
+<div class="version">JAOM ESCROW v2.0 GOLD ✅ - If you see this, update worked!</div>
+</div>
 </div>
 
-<div class="card"><h3>Marketplace</h3><div id="list">Loading...</div></div>
+<div id="tab-market" class="hidden"><div class="wrap"><h2>🏪 Marketplace</h2><p>All verified electronics in Juba. Every payment protected by Escrow.</p><div class="grid" id="list2"></div></div></div>
 
-<script>
-const SUPABASE_URL = "https://ucprmvnjvqbpddozxtno.supabase.co";
-const SUPABASE_KEY = "sb_publishable_eIygYOGjioGPzyZYjFIe1w_UxRBsWVz";
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+<div id="tab-escrow" class="hidden"><div class="wrap"><h2>🛡️ Escrow Protection</h2>
+<div class="escrowBox"><b>How JAOM Escrow Works:</b><br>1. Buyer pays to JAOM Escrow<br>2. Seller delivers product<br>3. Buyer confirms<br>4. JAOM releases money to seller<br><br>❌ Seller never gets money before you confirm!</div>
+<div id="myOrders"></div>
+</div></div>
 
-async function signup(){
-  const {error} = await supabaseClient.auth.signUp({email:email.value, password:password.value});
-  document.getElementById('authMsg').innerText = error ? error.message : "Check email to confirm! Then Login";
-}
-async function login(){
-  const {error} = await supabaseClient.auth.signInWithPassword({email:email.value, password:password.value});
-  document.getElementById('authMsg').innerText = error ? error.message : "Logged in! ✅";
-  load();
-}
-async function addProduct(){
-  const {data:{user}} = await supabaseClient.auth.getUser();
-  if(!user) return alert("Login first!");
-  const {error} = await supabaseClient.from('products').insert({
-    seller_id: user.id,
-    title: title.value,
-    description: desc.value,
-    price: price.value,
-    category: category.value,
-    image_url: image.value || null,
-    is_available: true
-  });
-  alert(error ? error.message : "Posted! ✅");
-  load();
-}
-async function load(){
-  const {data} = await supabaseClient.from('products').select('*').order('created_at',{ascending:false});
-  document.getElementById('list').innerHTML = (data||[]).map(p=>`
-    <div class="card"><b>${p.title}</b><br>${p.price} SSP<br>${p.description||''}<br>
-    <button onclick="buy('${p.id}','${p.seller_id}',${p.price})">Buy Now</button></div>`).join('') || "No products yet - be first!";
-}
-async function buy(id, seller, price){
-  const {data:{user}} = await supabaseClient.auth.getUser();
-  if(!user) return alert("Login first!");
-  const {error} = await supabaseClient.from('orders').insert({buyer_id:user.id, seller_id:seller, product_id:id, total_amount:price, status:'pending'});
-  alert(error ? error.message : "Order placed! Seller will contact you ✅");
-}
-load();
-</script>
-</body>
-</html>
+<div id="tab-wallet" class="hidden"><div class="wrap"><h2>👛 Wallet</h2><div class="card" style="text-align:center"><div style="font-size:38px">👑</div><b>JAOM Wallet</b><p style="font-size:28px;font-weight:900;color:#9A7B00">0 SSP</p><p>Escrow balance • Top up via Mobile Money coming soon</p><button class="gold" onclick="alert('Wallet top-up coming soon! Use Buy + Escrow for now.')">Top Up</button></div></div></div>
+
+<div id="tab-profile" class="hidden"><div class="wrap"><h2>👤 Profile</h2><div class="card">
+<p style="background:#FFF8DC;padding:10px;border-radius:8px;font-size:13px"><b>⚠️ Already
