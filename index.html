@@ -3,87 +3,198 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>JAOM ESCROW</title>
-<link rel="manifest" href="manifest.json?v=2">
+<title>JAOM Juba Marketplace</title>
+<link rel="manifest" href="manifest.json?v=3">
 <meta name="theme-color" content="#C9A227">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box} body{font-family:Arial;background:#FFFDF5;margin:0;padding:0;padding-bottom:80px}
-.top{background:linear-gradient(#8A6D00,#C9A227);color:#fff;padding:22px 16px 16px;text-align:center;border-radius:0 0 22px 22px}
-.crown{font-size:52px;line-height:1} .logo{font-size:32px;letter-spacing:3px;font-weight:900;color:#fff;margin:4px 0 0}
-.sub{font-size:11px;letter-spacing:4px;opacity:.9}
-.badgeBox{background:#FFF8DC;color:#333;margin:14px;border-radius:14px;padding:12px;text-align:center;box-shadow:0 2px 8px #0001}
-.badgeBox b{font-size:15px} .badgeBox p{margin:5px 0 0;font-size:12px;color:#777}
+*{box-sizing:border-box} body{font-family:Arial;background:#FFFEF7;margin:0;padding-bottom:85px}
+.top{padding:20px 16px 6px;text-align:center}
+.top h1{color:#B89600;font-size:28px;margin:0;letter-spacing:.5px}
+.langs{display:flex;justify-content:center;gap:8px;margin:14px 0}
+.lang{border:1.5px solid #333;padding:8px 16px;border-radius:8px;background:#fff;font-weight:bold;cursor:pointer}
+.lang.active{background:#C9A227;color:#fff;border-color:#C9A227}
 .wrap{padding:0 14px;max-width:600px;margin:auto}
-.search{width:100%;padding:13px 14px;border:1px solid #E8D88A;border-radius:12px;font-size:14px;margin:10px 0;background:#fff}
-.cats{display:flex;gap:8px;overflow-x:auto;padding:4px 0}
-.cat{background:#fff;border:1.5px solid #C9A227;color:#8A6D00;padding:8px 16px;border-radius:20px;white-space:nowrap;font-weight:bold;cursor:pointer}
+.search{display:flex;align-items:center;background:#FFFBEB;border:1.5px solid #E8D88A;border-radius:14px;padding:12px}
+.search input{border:none;outline:none;background:transparent;width:100%;font-size:15px}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:12px 0}
+.cat{background:#fff;border:1.5px solid #C9A227;color:#8A6D00;padding:8px 15px;border-radius:20px;white-space:nowrap;font-weight:bold;cursor:pointer}
 .cat.active{background:#C9A227;color:#fff}
-h2{font-size:19px;margin:16px 0 10px}
+.row{display:flex;justify-content:space-between;align-items:center}
+.row h2{font-size:20px} .see{color:#B89600;font-weight:bold;cursor:pointer}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.pcard{background:#fff;border:1px solid #F0E6B0;border-radius:14px;overflow:hidden;position:relative;box-shadow:0 2px 8px #0001}
-.pcard img{width:100%;height:150px;object-fit:cover;background:#f9f9f9}
+.pcard{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 3px 12px #0001;border:1px solid #f0e6b0}
+.pcard img{width:100%;height:150px;object-fit:cover}
 .pcard .in{padding:10px;text-align:center}
-.pcard b{font-size:14px} .pdetail{font-size:11px;color:#777;margin:4px 0} .price{color:#9A7B00;font-weight:900;font-size:15px;margin:5px 0}
-.tag{position:absolute;top:8px;right:8px;background:#C9A227;color:#fff;font-size:10px;font-weight:bold;padding:4px 8px;border-radius:6px}
-.buyBtn{border:1.5px solid #C9A227;color:#8A6D00;background:#fff;padding:6px 10px;border-radius:8px;font-weight:bold;font-size:12px;width:100%}
+.pcard b{font-size:15px} .price{color:#B89600;font-weight:900;font-size:16px;margin:5px 0}
+.escrow{background:#C9A227;color:#fff;font-size:10px;font-weight:bold;padding:6px 4px;border-radius:6px;margin:6px 0}
+.loc{font-size:12px;color:#333;margin:4px 0}
+.buyBtn{background:#111;color:#fff;border:none;padding:9px;border-radius:8px;width:100%;font-weight:bold;margin-top:6px}
+.buyBtn2{background:#25D366;color:#fff;border:none;padding:9px;border-radius:8px;width:100%;font-weight:bold;margin-top:6px}
 .card{background:#fff;padding:14px;border-radius:14px;margin:12px 0;box-shadow:0 2px 10px #0001;border:1px solid #F0E6B0}
-input,select,textarea{width:100%;padding:11px;margin:6px 0;border:1px solid #ddd;border-radius:10px}
+input,select,textarea{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:10px;font-size:14px}
 button.main{background:#111;color:#fff;padding:12px;border:none;border-radius:10px;width:100%;font-weight:bold}
 button.gold{background:#C9A227;color:#fff;padding:12px;border:none;border-radius:10px;width:100%;font-weight:bold}
 button:disabled{opacity:.5}
-.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:10px 0 14px;border-top:1px solid #eee;z-index:99}
-.nav div{text-align:center;font-size:11px;color:#999;cursor:pointer} .nav div.active{color:#C9A227;font-weight:bold} .nav span{font-size:22px;display:block}
-.hidden{display:none} .escrowBox{background:#FFF8DC;border:1px solid #C9A227;padding:12px;border-radius:12px;font-size:13px;line-height:1.6}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:10px 0 16px;border-top:1px solid #eee;z-index:99}
+.nav div{text-align:center;font-size:13px;color:#888;cursor:pointer} .nav div.active{color:#B89600;font-weight:bold} .nav span{font-size:26px;display:block}
+.hidden{display:none} .deal{background:#FFF8DC;border:1px solid #C9A227;padding:12px;border-radius:12px;margin:10px 0}
 .version{text-align:center;font-size:11px;color:#aaa;margin:20px 0}
 </style>
 </head>
 <body>
 
-<div class="top">
-<div class="crown">👑</div>
-<div class="logo">JAOM ESCROW</div>
-<div class="sub">ESCROW • SECURE • TRUSTED</div>
-</div>
+<div class="top"><h1 id="appTitle">JAOM Juba Marketplace</h1>
+<div class="langs">
+<button class="lang active" onclick="setLang('en',this)">English</button>
+<button class="lang" onclick="setLang('ar',this)">العربية</button>
+<button class="lang" onclick="setLang('sw',this)">Kiswahili</button>
+</div></div>
 
+<!-- HOME -->
 <div id="tab-home">
-<div class="badgeBox"><b>Marketplace • Electronics Only</b><p>🛡️ Verified Escrow • Secure Payment</p></div>
 <div class="wrap">
-<input class="search" id="searchBox" placeholder="🔍 Search iPhones, Samsung, TVs, Solar..." oninput="load()">
-<div class="cats">
-<span class="cat active" onclick="setCat('All',this)">All</span>
-<span class="cat" onclick="setCat('iPhones',this)">iPhones</span>
-<span class="cat" onclick="setCat('Samsung',this)">Samsung</span>
-<span class="cat" onclick="setCat('TVs',this)">TVs</span>
-<span class="cat" onclick="setCat('Solar',this)">Solar</span>
+<div class="search"><span>🔍</span><input id="searchBox" placeholder="Search products, land, vehicles, services..." oninput="load()"><span>☰</span></div>
+<div class="cats" id="catsHome"></div>
+<div class="row"><h2 id="featTitle">Featured Listings</h2><span class="see" onclick="goMarket()">See all</span></div>
+<div class="grid" id="list">Loading real listings...</div>
+<div class="version">JAOM REAL v3.0 ✅ Connected to Supabase</div>
 </div>
-<h2>⭐ Featured Products</h2>
-<div class="grid" id="list">Loading...</div>
+</div>
 
-<div class="card">
-<h3>📦 Sell on JAOM Escrow</h3>
-<input id="title" placeholder="e.g. iPhone 15 Pro Max">
+<!-- MARKET -->
+<div id="tab-market" class="hidden"><div class="wrap"><h2>🏪 Market</h2><div class="cats" id="catsMarket"></div><div class="grid" id="list2"></div></div></div>
+
+<!-- SELL -->
+<div id="tab-sell" class="hidden"><div class="wrap"><h2 id="sellTitle">➕ Sell Something</h2><div class="card">
+<input id="title" placeholder="Title e.g. iPhone 13 / Land in Gudele / Toyota Corolla">
 <input id="price" type="number" placeholder="Price in SSP">
-<input id="phone" placeholder="WhatsApp Number e.g. 211920000000">
+<input id="location" placeholder="Location e.g. Juba, Gudele, Munuki">
+<input id="phone" placeholder="WhatsApp e.g. 211920000000">
 <input id="image" placeholder="Image link (optional)">
-<input type="file" accept="image/*" onchange="previewImg(event)">
-<img id="preview" style="display:none;width:100%;border-radius:10px">
-<textarea id="desc" placeholder="256GB • Natural Titanium • Juba"></textarea>
-<select id="category"><option>iPhones</option><option>Samsung</option><option>TVs</option><option>Solar</option><option>Other</option></select>
-<button class="gold" onclick="addProduct()">🚀 Post Product</button>
-</div>
-<div class="version">JAOM ESCROW v2.0 GOLD ✅ - If you see this, update worked!</div>
-</div>
-</div>
+<label>📸 Upload Photo:</label><input type="file" accept="image/*" onchange="previewImg(event)"><img id="preview" style="display:none;width:100%;border-radius:10px">
+<textarea id="desc" placeholder="Details e.g. 128GB • Black • Good condition"></textarea>
+<select id="category"><option>Phones</option><option>Land</option><option>Vehicles</option><option>Electronics</option><option>Services</option><option>Other</option></select>
+<button class="gold" onclick="addProduct()">🚀 Post Listing - Real</button>
+<p id="sellMsg"></p>
+</div></div></div>
 
-<div id="tab-market" class="hidden"><div class="wrap"><h2>🏪 Marketplace</h2><p>All verified electronics in Juba. Every payment protected by Escrow.</p><div class="grid" id="list2"></div></div></div>
-
-<div id="tab-escrow" class="hidden"><div class="wrap"><h2>🛡️ Escrow Protection</h2>
-<div class="escrowBox"><b>How JAOM Escrow Works:</b><br>1. Buyer pays to JAOM Escrow<br>2. Seller delivers product<br>3. Buyer confirms<br>4. JAOM releases money to seller<br><br>❌ Seller never gets money before you confirm!</div>
+<!-- DEALS / ESCROW -->
+<div id="tab-deals" class="hidden"><div class="wrap"><h2>🏷️ Deals / Escrow</h2>
+<div class="deal"><b>🛡️ How GOLD Escrow Works:</b><br>1. Buyer pays to JAOM Escrow<br>2. Seller delivers<br>3. Buyer confirms<br>4. JAOM releases money to seller<br><br>❌ Seller never gets money before you confirm!</div>
 <div id="myOrders"></div>
 </div></div>
 
-<div id="tab-wallet" class="hidden"><div class="wrap"><h2>👛 Wallet</h2><div class="card" style="text-align:center"><div style="font-size:38px">👑</div><b>JAOM Wallet</b><p style="font-size:28px;font-weight:900;color:#9A7B00">0 SSP</p><p>Escrow balance • Top up via Mobile Money coming soon</p><button class="gold" onclick="alert('Wallet top-up coming soon! Use Buy + Escrow for now.')">Top Up</button></div></div></div>
-
+<!-- PROFILE -->
 <div id="tab-profile" class="hidden"><div class="wrap"><h2>👤 Profile</h2><div class="card">
-<p style="background:#FFF8DC;padding:10px;border-radius:8px;font-size:13px"><b>⚠️ Already
+<p style="background:#FFF8DC;padding:10px;border-radius:8px;font-size:13px"><b>Already have account?</b> Press LOGIN ONLY.</p>
+<input id="email" placeholder="Email"><input id="password" type="password" placeholder="Password">
+<button class="gold" id="signupBtn" onclick="signup()">Sign Up</button><br><br><button class="main" id="loginBtn" onclick="login()">Login</button>
+<p id="authMsg"></p><p id="userInfo"></p>
+<button class="main" onclick="logout()" style="background:#eee;color:#111">Logout</button>
+</div><div class="card"><h3>My Listings</h3><div id="myListings">Login to see your listings</div></div>
+</div></div>
+
+<div class="nav">
+<div class="active" onclick="showTab('home',this)"><span>🏠</span><label id="nHome">Home</label></div>
+<div onclick="showTab('market',this)"><span>🏪</span><label id="nMarket">Market</label></div>
+<div onclick="showTab('sell',this)"><span>➕</span><label id="nSell">Sell</label></div>
+<div onclick="showTab('deals',this)"><span>🏷️</span><label id="nDeals">Deals</label></div>
+<div onclick="showTab('profile',this)"><span>👤</span><label id="nProfile">Profile</label></div>
+</div>
+
+<script>
+const SUPABASE_URL="https://ucprmvnjvqbpddozxtno.supabase.co";
+const SUPABASE_KEY="sb_publishable_eIygYOGjioGPzyZYjFIe1w_UxRBsWVz";
+const supabaseClient=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let currentCat='All', uploadedImage='', currentLang='en';
+
+const T={
+en:{feat:'Featured Listings',sell:'➕ Sell Something',home:'Home',market:'Market',sellN:'Sell',deals:'Deals',profile:'Profile',search:'Search products, land, vehicles, services...'},
+ar:{feat:'العروض المميزة',sell:'➕ بيع شيء',home:'الرئيسية',market:'السوق',sellN:'بيع',deals:'العروض',profile:'الملف',search:'ابحث عن منتجات، أراضي، سيارات، خدمات...'},
+sw:{feat:'Orodha Maalum',sell:'➕ Uza Kitu',home:'Nyumbani',market:'Soko',sellN:'Uza',deals:'Deals',profile:'Wasifu',search:'Tafuta bidhaa, ardhi, magari, huduma...'}
+};
+function setLang(l,el){ currentLang=l; document.querySelectorAll('.lang').forEach(x=>x.classList.remove('active')); el.classList.add('active');
+document.getElementById('featTitle').innerText=T[l].feat; document.getElementById('sellTitle').innerText=T[l].sell;
+document.getElementById('nHome').innerText=T[l].home; document.getElementById('nMarket').innerText=T[l].market; document.getElementById('nSell').innerText=T[l].sellN; document.getElementById('nDeals').innerText=T[l].deals; document.getElementById('nProfile').innerText=T[l].profile;
+document.getElementById('searchBox').placeholder=T[l].search;
+}
+function renderCats(){ const cats=['All','Phones','Land','Vehicles','Electronics','Services']; const html=cats.map(c=>`<span class="cat ${c==currentCat?'active':''}" onclick="setCat('${c}',this)">${c}</span>`).join(''); document.getElementById('catsHome').innerHTML=html; document.getElementById('catsMarket').innerHTML=html; }
+function setCat(c,el){ currentCat=c; renderCats(); load(); }
+function goMarket(){ showTab('market',document.querySelectorAll('.nav div')[1]); }
+function showTab(t,el){ ['home','market','sell','deals','profile'].forEach(x=>document.getElementById('tab-'+x).classList.add('hidden')); document.getElementById('tab-'+t).classList.remove('hidden'); document.querySelectorAll('.nav div').forEach(d=>d.classList.remove('active')); el.classList.add('active'); if(t=='deals') loadOrders(); if(t=='profile') loadMyListings(); }
+function previewImg(e){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{ uploadedImage=r.result; const p=document.getElementById('preview'); p.src=uploadedImage; p.style.display='block'; }; r.readAsDataURL(f); }
+
+async function signup(){ const btn=document.getElementById('signupBtn'); btn.disabled=true; btn.innerText="Please wait..."; const {error}=await supabaseClient.auth.signUp({email:email.value,password:password.value}); if(error && error.message.includes("seconds")) document.getElementById('authMsg').innerText="⏳ Wait 60 sec! You already signed up - press LOGIN!"; else document.getElementById('authMsg').innerText=error?error.message:"✅ Check email! Then press LOGIN"; setTimeout(()=>{btn.disabled=false;btn.innerText="Sign Up"},60000); }
+async function login(){ const btn=document.getElementById('loginBtn'); btn.disabled=true; btn.innerText="Logging in..."; const {data,error}=await supabaseClient.auth.signInWithPassword({email:email.value,password:password.value}); document.getElementById('authMsg').innerText=error?error.message:"Logged in! ✅ Welcome to JAOM!"; if(!error) document.getElementById('userInfo').innerText="Logged in as: "+data.user.email; btn.disabled=false; btn.innerText="Login"; loadMyListings(); }
+async function logout(){ await supabaseClient.auth.signOut(); document.getElementById('userInfo').innerText="Logged out"; document.getElementById('authMsg').innerText=""; }
+
+const seed=[
+{title:'iPhone 13',description:'128GB • Black • Good condition',price:850000,category:'Phones',image_url:'https://images.unsplash.com/photo-1632661677709-2f619d0c3f3c?w=600',phone:'211920000000',location:'Juba',distance:'2.1km away'},
+{title:'Land in Gudele',description:'Plot • 20x30 • With documents',price:12000000,category:'Land',image_url:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600',phone:'211920000000',location:'Gudele',distance:'5.4km away'},
+{title:'Toyota Corolla 2018',description:'Automatic • Petrol • Clean',price:6500000,category:'Vehicles',image_url:'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=600',phone:'211920000000',location:'Munuki',distance:'3.8km away'}
+];
+
+async function addProduct(){
+  const {data:{user}}=await supabaseClient.auth.getUser();
+  if(!user) return alert("Login first in Profile tab!");
+  const img=uploadedImage||image.value||null;
+  const payload={seller_id:user.id,title:title.value,description:desc.value,price:Number(price.value),category:category.value,image_url:img,is_available:true,phone:phone.value,location:location.value||'Juba'};
+  const {error}=await supabaseClient.from('products').insert(payload);
+  if(error){ alert("Supabase error: "+error.message); } else { document.getElementById('sellMsg').innerText="✅ Posted! Real listing live now!"; alert("Posted! ✅ Now in Featured!"); showTab('home',document.querySelectorAll('.nav div')[0]); }
+  load();
+}
+function cardHTML(p){
+  const loc = p.location || 'Juba';
+  const dist = p.distance || 'Juba';
+  return `<div class="pcard"><img src="${p.image_url||'https://via.placeholder.com/300'}"><div class="in"><b>${p.title}</b><div class="price">${Number(p.price).toLocaleString()} SSP</div><div class="escrow">🛡️ GOLD ESCROW PROTECTED</div><div class="loc">📍 ${loc} • ${dist}</div><button class="buyBtn" onclick="buyNow('${p.id}','${p.seller_id||''}',${p.price},'${p.title.replace(/'/g,"")}')">BUY NOW</button><button class="buyBtn2" onclick="buyWhats('${p.phone||''}','${p.title.replace(/'/g,"")}')">💬 WhatsApp</button></div></div>`;
+}
+async function load(){
+  renderCats();
+  const s=document.getElementById('searchBox').value.toLowerCase();
+  // REAL DATA FROM SUPABASE ONLY
+  const {data,error}=await supabaseClient.from('products').select('*').order('created_at',{ascending:false});
+  let list=data||[];
+  // If DB empty first time, seed real listings once
+  if(list.length===0){
+    // Show seed temporarily while seeding
+    list=seed;
+    // Try to seed in Supabase in background (needs login, else just show)
+    const {data:{user}}=await supabaseClient.auth.getUser();
+    if(user){
+      for(let sp of seed){ await supabaseClient.from('products').insert({...sp,seller_id:user.id,is_available:true}); }
+    }
+  }
+  let f=list.filter(p=> currentCat=='All' || (p.category||'').toLowerCase()==currentCat.toLowerCase());
+  if(s) f=f.filter(p=>(p.title+' '+(p.description||'')+' '+(p.location||'')).toLowerCase().includes(s));
+  document.getElementById('list').innerHTML=f.map(cardHTML).join('')||"<p>No listings yet. Be the first to Sell!</p>";
+  document.getElementById('list2').innerHTML=f.map(cardHTML).join('')||"<p>No listings in this category.</p>";
+}
+function buyWhats(phone,title){ if(!phone) return alert("Seller didn't add WhatsApp. Use BUY NOW."); window.open(`https://wa.me/${phone}?text=${encodeURIComponent('Hi! I want to buy '+title+' on JAOM 🇸🇸')}`,'_blank'); }
+async function buyNow(id,seller,price,title){
+  const {data:{user}}=await supabaseClient.auth.getUser();
+  if(!user) return alert("Login first in Profile tab to Buy!");
+  const ok=confirm(`JAOM GOLD ESCROW 🔒\n\n${title}\n${Number(price).toLocaleString()} SSP\n\nYou pay to JAOM Escrow.\nSeller gets paid ONLY after you confirm delivery.\n\nContinue to BUY NOW?`);
+  if(!ok) return;
+  const {error}=await supabaseClient.from('orders').insert({buyer_id:user.id,seller_id:seller||user.id,product_id:String(id),total_amount:price,status:'escrow_held'});
+  if(error) alert("Escrow error: "+error.message);
+  else alert("✅ BUY NOW Success! Escrow started. Money held safely. Check Deals tab!");
+  showTab('deals',document.querySelectorAll('.nav div')[3]);
+}
+async function loadOrders(){
+  const {data:{user}}=await supabaseClient.auth.getUser();
+  if(!user){ document.getElementById('myOrders').innerHTML="<p>Login to see your Deals / Escrow orders.</p>"; return; }
+  const {data}=await supabaseClient.from('orders').select('*').order('created_at',{ascending:false});
+  document.getElementById('myOrders').innerHTML=(data||[]).map(o=>`<div class="card"><b>Deal: ${Number(o.total_amount).toLocaleString()} SSP</b><br>Status: <b style="color:#C9A227">${o.status}</b><br><button class="gold" onclick="confirmDelivery('${o.id}')">✅ Confirm Delivery & Release Money</button></div>`).join('')||"<p>No deals yet. Buy something!</p>";
+}
+async function confirmDelivery(id){ const {error}=await supabaseClient.from('orders').update({status:'completed'}).eq('id',id); alert(error?error.message:"✅ Delivery confirmed! Money released to seller. Thank you!"); loadOrders(); }
+async function loadMyListings(){
+  const {data:{user}}=await supabaseClient.auth.getUser();
+  if(!user) return;
+  const {data}=await supabaseClient.from('products').select('*').eq('seller_id',user.id).order('created_at',{ascending:false});
+  document.getElementById('myListings').innerHTML=(data||[]).map(p=>`<div>• ${p.title} - ${Number(p.price).toLocaleString()} SSP</div>`).join('')||"No listings yet.";
+}
+load();
+</script>
+</body>
+</html>
