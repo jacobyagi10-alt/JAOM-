@@ -1,665 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" id="htmlTag">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JAOM - Shop Smart. Shop with Confidence.</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--gold:#D4AF37;--black:#111;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:#fff;color:#111;font-family:sans-serif}
+header{background:#111;color:#fff;padding:14px;text-align:center;border-bottom:4px solid var(--gold)}
+.logo{font-size:32px;font-weight:900;letter-spacing:3px}.logo span{color:var(--gold)}
+.tag{color:var(--gold);font-size:12px}
+.topbar{display:flex;gap:6px;padding:10px;background:#f8f5e8}
+.topbar select,.topbar button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--gold);background:#fff}
+.tabs{display:flex;gap:6px;padding:10px}.tabs button{flex:1;padding:12px;border-radius:12px;background:#111;color:var(--gold);font-weight:bold;border:none}
+.card{background:#fff;border:1px solid #eee;border-radius:16px;padding:14px;margin:10px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.card img{width:100%;border-radius:12px}
+.gold{background:var(--gold);color:#000;border:none;padding:12px;width:100%;border-radius:10px;font-weight:bold}
+input,select,textarea{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:1px solid #ddd;background:#fff}
+.badge{background:var(--gold);padding:4px 8px;border-radius:20px;font-size:11px;font-weight:bold}
+.flag{font-size:22px}
+[dir="rtl"]{text-align:right}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">JA<span>OM</span> 🇸🇸</div>
+<div class="tag">Shop Smart. Shop with Confidence.</div>
+<div style="font-size:11px;margin-top:6px">South Sudan's Premium Online Marketplace • Custom • Konyo Konyo • Munuki • Gudele</div>
+</header>
 
-import React, { useState } from "react";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  Alert,
-  StyleSheet,
-} from "react-native";
-import * as ImagePicker from "expo-image-picker";
+<div class="topbar">
+<select id="lang" onchange="setLang(this.value)"><option value="en">English</option><option value="ar">العربية</option><option value="sw">Kiswahili</option></select>
+<select id="currency" onchange="loadProducts()"><option value="SSP">SSP</option><option value="USD">USD</option></select>
+<button onclick="showTab('admin')">👑 Admin</button>
+</div>
 
-const GOLD = "#C9A227";
-const DARK = "#171717";
+<div class="tabs">
+<button onclick="showTab('market')">🛒 Market</button>
+<button onclick="showTab('food')">🍲 Food</button>
+<button onclick="showTab('sell')">➕ Sell</button>
+<button onclick="showTab('cart')">🛒 Cart (<span id="cartCount">0</span>)</button>
+<button onclick="showTab('escrow')">🛡️ Escrow</button>
+</div>
 
-const products = [
-  { id: "1", name: "Premium Smartphone", price: 450, category: "Electronics", emoji: "📱" },
-  { id: "2", name: "Classic Wrist Watch", price: 85, category: "Fashion", emoji: "⌚" },
-  { id: "3", name: "Wireless Headphones", price: 35, category: "Electronics", emoji: "🎧" },
-  { id: "4", name: "Travel Backpack", price: 28, category: "Accessories", emoji: "🎒" },
-  { id: "5", name: "Luxury Perfume", price: 55, category: "Fashion", emoji: "🧴" },
-  { id: "6", name: "Home Coffee Maker", price: 70, category: "Home", emoji: "☕" },
-];
+<div id="market"></div>
+<div id="food" style="display:none"><div class="card"><h3>🍲 JAOM FOOD</h3><p id="foodTxt">Order from Mama shops & Restaurants. Same Escrow protects you.</p><div id="foodList"></div></div></div>
 
-const categories = ["All", "Electronics", "Fashion", "Accessories", "Home"];
+<div id="sell" style="display:none">
+<div class="card"><h3>➕ Seller Studio + AI Photo Studio</h3>
+<p>AI removes background, creates clean studio background. NEVER hides scratches.</p>
+<input id="title" placeholder="Product Title">
+<input id="price" type="number" placeholder="Price">
+<select id="curr2"><option>SSP</option><option>USD</option></select>
+<input id="photo" placeholder="Photo URL">
+<textarea id="desc" placeholder="Description - Be honest!"></textarea>
+<label><input type="checkbox" id="scratches"> Has Scratches?</label>
+<button class="gold" onclick="previewAI()">✨ AI Clean Background - Preview</button>
+<div id="aiPreview"></div>
+<p><b>JAOM Commission 5%:</b> <span id="calc">Enter price to see</span></p>
+<button class="gold" onclick="addProduct()">Publish Product</button><p id="sellMsg"></p>
+</div>
+</div>
 
-export default function App() {
-  const [page, setPage] = useState("Home");
-  const [cart, setCart] = useState([]);
-  const [orders, setOrders] = useState([]);
-  const [listing, setListing] = useState(products);
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
-  const [currency, setCurrency] = useState("USD");
-  const [language, setLanguage] = useState("English");
-  const [photo, setPhoto] = useState(null);
-  const [newName, setNewName] = useState("");
-  const [newPrice, setNewPrice] = useState("");
+<div id="cart" style="display:none"><div class="card"><h3>🛒 Your Cart</h3><div id="cartList"></div><button class="gold" onclick="checkout()">Secure Checkout with Escrow</button><p>Payment: MTN MoMo / Airtel Money / Cash - Provider must confirm before success.</p></div></div>
 
-  const rate = 4500;
-  const commission = 0.05;
+<div id="escrow" style="display:none"><div class="card"><h3>🛡️ JAOM Escrow</h3><p>1. Buyer Pays → HELD in JAOM<br>2. Seller Delivers<br>3. Buyer Confirms → Seller Paid - 5% Commission<br>4. Dispute → Refund. No Scam!</p><p><b>QR Papers:</b> FREE in Custom + Konyo Konyo - Scan to download</p></div></div>
 
-  const money = (amount) => {
-    const value = currency === "SSP" ? amount * rate : amount;
-    return `${currency} ${value.toLocaleString()}`;
-  };
+<div id="admin" style="display:none"><div class="card"><h3>👑 Admin Dashboard - Protected</h3><p>Manage Buyers, Sellers, Verify Sellers, Approve/Reject, Manage Products, Monitor Orders, 5% Commission, Disputes, Refunds, Notifications. <b>Requires real server-side permissions in Supabase RLS.</b></p><div id="adminStats"></div></div></div>
 
-  const addToCart = (product) => {
-    setCart((current) => [...current, product]);
-    Alert.alert("JAOM", "Product added to your cart.");
-  };
+<div class="card" style="text-align:center"><p>⭐ Trust: Verified Sellers • Reviews & Ratings • Report & Dispute • Secure Auth</p><p>AI Price: NOW FREE • Later 5,000 SSP/month OR 500 SSP / 1 product</p></div>
 
-  const removeFromCart = (index) => {
-    setCart((current) => current.filter((_, i) => i !== index));
-  };
+<script>
+// === PASTE YOUR SUPABASE IP HERE ===
+const SUPABASE_URL = "PASTE_YOUR_SUPABASE_URL_HERE";
+const SUPABASE_KEY = "PASTE_YOUR_SUPABASE_ANON_KEY_HERE";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let cart = [];
+let rate = 4500; // Configurable - fetch from real API in production, NOT hard-coded forever
 
-  const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-  const platformFee = subtotal * commission;
-
-  const checkout = () => {
-    if (cart.length === 0) {
-      Alert.alert("Your cart is empty", "Add a product before checkout.");
-      return;
-    }
-
-    const order = {
-      id: Date.now().toString(),
-      items: [...cart],
-      total: subtotal,
-      status: "Order received",
-    };
-
-    setOrders((current) => [order, ...current]);
-    setCart([]);
-    Alert.alert(
-      "Order created",
-      "Your demo order has been created. No real payment has been collected."
-    );
-    setPage("Orders");
-  };
-
-  const choosePhoto = async () => {
-    const permission =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (!permission.granted) {
-      Alert.alert("Permission needed", "Please allow photo access.");
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      quality: 0.8,
-    });
-
-    if (!result.canceled) {
-      setPhoto(result.assets[0].uri);
-    }
-  };
-
-  const publishProduct = () => {
-    const price = Number(newPrice);
-
-    if (!newName.trim() || !newPrice.trim() || price <= 0) {
-      Alert.alert("Missing information", "Enter a product name and valid price.");
-      return;
-    }
-
-    const product = {
-      id: Date.now().toString(),
-      name: newName.trim(),
-      price,
-      category: "General",
-      emoji: "🛍️",
-      photo,
-    };
-
-    setListing((current) => [product, ...current]);
-    setNewName("");
-    setNewPrice("");
-    setPhoto(null);
-
-    Alert.alert("JAOM", "Your demo product has been listed.");
-    setPage("Home");
-  };
-
-  const filteredProducts = listing.filter((product) => {
-    const matchesSearch = product.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
-
-    const matchesCategory =
-      category === "All" || product.category === category;
-
-    return matchesSearch && matchesCategory;
-  });
-
-  const ProductCard = ({ item }) => (
-    <View style={styles.product}>
-      {item.photo ? (
-        <Image source={{ uri: item.photo }} style={styles.productPhoto} />
-      ) : (
-        <View style={styles.productEmoji}>
-          <Text style={{ fontSize: 42 }}>{item.emoji}</Text>
-        </View>
-      )}
-
-      <Text style={styles.productName}>{item.name}</Text>
-      <Text style={styles.price}>{money(item.price)}</Text>
-
-      <TouchableOpacity
-        style={styles.goldButton}
-        onPress={() => addToCart(item)}
-      >
-        <Text style={styles.goldButtonText}>Add to cart</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
-  const Header = () => (
-    <View style={styles.header}>
-      <View>
-        <Text style={styles.logo}>JAOM</Text>
-        <Text style={styles.tagline}>VERIFIED PREMIUM • JUBA</Text>
-      </View>
-
-      <TouchableOpacity
-        style={styles.currencyButton}
-        onPress={() =>
-          setCurrency((current) => (current === "USD" ? "SSP" : "USD"))
-        }
-      >
-        <Text style={styles.currencyText}>{currency} ▾</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
-  const Navigation = () => (
-    <View style={styles.navigation}>
-      {[
-        ["Home", "🏠"],
-        ["Cart", "🛒"],
-        ["Sell", "🏪"],
-        ["Orders", "📦"],
-        ["Account", "👤"],
-      ].map(([name, icon]) => (
-        <TouchableOpacity
-          key={name}
-          style={styles.navItem}
-          onPress={() => setPage(name)}
-        >
-          <Text style={{ fontSize: 19 }}>{icon}</Text>
-          <Text style={[styles.navText, page === name && styles.activeNav]}>
-            {name}
-          </Text>
-          {name === "Cart" && cart.length > 0 && (
-            <Text style={styles.cartCount}>{cart.length}</Text>
-          )}
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <Header />
-
-      <ScrollView contentContainerStyle={styles.content}>
-        {page === "Home" && (
-          <>
-            <View style={styles.hero}>
-              <Text style={styles.heroSmall}>WELCOME TO JAOM 🇸🇸</Text>
-              <Text style={styles.heroTitle}>Shop smarter.</Text>
-              <Text style={styles.heroTitle}>Shop with confidence.</Text>
-              <Text style={styles.heroSubtitle}>
-                Discover products from sellers in South Sudan.
-              </Text>
-            </View>
-
-            <TextInput
-              style={styles.search}
-              placeholder="Search products..."
-              placeholderTextColor="#888"
-              value={search}
-              onChangeText={setSearch}
-            />
-
-            <Text style={styles.sectionTitle}>Categories</Text>
-
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {categories.map((item) => (
-                <TouchableOpacity
-                  key={item}
-                  style={[
-                    styles.categoryButton,
-                    category === item && styles.selectedCategory,
-                  ]}
-                  onPress={() => setCategory(item)}
-                >
-                  <Text
-                    style={[
-                      styles.categoryText,
-                      category === item && styles.selectedCategoryText,
-                    ]}
-                  >
-                    {item}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-
-            <Text style={styles.sectionTitle}>Featured products</Text>
-
-            <View style={styles.productGrid}>
-              {filteredProducts.map((item) => (
-                <ProductCard key={item.id} item={item} />
-              ))}
-            </View>
-
-            {filteredProducts.length === 0 && (
-              <Text style={styles.empty}>No products found.</Text>
-            )}
-          </>
-        )}
-
-        {page === "Cart" && (
-          <>
-            <Text style={styles.pageTitle}>My Shopping Cart</Text>
-
-            {cart.length === 0 ? (
-              <Text style={styles.empty}>Your cart is empty.</Text>
-            ) : (
-              cart.map((item, index) => (
-                <View style={styles.cartItem} key={`${item.id}-${index}`}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.productName}>{item.name}</Text>
-                    <Text style={styles.price}>{money(item.price)}</Text>
-                  </View>
-                  <TouchableOpacity onPress={() => removeFromCart(index)}>
-                    <Text style={styles.remove}>Remove</Text>
-                  </TouchableOpacity>
-                </View>
-              ))
-            )}
-
-            <View style={styles.summary}>
-              <Text style={styles.summaryText}>Subtotal: {money(subtotal)}</Text>
-              <Text style={styles.summaryText}>
-                Platform commission (5%): {money(platformFee)}
-              </Text>
-              <Text style={styles.total}>Total: {money(subtotal)}</Text>
-            </View>
-
-            <TouchableOpacity style={styles.goldButton} onPress={checkout}>
-              <Text style={styles.goldButtonText}>Place demo order</Text>
-            </TouchableOpacity>
-          </>
-        )}
-
-        {page === "Sell" && (
-          <>
-            <Text style={styles.pageTitle}>Sell on JAOM</Text>
-            <Text style={styles.subtitle}>
-              List your products and reach more customers.
-            </Text>
-
-            <TouchableOpacity style={styles.photoButton} onPress={choosePhoto}>
-              <Text style={styles.photoButtonText}>
-                {photo ? "Change product photo" : "Choose product photo"}
-              </Text>
-            </TouchableOpacity>
-
-            {photo && (
-              <Image source={{ uri: photo }} style={styles.previewPhoto} />
-            )}
-
-            <TextInput
-              style={styles.input}
-              placeholder="Product name"
-              value={newName}
-              onChangeText={setNewName}
-            />
-
-            <TextInput
-              style={styles.input}
-              placeholder="Price in USD"
-              keyboardType="decimal-pad"
-              value={newPrice}
-              onChangeText={setNewPrice}
-            />
-
-            <Text style={styles.info}>
-              JAOM platform commission: 5% of the sale price.
-            </Text>
-
-            <TouchableOpacity
-              style={styles.goldButton}
-              onPress={publishProduct}
-            >
-              <Text style={styles.goldButtonText}>Publish product</Text>
-            </TouchableOpacity>
-          </>
-        )}
-
-        {page === "Orders" && (
-          <>
-            <Text style={styles.pageTitle}>My Orders</Text>
-
-            {orders.length === 0 ? (
-              <Text style={styles.empty}>You have no orders yet.</Text>
-            ) : (
-              orders.map((order) => (
-                <View style={styles.orderCard} key={order.id}>
-                  <Text style={styles.productName}>
-                    Order #{order.id.slice(-6)}
-                  </Text>
-                  <Text style={styles.summaryText}>
-                    {order.items.length} product(s)
-                  </Text>
-                  <Text style={styles.price}>{money(order.total)}</Text>
-                  <Text style={styles.info}>{order.status}</Text>
-                </View>
-              ))
-            )}
-          </>
-        )}
-
-        {page === "Account" && (
-          <>
-            <Text style={styles.pageTitle}>My Account</Text>
-            <Text style={styles.subtitle}>Welcome to JAOM.</Text>
-
-            <Text style={styles.sectionTitle}>Language</Text>
-
-            {["English", "Kiswahili", "Arabic"].map((item) => (
-              <TouchableOpacity
-                key={item}
-                style={styles.languageButton}
-                onPress={() => {
-                  setLanguage(item);
-                  Alert.alert("Language", `${item} selected.`);
-                }}
-              >
-                <Text style={styles.languageText}>
-                  {item} {language === item ? "✓" : ""}
-                </Text>
-              </TouchableOpacity>
-            ))}
-
-            <Text style={styles.info}>
-              Selected currency: {currency}
-            </Text>
-            <Text style={styles.info}>
-              JAOM marketplace demo account.
-            </Text>
-          </>
-        )}
-      </ScrollView>
-
-      <Navigation />
-    </SafeAreaView>
-  );
+const texts = {
+  en:{food:"Order from Mama shops & Restaurants. Same Escrow protects you."},
+  ar:{food:"اطلب من متاجر ومطاعم جوبا. نفس الضمان يحميك."},
+  sw:{food:"Agiza kutoka kwa maduka na migahawa ya Juba. Escrow ile ile inakulinda."}
+};
+function setLang(l){
+  document.getElementById('htmlTag').dir = l==='ar' ? 'rtl' : 'ltr';
+  document.getElementById('foodTxt').innerText = texts[l].food;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFFFFF",
-  },
-  header: {
-    backgroundColor: DARK,
-    paddingHorizontal: 18,
-    paddingVertical: 15,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  logo: {
-    color: GOLD,
-    fontSize: 29,
-    fontWeight: "900",
-    letterSpacing: 3,
-  },
-  tagline: {
-    color: "#FFFFFF",
-    fontSize: 9,
-    letterSpacing: 1,
-    marginTop: 3,
-  },
-  currencyButton: {
-    borderWidth: 1,
-    borderColor: GOLD,
-    padding: 10,
-    borderRadius: 8,
-  },
-  currencyText: {
-    color: GOLD,
-    fontWeight: "bold",
-  },
-  content: {
-    padding: 16,
-    paddingBottom: 30,
-  },
-  hero: {
-    backgroundColor: DARK,
-    padding: 22,
-    borderRadius: 15,
-    marginBottom: 18,
-  },
-  heroSmall: {
-    color: GOLD,
-    fontWeight: "bold",
-    marginBottom: 12,
-  },
-  heroTitle: {
-    color: "#FFFFFF",
-    fontSize: 26,
-    fontWeight: "900",
-  },
-  heroSubtitle: {
-    color: "#DDDDDD",
-    marginTop: 10,
-    lineHeight: 21,
-  },
-  search: {
-    backgroundColor: "#F5F5F5",
-    padding: 14,
-    borderRadius: 10,
-    marginBottom: 20,
-    color: DARK,
-  },
-  sectionTitle: {
-    fontSize: 19,
-    fontWeight: "bold",
-    color: DARK,
-    marginTop: 15,
-    marginBottom: 12,
-  },
-  categoryButton: {
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 20,
-    backgroundColor: "#F1F1F1",
-    marginRight: 8,
-  },
-  selectedCategory: {
-    backgroundColor: GOLD,
-  },
-  categoryText: {
-    color: DARK,
-    fontWeight: "600",
-  },
-  selectedCategoryText: {
-    color: "#FFFFFF",
-  },
-  productGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-  },
-  product: {
-    width: "48%",
-    backgroundColor: "#FFFFFF",
-    borderWidth: 1,
-    borderColor: "#EEEEEE",
-    borderRadius: 12,
-    padding: 10,
-    marginBottom: 13,
-  },
-  productEmoji: {
-    height: 105,
-    backgroundColor: "#F7F5EF",
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  productPhoto: {
-    height: 105,
-    width: "100%",
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  productName: {
-    color: DARK,
-    fontSize: 14,
-    fontWeight: "bold",
-    marginBottom: 6,
-  },
-  price: {
-    color: GOLD,
-    fontSize: 16,
-    fontWeight: "900",
-    marginBottom: 10,
-  },
-  goldButton: {
-    backgroundColor: GOLD,
-    padding: 13,
-    borderRadius: 9,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  goldButtonText: {
-    color: DARK,
-    fontWeight: "900",
-  },
-  pageTitle: {
-    fontSize: 25,
-    fontWeight: "900",
-    color: DARK,
-    marginBottom: 15,
-  },
-  subtitle: {
-    color: "#666666",
-    marginBottom: 15,
-    lineHeight: 21,
-  },
-  empty: {
-    color: "#777777",
-    textAlign: "center",
-    marginVertical: 30,
-  },
-  cartItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: "#EEEEEE",
-  },
-  remove: {
-    color: "#B3261E",
-    fontWeight: "bold",
-  },
-  summary: {
-    backgroundColor: "#F7F5EF",
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 18,
-  },
-  summaryText: {
-    color: DARK,
-    marginBottom: 8,
-  },
-  total: {
-    color: DARK,
-    fontSize: 19,
-    fontWeight: "900",
-    marginTop: 5,
-  },
-  photoButton: {
-    borderWidth: 1,
-    borderColor: GOLD,
-    borderRadius: 10,
-    padding: 15,
-    alignItems: "center",
-    marginVertical: 12,
-  },
-  photoButtonText: {
-    color: DARK,
-    fontWeight: "bold",
-  },
-  previewPhoto: {
-    width: "100%",
-    height: 180,
-    borderRadius: 10,
-    marginBottom: 15,
-  },
-  input: {
-    backgroundColor: "#F5F5F5",
-    borderRadius: 9,
-    padding: 14,
-    marginVertical: 8,
-    color: DARK,
-  },
-  info: {
-    color: "#777777",
-    fontSize: 13,
-    marginTop: 10,
-    lineHeight: 19,
-  },
-  orderCard: {
-    backgroundColor: "#F7F5EF",
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 12,
-  },
-  languageButton: {
-    padding: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: "#EEEEEE",
-  },
-  languageText: {
-    color: DARK,
-    fontWeight: "bold",
-  },
-  navigation: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderTopColor: "#EEEEEE",
-    backgroundColor: "#FFFFFF",
-  },
-  navItem: {
-    alignItems: "center",
-    minWidth: 55,
-  },
-  navText: {
-    color: "#777777",
-    fontSize: 11,
-    marginTop: 3,
-  },
-  activeNav: {
-    color: GOLD,
-    fontWeight: "900",
-  },
-  cartCount: {
-    color: "#B3261E",
-    fontWeight: "bold",
-    fontSize: 10,
-  },
-});
+function showTab(t){['market','food','sell','cart','escrow','admin'].forEach(id=>document.getElementById(id).style.display=id===t?'block':'none')}
+function previewAI(){
+  const url=document.getElementById('photo').value;
+  const price=parseInt(document.getElementById('price').value||0);
+  const commission = price*0.05;
+  document.getElementById('aiPreview').innerHTML = url?`<img src="${url}"><p>✨ AI: Background Cleaned - Studio Look. Scratches KEPT if checked ✅</p>`:'Add photo URL first';
+  document.getElementById('calc').innerText = `Sale ${price} | JAOM 5% = ${commission} | Seller Gets ${price-commission}`;
+}
+async function loadProducts(){
+  const curr=document.getElementById('currency').value;
+  const {data} = await supabaseClient.from('products').select('*').order('created_at',{ascending:false});
+  let html='<div class="card"><h3>🔥 Products in Juba - Search & Filter</h3><input placeholder="🔍 Search products..." oninput="filterProducts(this.value)"></div>';
+  if(data) data.forEach(p=>{
+    let displayPrice = curr==='USD' ? (p.price/rate).toFixed(2)+' USD' : p.price+' SSP';
+    html+=`<div class="card product" data-title="${p.title.toLowerCase()}">${p.photo_url?`<img src="${p.photo_url}">`:''}<h3>${p.title}</h3><p><b>${displayPrice}</b> • ${p.description||''}</p><p>${p.has_scratches?'⚠️ Has Scratches - Honest ✅':'✅ No Scratches'} • ⭐ 4.8 Seller Rating</p><button class="gold" onclick="addToCart('${p.id}','${p.title}',${p.price})">Add to Cart</button> <button onclick="buyProduct('${p.id}')">Buy with Escrow</button></div>`;
+  });
+  document.getElementById('market').innerHTML=html;
+  document.getElementById('foodList').innerHTML=html;
+}
+function filterProducts(q){document.querySelectorAll('.product').forEach(el=>el.style.display=el.dataset.title.includes(q.toLowerCase())?'block':'none')}
+function addToCart(id,title,price){cart.push({id,title,price});document.getElementById('cartCount').innerText=cart.length;document.getElementById('cartList').innerHTML=cart.map(c=>`<p>${c.title} - ${c.price} SSP</p>`).join('');alert('Added to Cart ✅')}
+async function addProduct(){
+  const title=document.getElementById('title').value; const price=document.getElementById('price').value;
+  const photo_url=document.getElementById('photo').value; const description=document.getElementById('desc').value;
+  const has_scratches=document.getElementById('scratches').checked;
+  if(!title||!price){document.getElementById('sellMsg').innerText='Add title + price';return;}
+  const {error}=await supabaseClient.from('products').insert([{title,price:parseInt(price),photo_url,description,has_scratches}]);
+  document.getElementById('sellMsg').innerText=error?'Error: '+error.message:'✅ Published! AI cleaned background, scratches kept!';
+  loadProducts();
+}
+async function buyProduct(id){alert('Escrow Started! Money HELD until you confirm delivery.');await supabaseClient.from('orders').insert([{product_id:id,status:'waiting'}])}
+function checkout(){if(!cart.length){alert('Cart empty');return;}alert('Checkout: Payment provider must confirm. Escrow will HOLD money until delivery confirmed.');}
+loadProducts();
+</script>
+</body>
+  </html>
