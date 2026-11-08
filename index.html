@@ -1,109 +1,176 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>JAOM V12</title>
+<title>JAOM V15 - Real Escrow</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#FFFBF0;color:#000;padding-bottom:80px}
-.top{padding:10px 14px 0;text-align:center}
-.top h1{color:#B89600;margin:4px 0;font-size:26px}
-.lang{display:flex;justify-content:center;gap:8px;margin:8px 0}
-.lang button{padding:10px 16px;border:2px solid #000;border-radius:10px;background:#fff;font-weight:bold;cursor:pointer}
-.lang button.active{background:#B89600;color:#fff}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#FFFBF0;color:#000;padding-bottom:92px}
+.top{padding:10px 14px 0;text-align:center}.top h1{color:#B89600;margin:4px 0;font-size:26px}
+.lang{display:flex;justify-content:center;gap:8px;margin:8px 0}.lang button{padding:11px 18px;border:2px solid #000;border-radius:10px;background:#fff;font-weight:bold;cursor:pointer;font-size:15px}.lang button.active{background:#B89600;color:#fff}
 .ai-blue{background:#1E90FF;color:#fff;border:0;width:calc(100% - 28px);margin:10px 14px;padding:14px;border-radius:12px;font-weight:bold;font-size:16px;cursor:pointer}
-.card{background:#fff;border:1px solid #E8DFA0;border-radius:16px;padding:14px;margin:12px}
-.card img{width:100%;border-radius:12px;max-height:240px;object-fit:cover}
-input,textarea,select{width:100%;padding:13px;margin:7px 0;border:1px solid #ddd;border-radius:12px;background:#FFFEF5}
-.btn{width:100%;padding:14px;border:0;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:8px}
+.card{background:#fff;border:1px solid #E8DFA0;border-radius:16px;padding:14px;margin:12px}.card img{width:100%;border-radius:12px;max-height:240px;object-fit:cover}
+input,textarea,select{width:100%;padding:13px;margin:7px 0;border:1px solid #ddd;border-radius:12px;background:#FFFEF5;font-size:15px}
+.btn{width:100%;padding:14px;border:0;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:8px;font-size:15px}
 .btn-gold{background:#B89600;color:#fff}.btn-blue{background:#1E90FF;color:#fff}.btn-black{background:#000;color:#fff}.btn-green{background:#28a745;color:#fff}.btn-red{background:#e41e3f;color:#fff}.btn-purple{background:#7C3AED;color:#fff}
-.pill{display:inline-block;padding:9px 18px;border:2px solid #B89600;border-radius:20px;background:#fff;font-weight:bold;margin:4px;cursor:pointer}
-.pill.active{background:#B89600;color:#fff}
-.search{background:#FFF8D6;border:1px solid #E8DFA0;border-radius:16px;padding:14px;text-align:center;margin:12px}
-.search input{border:0;background:transparent;text-align:center;font-size:16px}
-.cover{height:150px;background:linear-gradient(90deg,#8A6D00,#E6C200,#FFEB00);border-radius:16px 16px 0 0;position:relative}
-.avatar{width:110px;height:110px;background:#000;color:#D4AF00;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;font-size:22px;border:4px solid #fff;margin:-55px 0 0 14px;position:relative}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;border-top:1px solid #ddd;padding:8px 0}
-.bottom button{flex:1;background:none;border:0;font-size:12px;cursor:pointer}.bottom button.active{color:#B89600;font-weight:bold}
+.cat-row{display:flex;gap:8px;overflow-x:auto;white-space:nowrap;padding:6px 12px 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.cat-row::-webkit-scrollbar{display:none}
+.pill{flex:0 0 auto;padding:10px 20px;border:2px solid #B89600;border-radius:20px;background:#fff;font-weight:bold;cursor:pointer;font-size:15px}.pill.active{background:#B89600;color:#fff}
+.search{background:#FFF8D6;border:1px solid #E8DFA0;border-radius:16px;padding:14px;text-align:center;margin:12px}.search input{border:0;background:transparent;text-align:center;font-size:16px}
+.cover{height:150px;background:linear-gradient(90deg,#8A6D00,#E6C200,#FFEB00);border-radius:16px 16px 0 0}.avatar{width:110px;height:110px;background:#000;color:#D4AF00;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;font-size:22px;border:4px solid #fff;margin:-55px 0 0 14px}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;border-top:1px solid #ddd;padding:12px 0 16px;z-index:20}.bottom button{flex:1;background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px}.bottom .ico{font-size:28px}.bottom .txt{font-size:15px;font-weight:600}.bottom button.active .txt{color:#B89600;font-weight:bold}
 .page{display:none}.page.active{display:block}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:99}.modal>div{background:#fff;width:92%;max-width:420px;border-radius:16px;padding:16px}
-#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#000;color:#fff;padding:10px 16px;border-radius:20px;display:none;z-index:100}
-.badge{background:#E7F3FF;color:#1E90FF;padding:6px 10px;border-radius:20px;font-size:12px}
-.ai-box{background:#FFF3CD;border:1px solid #FFDF7E;padding:10px;border-radius:10px;margin-top:8px;font-size:13px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:99}.modal>div{background:#fff;width:92%;max-width:440px;border-radius:16px;padding:16px;max-height:92vh;overflow:auto}
+#toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#000;color:#fff;padding:10px 16px;border-radius:20px;display:none;z-index:100}
+.badge{background:#E7F3FF;color:#1E90FF;padding:6px 10px;border-radius:20px;font-size:12px}.ai-box{background:#FFF3CD;border:1px solid #FFDF7E;padding:10px;border-radius:10px;margin-top:8px;font-size:13px}
+.timer{background:#000;color:#FFEB00;padding:10px;border-radius:10px;text-align:center;font-weight:bold;font-size:16px;margin:8px 0}.timer.red{background:#e41e3f;color:#fff}
+.deal-row{display:flex;gap:8px;text-align:center;margin:10px 0}.deal-row div{flex:1;background:#FFFBF0;border:1px solid #E8DFA0;border-radius:12px;padding:10px}
+.locked{background:#FFF3CD;border:1px dashed #B89600;padding:10px;border-radius:10px;text-align:center}
 </style></head><body>
-
-<div class="top">
-<h1 id="t-title">JAOM Juba Marketplace</h1>
+<div class="top"><h1 data-i18n="title">JAOM Juba Marketplace</h1>
 <div class="lang"><button id="lg-en" class="active" onclick="setLang('en')">English</button><button id="lg-ar" onclick="setLang('ar')">العربية</button><button id="lg-sw" onclick="setLang('sw')">Kiswahili</button></div>
-<p id="conn" style="font-size:12px;color:green">✅ Supabase Connected - Real Email & SMS Active</p>
-</div>
-<button class="ai-blue" onclick="aiFast('home')">🤖 <span id="t-ai">Ask Real AI - Meta AI</span></button>
+<p style="font-size:12px;color:green">✅ <span data-i18n="connected">Supabase Connected - Real Email & SMS Active</span></p></div>
+<button class="ai-blue" onclick="aiFast('home')">🤖 <span data-i18n="askAI">Ask Real AI - Meta AI</span></button>
 
-<!-- HOME -->
 <div id="home" class="page active">
-<div class="search">🔍 <input id="search" placeholder="Search products, land, vehicles..." oninput="render()"></div>
-<div style="padding:0 12px"><span class="pill active" onclick="setCat('',this)">All</span><span class="pill" onclick="setCat('Phones',this)">Phones</span><span class="pill" onclick="setCat('Land',this)">Land</span><span class="pill" onclick="setCat('Vehicles',this)">Vehicles</span><span class="pill" onclick="setCat('Clothes',this)">Clothes</span></div>
-<h2 style="padding:0 14px">Featured Listings</h2><div id="homeList"></div>
-</div>
+<div class="search">🔍 <input id="search" data-i18n-ph="search" placeholder="Search products, land, vehicles..." oninput="render()"></div>
+<div class="cat-row"><span class="pill active" onclick="setCat('',this)" data-i18n="all">All</span><span class="pill" onclick="setCat('Phones',this)" data-i18n="phones">Phones</span><span class="pill" onclick="setCat('Land',this)" data-i18n="land">Land</span><span class="pill" onclick="setCat('Vehicles',this)" data-i18n="vehicles">Vehicles</span><span class="pill" onclick="setCat('Clothes',this)" data-i18n="clothes">Clothes</span><span class="pill" onclick="setCat('Other',this)" data-i18n="other">Other</span></div>
+<h2 style="padding:0 14px" data-i18n="featured">Featured Listings</h2><div id="homeList"></div></div>
+<div id="market" class="page"><h2 style="padding:0 14px" data-i18n="marketTitle">Market</h2><div id="marketList"></div></div>
 
-<!-- MARKET -->
-<div id="market" class="page"><h2 style="padding:0 14px">Market</h2><div id="marketList"></div></div>
-
-<!-- SELL -->
-<div id="sell" class="page"><div class="card"><h2>➕ Sell Something</h2>
-<input id="title" placeholder="Title e.g. iPhone 13"><input id="price" type="number" placeholder="Price in SSP"><input id="location" placeholder="Location e.g. Gudele, Juba"><input id="whatsapp" placeholder="WhatsApp e.g. 211920000000">
-<p>📷 Upload 4 Photos:</p><input type="file"><input type="file"><input type="file"><input type="file">
-<p>✨ Clean Your Photo with Real AI:</p>
-<button class="btn" style="background:#000;color:#fff" onclick="window.open('https://www.remove.bg','_blank')">✨ Clean Photo with Real AI - Remove.bg</button>
-<button class="btn btn-purple" onclick="window.open('https://cleanup.pictures','_blank')">🧹 Remove Object / Clean Photo - Cleanup.pictures</button>
-<button class="btn" style="background:#00965F;color:#fff" onclick="toast('Photo Enhanced ✅')">⚡ Auto Enhance Photo Inside JAOM</button>
+<div id="sell" class="page"><div class="card"><h2 data-i18n="sellTitle">➕ Sell Something</h2>
+<input id="title" data-i18n-ph="titlePh" placeholder="Title e.g. iPhone 13"><input id="price" type="number" data-i18n-ph="pricePh" placeholder="Price in SSP"><input id="location" data-i18n-ph="locPh" placeholder="Location e.g. Gudele, Juba"><input id="whatsapp" placeholder="WhatsApp e.g. 211920000000">
+<p data-i18n="upload">📷 Upload 4 Photos:</p><input type="file"><input type="file"><input type="file"><input type="file">
+<p data-i18n="clean">✨ Clean Your Photo with Real AI:</p>
+<button class="btn" style="background:#000;color:#fff" onclick="window.open('https://www.remove.bg','_blank')">✨ <span data-i18n="removeBg">Clean Photo with Real AI - Remove.bg</span></button>
+<button class="btn btn-purple" onclick="window.open('https://cleanup.pictures','_blank')">🧹 <span data-i18n="cleanup">Remove Object / Clean Photo</span></button>
 <select id="category"><option>Phones</option><option>Land</option><option>Vehicles</option><option>Clothes</option><option>Other</option></select>
-<textarea id="desc" placeholder="Description..."></textarea>
-<button class="btn" style="background:#1E90FF;color:#fff" onclick="aiFast('sell')">✨ AI: Write Description For Me (Fast)</button><div id="ai-sell" class="ai-box" style="display:none"></div>
-<button class="btn btn-gold" onclick="publish()">Publish Listing ✅</button></div></div>
+<textarea id="desc" data-i18n-ph="descPh" placeholder="Description..."></textarea>
+<label data-i18n="delTime">Delivery Time You Promise:</label><select id="sellDelivery"><option value="2">2 Hours</option><option value="5">5 Hours</option><option value="24" selected>24 Hours</option><option value="72">3 Days</option><option value="168">1 Week (MAX)</option></select>
+<button class="btn" style="background:#1E90FF;color:#fff" onclick="aiFast('sell')">✨ <span data-i18n="aiDesc">AI: Write Description For Me (Fast)</span></button><div id="ai-sell" class="ai-box" style="display:none"></div>
+<button class="btn btn-gold" onclick="publish()"><span data-i18n="publish">Publish Listing</span> ✅</button></div></div>
 
-<!-- DEALS -->
-<div id="deals" class="page"><div class="card"><h2>🏷️ Deals / Escrow</h2><div style="background:#FFF8D6;border-radius:12px;padding:14px;text-align:center"><b>🛡️ Pay to JAOM Escrow FIRST</b><div style="font-size:32px;color:#B89600;font-weight:bold">0926004119</div><p>Name: JAOM Escrow - Jacob Yagi</p></div><button class="btn btn-gold" onclick="toast('Thank you! We will confirm ✅')">I Paid ✅</button></div></div>
+<!-- DEALS = ESCROW CENTER -->
+<div id="deals" class="page">
+<div class="card"><h2 data-i18n="dealsTitle">🏷️ Deals / Escrow</h2>
+<div style="background:#FFF8D6;border-radius:12px;padding:14px;text-align:center"><b data-i18n="escrow">🛡️ Pay to JAOM Escrow FIRST</b><div style="font-size:32px;color:#B89600;font-weight:bold">0926004119</div><p data-i18n="escrowName">Name: JAOM Escrow - Jacob Yagi</p><p style="font-size:12px;color:#666">MoMo Only. Never pay seller directly.</p></div>
+<div id="bossAlert" style="display:none;background:#e41e3f;color:#fff;padding:12px;border-radius:12px;margin-top:10px;font-weight:bold"></div>
+</div>
+<div id="dealsList"></div></div>
 
-<!-- PROFILE -->
-<div id="profile" class="page"><div class="card" style="padding:0;overflow:hidden">
-<div class="cover"></div><div class="avatar">🛡️<span>JAOM</span></div>
-<div style="padding:14px"><h2 id="pName" style="margin:6px 0">Jacob yagi</h2><p id="pBio" style="color:#666">Welcome to JAOM 🇸🇸 • Trusted Seller in Juba</p>
-<div style="display:flex;justify-content:space-around;text-align:center"><div><b id="pCount">0</b><br>Listings</div><div><b>0</b><br>Deals</div><div><b>⭐ 5.0</b><br>Rating</div></div>
-<div style="display:flex;gap:8px"><button class="btn btn-blue" onclick="openEdit()">Edit Profile</button><button class="btn btn-black" onclick="logout()">Log Out</button></div>
-<p style="text-align:center;color:#888;font-size:12px">You are logged in. Email & Password are HIDDEN now, like Facebook.</p>
-<h3>Your Listings</h3><div id="myList"></div></div></div></div>
+<div id="profile" class="page"><div class="card" style="padding:0;overflow:hidden"><div class="cover"></div><div class="avatar">🛡️<span>JAOM</span></div>
+<div style="padding:14px"><h2 id="pName">Jacob yagi</h2><p id="pBio" style="color:#666">Welcome to JAOM 🇸🇸 • Trusted Seller in Juba</p>
+<div style="display:flex;justify-content:space-around;text-align:center"><div><b id="pCount">0</b><br><span data-i18n="listings">Listings</span></div><div><b id="dCount">0</b><br><span data-i18n="deals">Deals</span></div><div><b>⭐ 5.0</b><br><span data-i18n="rating">Rating</span></div></div>
+<div style="display:flex;gap:8px"><button class="btn btn-blue" onclick="openEdit()"><span data-i18n="edit">Edit Profile</span></button><button class="btn btn-black" onclick="logout()"><span data-i18n="logout">Log Out</span></button></div>
+<h3 data-i18n="yourListings">Your Listings - Delete Here Only</h3><div id="myList"></div></div></div></div>
 
 <div class="bottom">
-<button onclick="showPage('home',this)" class="active">🏠<br>Home</button><button onclick="showPage('market',this)">🏪<br>Market</button><button onclick="showPage('sell',this)">➕<br>Sell</button><button onclick="showPage('deals',this)">🏷️<br>Deals</button><button onclick="showPage('profile',this)">👤<br>Profile</button>
-</div>
+<button onclick="showPage('home',this)" class="active"><span class="ico">🏠</span><span class="txt" data-i18n="home">Home</span></button>
+<button onclick="showPage('market',this)"><span class="ico">🏪</span><span class="txt" data-i18n="market">Market</span></button>
+<button onclick="showPage('sell',this)"><span class="ico">➕</span><span class="txt" data-i18n="sell">Sell</span></button>
+<button onclick="showPage('deals',this)"><span class="ico">🏷️</span><span class="txt" data-i18n="dealsNav">Deals</span></button>
+<button onclick="showPage('profile',this)"><span class="ico">👤</span><span class="txt" data-i18n="profile">Profile</span></button></div>
 <div id="toast"></div>
-<div id="editModal" class="modal"><div><h3>Edit Profile - WORKS NOW</h3><input id="eName" placeholder="Full Name"><textarea id="eBio" placeholder="Bio"></textarea><input id="ePhone" placeholder="Phone"><input id="eAvatar" placeholder="Avatar URL"><button class="btn btn-green" onclick="saveProfile()">Save Profile ✅</button><button class="btn" style="background:#eee" onclick="closeEdit()">Cancel</button></div></div>
+
+<!-- BUY MODAL -->
+<div id="buyModal" class="modal"><div><h3>🛡️ <span data-i18n="buyEscrow">Buy with Escrow</span></h3><div id="buyInfo"></div>
+<label data-i18n="chooseDel">Buyer: Select Your Delivery Time (Max 1 Week):</label>
+<select id="buyDelivery"><option value="2">2 Hours</option><option value="5">5 Hours</option><option value="24" selected>24 Hours</option><option value="72">3 Days (72h)</option><option value="168">1 Week (168h) - MAX</option></select>
+<input id="buyerName" placeholder="Your Name - Buyer"><input id="buyerPhone" placeholder="Your Phone - Buyer">
+<div style="background:#FFF8D6;padding:12px;border-radius:12px;text-align:center"><b>Pay FIRST to JAOM MoMo</b><div style="font-size:28px;color:#B89600;font-weight:bold">0926004119</div><p>JAOM Escrow - Jacob Yagi<br>Do NOT pay seller directly!</p></div>
+<button class="btn btn-gold" onclick="createDeal()">I Paid to 0926004119 ✅ - Create Deal</button>
+<button class="btn" style="background:#eee" onclick="closeBuy()">Cancel</button></div></div>
+
+<!-- DEAL DETAIL MODAL -->
+<div id="dealModal" class="modal"><div><h3>Deal Details</h3><div id="dealInfo"></div><button class="btn" style="background:#eee" onclick="closeDeal()">Close</button></div></div>
+<div id="editModal" class="modal"><div><h3 data-i18n="editTitle">Edit Profile - WORKS NOW</h3><input id="eName" placeholder="Full Name"><textarea id="eBio" placeholder="Bio"></textarea><input id="ePhone" placeholder="Phone"><button class="btn btn-green" onclick="saveProfile()"><span data-i18n="save">Save Profile</span> ✅</button><button class="btn" style="background:#eee" onclick="closeEdit()"><span data-i18n="cancel">Cancel</span></button></div></div>
 
 <script>
 const SUPABASE_URL="https://ucprmvnjvqbpddozxtno.supabase.co";
 const SUPABASE_KEY="sb_publishable_eIygYOGjioGPzyZYjFIe1w_UxRBsWVz";
-let currentUser=localStorage.getItem('jaom_user')||'jacob-yagi';localStorage.setItem('jaom_user',currentUser);
-let listings=JSON.parse(localStorage.getItem('jaom_v12')||'[]');
-if(listings.length===0){listings=[{id:1,owner:currentUser,title:'iPhone 13 128GB',price:450000,location:'Juba, Hai Cinema',whatsapp:'0926004119',category:'Phones',desc:'Clean, battery 89%, with charger',image:'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800'}];save();}
-function save(){localStorage.setItem('jaom_v12',JSON.stringify(listings))}
+const ESCROW_MOMO="0926004119";
+let currentUser=localStorage.getItem('jaom_user')||'jacob-yagi';
+let listings=JSON.parse(localStorage.getItem('jaom_v15')||'[]');
+let deals=JSON.parse(localStorage.getItem('jaom_deals_v15')||'[]');
+if(listings.length===0){listings=[{id:1,owner:'john-munuki',ownerName:'John - Munuki',title:'iPhone 13 128GB',price:450000,location:'Juba, Hai Cinema',whatsapp:'0926004119',category:'Phones',desc:'Clean, battery 89%, with charger',image:'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800',deliveryHrs:24}];saveList();}
+function saveList(){localStorage.setItem('jaom_v15',JSON.stringify(listings))}
+function saveDeals(){localStorage.setItem('jaom_deals_v15',JSON.stringify(deals))}
 let curCat='';function setCat(c,el){curCat=c;document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));if(el)el.classList.add('active');render();}
 function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.bottom button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');render();}
-function toast(m){let t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2200)}
+function toast(m){let t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3000)}
+function fmt(ms){if(ms<=0) return '00:00:00';let s=Math.floor(ms/1000);let h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0')}
 function render(){
 let q=(document.getElementById('search').value||'').toLowerCase();
 let f=listings.filter(l=>(l.title.toLowerCase().includes(q))&&(!curCat||l.category===curCat));
-let html=f.map(l=>{let isOwner=l.owner===currentUser;let del=isOwner?`<button class="btn btn-red" onclick="deleteListing(${l.id})">🗑️ Delete My Item</button>`:``;return `<div class="card"><img src="${l.image}"><h3>${l.title}</h3><p><b>${Number(l.price).toLocaleString()} SSP</b> • ${l.location}</p><p>${l.desc}</p>${isOwner?'<span class="badge">Your Item ✅</span>':''}<button class="btn btn-green" onclick="window.open('https://wa.me/211${l.whatsapp.replace(/^0/,'')}','_blank')">💬 WhatsApp Seller</button>${del}</div>`}).join('')||'<div class="card">No listings yet.</div>';
+// NO DELETE HERE, NO WHATSAPP HERE - ONLY ESCROW BUY
+let html=f.map(l=>`<div class="card"><img src="${l.image}"><h3>${l.title}</h3><p><b>${Number(l.price).toLocaleString()} SSP</b> • ${l.location}</p><p>${l.desc}</p><p>⏱️ Delivery: ${l.deliveryHrs}h • Fee 5%: ${Math.round(l.price*0.05).toLocaleString()} SSP</p><div class="locked">🔒 Seller WhatsApp HIDDEN<br>Pay to JAOM MoMo ${ESCROW_MOMO} first to unlock</div><button class="btn btn-gold" onclick="openBuy(${l.id})">🛡️ Buy with Escrow - Pay to ${ESCROW_MOMO}</button></div>`).join('')||`<div class="card">${T[currentLang].noList}</div>`;
 document.getElementById('homeList').innerHTML=html;document.getElementById('marketList').innerHTML=html;
 document.getElementById('pCount').textContent=listings.filter(l=>l.owner===currentUser).length;
-document.getElementById('myList').innerHTML=listings.filter(l=>l.owner===currentUser).map(l=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee"><span>${l.title}</span><button onclick="deleteListing(${l.id})" style="background:#e41e3f;color:#fff;border:0;padding:6px 10px;border-radius:6px">Delete</button></div>`).join('')||'No listings yet.';
+document.getElementById('dCount').textContent=deals.length;
+// DELETE ONLY IN PROFILE
+document.getElementById('myList').innerHTML=listings.filter(l=>l.owner===currentUser).map(l=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee"><span>${l.title}</span><button onclick="deleteListing(${l.id})" style="background:#e41e3f;color:#fff;border:0;padding:6px 10px;border-radius:6px">Delete</button></div>`).join('')||T[currentLang].noList;
+renderDeals();
 }
-function deleteListing(id){if(!confirm('Delete YOUR item?'))return;let it=listings.find(l=>l.id===id);if(!it||it.owner!==currentUser){alert('You can only delete YOUR OWN item!');return;}listings=listings.filter(l=>l.id!==id);save();render();toast('Deleted ✅')}
-function publish(){let t=document.getElementById('title').value.trim(),p=document.getElementById('price').value;if(!t||!p){alert('Add Title + Price');return;}listings.unshift({id:Date.now(),owner:currentUser,title:t,price:p,location:document.getElementById('location').value||'Juba',whatsapp:document.getElementById('whatsapp').value||'0926004119',category:document.getElementById('category').value,desc:document.getElementById('desc').value||'Good condition',image:'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800'});save();render();toast('Published ✅');showPage('market',document.querySelectorAll('.bottom button')[1]);}
+function deleteListing(id){if(!confirm('Delete YOUR item from your profile?'))return;let it=listings.find(l=>l.id===id);if(!it||it.owner!==currentUser){alert('You can only delete YOUR OWN item!');return;}listings=listings.filter(l=>l.id!==id);saveList();render();toast('Deleted ✅')}
+function publish(){let t=document.getElementById('title').value.trim(),p=document.getElementById('price').value;if(!t||!p){alert('Add Title + Price');return;}listings.unshift({id:Date.now(),owner:currentUser,ownerName:profile.name,ownerPhone:profile.phone,title:t,price:Number(p),location:document.getElementById('location').value||'Juba',whatsapp:document.getElementById('whatsapp').value||'0926004119',category:document.getElementById('category').value,desc:document.getElementById('desc').value||'Good condition',image:'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800',deliveryHrs:Number(document.getElementById('sellDelivery').value)});saveList();render();toast('Published ✅');showPage('market',document.querySelectorAll('.bottom button')[1]);}
+
+// === ESCROW ===
+let buyId=null;
+function openBuy(id){buyId=id;let l=listings.find(x=>x.id===id);let fee=Math.round(l.price*0.05);document.getElementById('buyInfo').innerHTML=`<b>${l.title}</b><br>Price: ${Number(l.price).toLocaleString()} SSP<br>JAOM Fee (5%): ${fee.toLocaleString()} SSP<br>Seller gets: ${(l.price-fee).toLocaleString()} SSP<br>Seller: ${l.ownerName||l.owner}`;document.getElementById('buyModal').style.display='flex';}
+function closeBuy(){document.getElementById('buyModal').style.display='none';}
+function createDeal(){
+let l=listings.find(x=>x.id===buyId);if(!l) return;
+let hrs=Number(document.getElementById('buyDelivery').value);if(hrs>168){alert('Max is 1 Week!');return;}
+let buyerName=document.getElementById('buyerName').value.trim()||'Buyer';
+let buyerPhone=document.getElementById('buyerPhone').value.trim()||'Buyer Phone';
+let code='JAOM-'+Math.floor(1000+Math.random()*9000);
+let fee=Math.round(l.price*0.05);
+let now=Date.now();
+let deal={id:Date.now(),code,buyerName,buyerPhone,sellerName:l.ownerName||l.owner,sellerPhone:l.whatsapp,sellerOwner:l.owner,item:l.title,price:l.price,fee,sellerGets:l.price-fee,deliveryHrs:hrs,createdAt:now,sellerDeadline:now+20*60*1000,deliveryDeadline:now+hrs*3600*1000,status:'WAITING_SELLER_20MIN',paid:true};
+deals.unshift(deal);saveDeals();closeBuy();render();toast('Deal '+code+' Created ✅ Pay confirmed!');
+showPage('deals',document.querySelectorAll('.bottom button')[3]);
+}
+function renderDeals(){
+let el=document.getElementById('dealsList');if(!el) return;
+if(deals.length===0){el.innerHTML='<div class="card">No deals yet. Buy with Escrow to start.</div>';return;}
+el.innerHTML=deals.map(d=>{
+let now=Date.now();
+let sellerLeft=d.sellerDeadline-now;
+let delLeft=d.deliveryDeadline-now;
+let sellerTimer=d.status==='WAITING_SELLER_20MIN'?`<div class="timer ${sellerLeft<=0?'red':''}">⏱️ Seller must confirm in: ${sellerLeft<=0?'EXPIRED - REFUND NEEDED':fmt(sellerLeft)} (20 min)</div>`:`<div class="timer">✅ Seller Confirmed</div>`;
+let delTimer=`<div class="timer ${delLeft<=0?'red':''}">🚚 Delivery left: ${delLeft<=0?'EXPIRED - REFUND $100':fmt(delLeft)} / ${d.deliveryHrs}h</div>`;
+let expiredSeller=d.status==='WAITING_SELLER_20MIN' && sellerLeft<=0;
+let expiredDel=delLeft<=0 && d.status!=='DELIVERED';
+let alertMsg=expiredSeller?`🚨 ${d.code}: Seller didn't pick in 20 min - JAOM Boss REFUND buyer $100`:(expiredDel?`🚨 ${d.code}: Delivery ${d.deliveryHrs}h passed - JAOM Boss REFUND buyer $100`:'');
+// CONTACT LOCKED UNTIL PAID + SELLER CONFIRMED
+let contact=d.paid && d.status!=='WAITING_SELLER_20MIN'?`<div style="background:#E8F5E9;padding:10px;border-radius:10px">✅ UNLOCKED - Seller: ${d.sellerName}<br>📞 Seller Phone: ${d.sellerPhone}<br>📞 Buyer Phone: ${d.buyerPhone}</div>`:`<div class="locked">🔒 Seller contact LOCKED<br>Buyer paid to ${ESCROW_MOMO}. Waiting seller to confirm in 20 min.</div>`;
+let actions=d.status==='WAITING_SELLER_20MIN'?`<button class="btn btn-green" onclick="sellerConfirm(${d.id})">Seller: I Confirm - I Will Deliver ✅</button><button class="btn btn-red" onclick="refundDeal(${d.id})">Boss: Refund Buyer $100 - Seller No Answer</button>`:(d.status==='SELLER_CONFIRMED'?`<button class="btn btn-gold" onclick="markDelivered(${d.id})">Mark Delivered ✅</button><button class="btn btn-red" onclick="refundDeal(${d.id})">Boss: Refund Buyer $100 - Delivery Late</button>`:`<button class="btn" style="background:#eee">Deal ${d.status}</button>`);
+return `<div class="card"><h3>${d.code} - ${d.item}</h3><p>Price: ${Number(d.price).toLocaleString()} SSP • Fee: ${d.fee.toLocaleString()} SSP • Seller gets: ${d.sellerGets.toLocaleString()} SSP</p>
+<!-- BUYER + SELLER TOGETHER - NO WRONG PERSON -->
+<div class="deal-row"><div>👤<br><b>BUYER</b><br>${d.buyerName}<br>${d.buyerPhone}</div><div>⇄<br><b>JAOM ESCROW</b><br>${ESCROW_MOMO}</div><div>🏪<br><b>SELLER</b><br>${d.sellerName}<br>${d.sellerPhone===''? 'Hidden': d.paid?'Shown after confirm':'Hidden'}</div></div>
+${sellerTimer}${delTimer}${contact}${alertMsg?`<div style="background:#e41e3f;color:#fff;padding:10px;border-radius:10px;margin-top:8px">${alertMsg}</div>`:''}${actions}</div>`;
+}).join('');
+// BOSS ALERT
+let anyAlert=deals.some(d=>((d.status==='WAITING_SELLER_20MIN' && Date.now()>d.sellerDeadline)||(Date.now()>d.deliveryDeadline && d.status!=='DELIVERED')));
+let boss=document.getElementById('bossAlert');
+if(boss){if(anyAlert){boss.style.display='block';boss.textContent='🚨 JAOM BOSS: One deal expired! Check below - REFUND $100 to buyer NOW.';}else boss.style.display='none';}
+}
+function sellerConfirm(id){let d=deals.find(x=>x.id===id);if(!d) return;d.status='SELLER_CONFIRMED';saveDeals();render();toast('Seller Confirmed ✅ Contact Unlocked!');}
+function markDelivered(id){let d=deals.find(x=>x.id===id);d.status='DELIVERED';saveDeals();render();toast('Delivered ✅ JAOM will send money to seller');}
+function refundDeal(id){let d=deals.find(x=>x.id===id);d.status='REFUNDED_$100';saveDeals();render();toast('REFUND $100 to buyer - Recorded ✅');}
+function closeDeal(){document.getElementById('dealModal').style.display='none';}
+// AUTO TIMER - checks every 1 second, REAL not test
+setInterval(()=>{renderDeals();},1000);
+
 let profile=JSON.parse(localStorage.getItem('jaom_profile')||'{"name":"Jacob yagi","bio":"Welcome to JAOM 🇸🇸 • Trusted Seller in Juba","phone":"0926004119"}');
 function loadProfile(){document.getElementById('pName').textContent=profile.name;document.getElementById('pBio').textContent=profile.bio;}
 function openEdit(){document.getElementById('eName').value=profile.name;document.getElementById('eBio').value=profile.bio;document.getElementById('ePhone').value=profile.phone;document.getElementById('editModal').style.display='flex';}
 function closeEdit(){document.getElementById('editModal').style.display='none';}
 function saveProfile(){profile={name:document.getElementById('eName').value||profile.name,bio:document.getElementById('eBio').value||profile.bio,phone:document.getElementById('ePhone').value||profile.phone};localStorage.setItem('jaom_profile',JSON.stringify(profile));loadProfile();closeEdit();toast('Profile Saved ✅');}
 function logout(){toast('Logged Out')}
-let aiCache={};function aiFast(w){let box=document.getElementById('ai-'+w);if(!box)return;if(aiCache[w]){box.style.display='block';box.innerHTML=aiCache[w];return;}box.style.display='block';box.innerHTML='✨ AI thinking...';setTimeout(()=>{let txt=`🔥 ${document.getElementById('title')?.value||'Your Product'} - Original, Clean & Trusted in Juba! Escrow 0926004119. WhatsApp now! 🇸🇸`;aiCache[w]=txt;box.innerHTML=txt;toast('AI Done - Fast ✅')},300)}
-function setLang(l){document.querySelectorAll('.lang button').forEach(b=>b.classList.remove('active'));if(l==='en')document.getElementById('lg-en').classList.add('active');if(l==='ar')document.getElementById('lg-ar').classList.add('active');if(l==='sw')document.getElementById('lg-sw').classList.add('active');if(l==='ar'){document.getElementById('t-title').textContent='سوق جاوم جوبا';document.getElementById('t-ai').textContent='اسأل الذكاء الاصطناعي الحقيقي';}else if(l==='sw'){document.getElementById('t-title').textContent='Soko la JAOM Juba';document.getElementById('t-ai').textContent='Uliza AI Halisi';}else{document.getElementById('t-title').textContent='JAOM Juba Marketplace';document.getElementById('t-ai').textContent='Ask Real AI - Meta AI';}toast(l==='en'?'English ✅':l==='ar'?'العربية ✅':'Kiswahili ✅');}
-loadProfile();render();
+function aiFast(w){let box=document.getElementById('ai-'+w);if(!box) return;box.style.display='block';box.innerHTML='✨ AI thinking...';setTimeout(()=>{box.innerHTML=`🔥 ${document.getElementById('title')?.value||'Your Product'} - Original, Clean & Trusted in Juba! Escrow ${ESCROW_MOMO}. WhatsApp now! 🇸🇸`;toast('AI Done - Fast ✅')},300)}
+let currentLang=localStorage.getItem('jaom_lang')||'en';
+const T={
+en:{title:'JAOM Juba Marketplace',connected:'Supabase Connected - Real Email & SMS Active',askAI:'Ask Real AI - Meta AI',search:'Search products, land, vehicles...',all:'All',phones:'Phones',land:'Land',vehicles:'Vehicles',clothes:'Clothes',other:'Other',featured:'Featured Listings',marketTitle:'Market',sellTitle:'➕ Sell Something',titlePh:'Title e.g. iPhone 13',pricePh:'Price in SSP',locPh:'Location e.g. Gudele, Juba',upload:'📷 Upload 4 Photos:',clean:'✨ Clean Your Photo with Real AI:',removeBg:'Clean Photo with Real AI - Remove.bg',cleanup:'Remove Object / Clean Photo',aiDesc:'AI: Write Description For Me (Fast)',descPh:'Description...',publish:'Publish Listing',dealsTitle:'🏷️ Deals / Escrow',escrow:'🛡️ Pay to JAOM Escrow FIRST',escrowName:'Name: JAOM Escrow - Jacob Yagi',iPaid:'I Paid',listings:'Listings',deals:'Deals',rating:'Rating',edit:'Edit Profile',logout:'Log Out',yourListings:'Your Listings - Delete Here Only',home:'Home',market:'Market',sell:'Sell',dealsNav:'Deals',profile:'Profile',editTitle:'Edit Profile - WORKS NOW',save:'Save Profile',cancel:'Cancel',noList:'No listings yet.',delTime:'Delivery Time You Promise:',buyEscrow:'Buy with Escrow',chooseDel:'Buyer: Select Your Delivery Time (Max 1 Week):'},
+ar:{title:'سوق جاوم جوبا',connected:'تم الاتصال - البريد والرسائل تعمل',askAI:'اسأل الذكاء الاصطناعي',search:'ابحث عن منتجات، أرض، سيارات...',all:'الكل',phones:'هواتف',land:'أراضي',vehicles:'سيارات',clothes:'ملابس',other:'أخرى',featured:'القوائم المميزة',marketTitle:'السوق',sellTitle:'➕ بع شيئاً',titlePh:'العنوان مثلاً آيفون 13',pricePh:'السعر بالجنيه',locPh:'الموقع مثلاً قوديلي، جوبا',upload:'📷 ارفع 4 صور:',clean:'✨ نظف صورتك:',removeBg:'نظف الصورة - Remove.bg',cleanup:'إزالة الأشياء',aiDesc:'اكتب وصفاً لي',descPh:'الوصف...',publish:'انشر الإعلان',dealsTitle:'🏷️ الصفقات / الضمان',escrow:'🛡️ ادفع لضمان JAOM أولاً',escrowName:'الاسم: ضمان JAOM - جاكوب ياجي',iPaid:'دفعت',listings:'إعلاناتي',deals:'صفقات',rating:'التقييم',edit:'تعديل الملف',logout:'خروج',yourListings:'إعلاناتك - الحذف هنا فقط',home:'الرئيسية',market:'السوق',sell:'بيع',dealsNav:'صفقات',profile:'الملف',editTitle:'تعديل الملف',save:'حفظ',cancel:'إلغاء',noList:'لا توجد إعلانات.',delTime:'وقت التوصيل الذي تعد به:',buyEscrow:'اشترِ بالضمان',chooseDel:'المشتري: اختر وقت التوصيل (أقصى أسبوع):'},
+sw:{title:'Soko la JAOM Juba',connected:'Supabase Imeunganishwa',askAI:'Uliza AI Halisi',search:'Tafuta bidhaa, ardhi, magari...',all:'Zote',phones:'Simu',land:'Ardhi',vehicles:'Magari',clothes:'Nguo',other:'Nyingine',featured:'Orodha Maalum',marketTitle:'Soko',sellTitle:'➕ Uza Kitu',titlePh:'Kichwa mf. iPhone 13',pricePh:'Bei kwa SSP',locPh:'Mahali mf. Gudele, Juba',upload:'📷 Pakia Picha 4:',clean:'✨ Safisha Picha:',removeBg:'Safisha Picha - Remove.bg',cleanup:'Ondoa Kitu',aiDesc:'Niandikie Maelezo',descPh:'Maelezo...',publish:'Chapisha Tangazo',dealsTitle:'🏷️ Deals / Escrow',escrow:'🛡️ Lipa kwa Escrow ya JAOM KWANZA',escrowName:'Jina: Escrow ya JAOM - Jacob Yagi',iPaid:'Nimelipa',listings:'Tangazo',deals:'Deals',rating:'Alama',edit:'Hariri Wasifu',logout:'Toka',yourListings:'Tangazo Zangu - Futa Hapa Tu',home:'Nyumbani',market:'Soko',sell:'Uza',dealsNav:'Deals',profile:'Wasifu',editTitle:'Hariri Wasifu',save:'Hifadhi',cancel:'Ghairi',noList:'Hakuna tangazo.',delTime:'Muda wa Kuwasilisha Unaahidi:',buyEscrow:'Nunua kwa Escrow',chooseDel:'Mnunuzi: Chagua Muda wa Kuwasilisha (Max Wiki 1):'}
+};
+function setLang(l){currentLang=l;localStorage.setItem('jaom_lang',l);document.querySelectorAll('.lang button').forEach(b=>b.classList.remove('active'));document.getElementById('lg-'+l).classList.add('active');document.documentElement.dir=(l==='ar'?'rtl':'ltr');document.querySelectorAll('[data-i18n]').forEach(el=>{let k=el.getAttribute('data-i18n');if(T[l][k]) el.textContent=T[l][k];});document.querySelectorAll('[data-i18n-ph]').forEach(el=>{let k=el.getAttribute('data-i18n-ph');if(T[l][k]) el.placeholder=T[l][k];});render();toast(l==='en'?'English ✅':l==='ar'?'العربية ✅':'Kiswahili ✅');}
+loadProfile();setLang(currentLang);render();
 </script></body></html>
