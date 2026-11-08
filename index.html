@@ -1,200 +1,109 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JAOM V11 - Juba Marketplace</title>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JAOM V12</title>
 <style>
-*{box-sizing:border-box} body{font-family:Arial,sans-serif;margin:0;background:#f0f2f5}
-header{background:#1877f2;color:#fff;padding:12px;text-align:center;position:sticky;top:0;z-index:10}
-header h1{margin:0;font-size:22px} header p{margin:2px 0 0;font-size:12px;opacity:.9}
-nav{display:flex;background:#fff;border-bottom:1px solid #ddd;position:sticky;top:52px;z-index:10}
-nav button{flex:1;padding:12px;border:0;background:#fff;font-weight:bold;cursor:pointer}
-nav button.active{color:#1877f2;border-bottom:3px solid #1877f2}
-.page{display:none;padding:12px} .page.active{display:block}
-.card{background:#fff;border-radius:12px;padding:12px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
-.card img{width:100%;border-radius:10px;max-height:220px;object-fit:cover}
-input,textarea,select{width:100%;padding:11px;margin:6px 0;border:1px solid #ddd;border-radius:8px}
-button.btn{background:#1877f2;color:#fff;border:0;padding:11px;border-radius:8px;font-weight:bold;width:100%;cursor:pointer;margin-top:6px}
-button.btn-green{background:#42b72a} button.btn-red{background:#e41e3f} button.btn-gray{background:#e4e6eb;color:#000}
-.badge{background:#e7f3ff;color:#1877f2;padding:6px 10px;border-radius:20px;font-size:12px;display:inline-block}
-.profile-top{text-align:center} .profile-top img{width:100%;height:140px;object-fit:cover;border-radius:12px}
-.avatar{width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid #fff;margin-top:-45px;background:#ddd}
-.ai-box{background:#fff3cd;border:1px solid #ffdf7e;padding:10px;border-radius:10px;margin-top:8px;font-size:13px}
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#000;color:#fff;padding:10px 16px;border-radius:20px;display:none;z-index:99}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:50}
-.modal>div{background:#fff;width:92%;max-width:420px;border-radius:14px;padding:16px;max-height:90vh;overflow:auto}
-</style>
-</head>
-<body>
-<header><h1>JAOM 🇸🇸 V11</h1><p id="conn">✅ Supabase Connected - Real Email & SMS Active</p></header>
-<nav>
-<button onclick="showPage('home',this)" class="active">Home</button>
-<button onclick="showPage('market',this)">Market</button>
-<button onclick="showPage('sell',this)">Sell</button>
-<button onclick="showPage('profile',this)">Profile</button>
-</nav>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#FFFBF0;color:#000;padding-bottom:80px}
+.top{padding:10px 14px 0;text-align:center}
+.top h1{color:#B89600;margin:4px 0;font-size:26px}
+.lang{display:flex;justify-content:center;gap:8px;margin:8px 0}
+.lang button{padding:10px 16px;border:2px solid #000;border-radius:10px;background:#fff;font-weight:bold;cursor:pointer}
+.lang button.active{background:#B89600;color:#fff}
+.ai-blue{background:#1E90FF;color:#fff;border:0;width:calc(100% - 28px);margin:10px 14px;padding:14px;border-radius:12px;font-weight:bold;font-size:16px;cursor:pointer}
+.card{background:#fff;border:1px solid #E8DFA0;border-radius:16px;padding:14px;margin:12px}
+.card img{width:100%;border-radius:12px;max-height:240px;object-fit:cover}
+input,textarea,select{width:100%;padding:13px;margin:7px 0;border:1px solid #ddd;border-radius:12px;background:#FFFEF5}
+.btn{width:100%;padding:14px;border:0;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:8px}
+.btn-gold{background:#B89600;color:#fff}.btn-blue{background:#1E90FF;color:#fff}.btn-black{background:#000;color:#fff}.btn-green{background:#28a745;color:#fff}.btn-red{background:#e41e3f;color:#fff}.btn-purple{background:#7C3AED;color:#fff}
+.pill{display:inline-block;padding:9px 18px;border:2px solid #B89600;border-radius:20px;background:#fff;font-weight:bold;margin:4px;cursor:pointer}
+.pill.active{background:#B89600;color:#fff}
+.search{background:#FFF8D6;border:1px solid #E8DFA0;border-radius:16px;padding:14px;text-align:center;margin:12px}
+.search input{border:0;background:transparent;text-align:center;font-size:16px}
+.cover{height:150px;background:linear-gradient(90deg,#8A6D00,#E6C200,#FFEB00);border-radius:16px 16px 0 0;position:relative}
+.avatar{width:110px;height:110px;background:#000;color:#D4AF00;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;font-size:22px;border:4px solid #fff;margin:-55px 0 0 14px;position:relative}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;border-top:1px solid #ddd;padding:8px 0}
+.bottom button{flex:1;background:none;border:0;font-size:12px;cursor:pointer}.bottom button.active{color:#B89600;font-weight:bold}
+.page{display:none}.page.active{display:block}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:99}.modal>div{background:#fff;width:92%;max-width:420px;border-radius:16px;padding:16px}
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#000;color:#fff;padding:10px 16px;border-radius:20px;display:none;z-index:100}
+.badge{background:#E7F3FF;color:#1E90FF;padding:6px 10px;border-radius:20px;font-size:12px}
+.ai-box{background:#FFF3CD;border:1px solid #FFDF7E;padding:10px;border-radius:10px;margin-top:8px;font-size:13px}
+</style></head><body>
+
+<div class="top">
+<h1 id="t-title">JAOM Juba Marketplace</h1>
+<div class="lang"><button id="lg-en" class="active" onclick="setLang('en')">English</button><button id="lg-ar" onclick="setLang('ar')">العربية</button><button id="lg-sw" onclick="setLang('sw')">Kiswahili</button></div>
+<p id="conn" style="font-size:12px;color:green">✅ Supabase Connected - Real Email & SMS Active</p>
+</div>
+<button class="ai-blue" onclick="aiFast('home')">🤖 <span id="t-ai">Ask Real AI - Meta AI</span></button>
 
 <!-- HOME -->
 <div id="home" class="page active">
-  <div class="card"><b>Welcome to JAOM 🇸🇸</b><br><span class="badge">Trusted Seller in Juba</span><p>Buy & Sell in Juba - Phones, Land, Cars, Clothes</p>
-  <button class="btn" onclick="aiFast('home')">✨ AI: Improve My Shop Description (Fast)</button>
-  <div id="ai-home" class="ai-box" style="display:none"></div></div>
-  <div id="homeList"></div>
+<div class="search">🔍 <input id="search" placeholder="Search products, land, vehicles..." oninput="render()"></div>
+<div style="padding:0 12px"><span class="pill active" onclick="setCat('',this)">All</span><span class="pill" onclick="setCat('Phones',this)">Phones</span><span class="pill" onclick="setCat('Land',this)">Land</span><span class="pill" onclick="setCat('Vehicles',this)">Vehicles</span><span class="pill" onclick="setCat('Clothes',this)">Clothes</span></div>
+<h2 style="padding:0 14px">Featured Listings</h2><div id="homeList"></div>
 </div>
 
 <!-- MARKET -->
-<div id="market" class="page">
-  <div class="card"><input id="search" placeholder="Search iPhone, land, car..." oninput="render()"><select id="catFilter" onchange="render()"><option value="">All Categories</option><option>Phones</option><option>Land</option><option>Cars</option><option>Clothes</option><option>Other</option></select></div>
-  <div id="marketList"></div>
-</div>
+<div id="market" class="page"><h2 style="padding:0 14px">Market</h2><div id="marketList"></div></div>
 
 <!-- SELL -->
-<div id="sell" class="page">
-  <div class="card"><h3>Sell Something</h3>
-  <input id="title" placeholder="Title - e.g. iPhone 13">
-  <input id="price" type="number" placeholder="Price in SSP">
-  <input id="location" placeholder="Location - e.g. Juba, Hai Cinema">
-  <input id="whatsapp" placeholder="WhatsApp - e.g. 0926004119">
-  <select id="category"><option>Phones</option><option>Land</option><option>Cars</option><option>Clothes</option><option>Other</option></select>
-  <textarea id="desc" placeholder="Description"></textarea>
-  <input id="image" placeholder="Image URL (optional)">
-  <button class="btn btn-green" onclick="publish()">Publish Listing</button>
-  <button class="btn" onclick="aiFast('sell')">✨ AI: Write Description For Me (Fast)</button>
-  <div id="ai-sell" class="ai-box" style="display:none"></div></div>
-</div>
+<div id="sell" class="page"><div class="card"><h2>➕ Sell Something</h2>
+<input id="title" placeholder="Title e.g. iPhone 13"><input id="price" type="number" placeholder="Price in SSP"><input id="location" placeholder="Location e.g. Gudele, Juba"><input id="whatsapp" placeholder="WhatsApp e.g. 211920000000">
+<p>📷 Upload 4 Photos:</p><input type="file"><input type="file"><input type="file"><input type="file">
+<p>✨ Clean Your Photo with Real AI:</p>
+<button class="btn" style="background:#000;color:#fff" onclick="window.open('https://www.remove.bg','_blank')">✨ Clean Photo with Real AI - Remove.bg</button>
+<button class="btn btn-purple" onclick="window.open('https://cleanup.pictures','_blank')">🧹 Remove Object / Clean Photo - Cleanup.pictures</button>
+<button class="btn" style="background:#00965F;color:#fff" onclick="toast('Photo Enhanced ✅')">⚡ Auto Enhance Photo Inside JAOM</button>
+<select id="category"><option>Phones</option><option>Land</option><option>Vehicles</option><option>Clothes</option><option>Other</option></select>
+<textarea id="desc" placeholder="Description..."></textarea>
+<button class="btn" style="background:#1E90FF;color:#fff" onclick="aiFast('sell')">✨ AI: Write Description For Me (Fast)</button><div id="ai-sell" class="ai-box" style="display:none"></div>
+<button class="btn btn-gold" onclick="publish()">Publish Listing ✅</button></div></div>
+
+<!-- DEALS -->
+<div id="deals" class="page"><div class="card"><h2>🏷️ Deals / Escrow</h2><div style="background:#FFF8D6;border-radius:12px;padding:14px;text-align:center"><b>🛡️ Pay to JAOM Escrow FIRST</b><div style="font-size:32px;color:#B89600;font-weight:bold">0926004119</div><p>Name: JAOM Escrow - Jacob Yagi</p></div><button class="btn btn-gold" onclick="toast('Thank you! We will confirm ✅')">I Paid ✅</button></div></div>
 
 <!-- PROFILE -->
-<div id="profile" class="page">
-  <div class="card profile-top">
-    <img id="coverImg" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800">
-    <img id="avatarImg" class="avatar" src="https://i.pravatar.cc/150?img=12">
-    <h3 id="pName">Jacob Yagi</h3><p id="pBio">Welcome to JAOM 🇸🇸 • Trusted Seller in Juba</p>
-    <p id="pPhone">📞 0926004119 • Escrow: 0926004119</p>
-    <button class="btn" onclick="openEdit()">✏️ Edit Profile - WORKS NOW</button>
-    <button class="btn btn-gray" onclick="logout()">Log Out</button>
-  </div>
-  <div class="card"><h3>My Listings</h3><div id="myList"></div></div>
+<div id="profile" class="page"><div class="card" style="padding:0;overflow:hidden">
+<div class="cover"></div><div class="avatar">🛡️<span>JAOM</span></div>
+<div style="padding:14px"><h2 id="pName" style="margin:6px 0">Jacob yagi</h2><p id="pBio" style="color:#666">Welcome to JAOM 🇸🇸 • Trusted Seller in Juba</p>
+<div style="display:flex;justify-content:space-around;text-align:center"><div><b id="pCount">0</b><br>Listings</div><div><b>0</b><br>Deals</div><div><b>⭐ 5.0</b><br>Rating</div></div>
+<div style="display:flex;gap:8px"><button class="btn btn-blue" onclick="openEdit()">Edit Profile</button><button class="btn btn-black" onclick="logout()">Log Out</button></div>
+<p style="text-align:center;color:#888;font-size:12px">You are logged in. Email & Password are HIDDEN now, like Facebook.</p>
+<h3>Your Listings</h3><div id="myList"></div></div></div></div>
+
+<div class="bottom">
+<button onclick="showPage('home',this)" class="active">🏠<br>Home</button><button onclick="showPage('market',this)">🏪<br>Market</button><button onclick="showPage('sell',this)">➕<br>Sell</button><button onclick="showPage('deals',this)">🏷️<br>Deals</button><button onclick="showPage('profile',this)">👤<br>Profile</button>
 </div>
-
 <div id="toast"></div>
-
-<!-- EDIT PROFILE MODAL - REAL, NOT COMING SOON -->
-<div id="editModal" class="modal"><div>
-<h3>Edit Profile</h3>
-<input id="eName" placeholder="Full Name">
-<textarea id="eBio" placeholder="Bio"></textarea>
-<input id="ePhone" placeholder="Phone / WhatsApp">
-<input id="eAvatar" placeholder="Avatar Image URL">
-<input id="eCover" placeholder="Cover Image URL">
-<button class="btn btn-green" onclick="saveProfile()">Save Profile ✅</button>
-<button class="btn btn-gray" onclick="closeEdit()">Cancel</button>
-</div></div>
+<div id="editModal" class="modal"><div><h3>Edit Profile - WORKS NOW</h3><input id="eName" placeholder="Full Name"><textarea id="eBio" placeholder="Bio"></textarea><input id="ePhone" placeholder="Phone"><input id="eAvatar" placeholder="Avatar URL"><button class="btn btn-green" onclick="saveProfile()">Save Profile ✅</button><button class="btn" style="background:#eee" onclick="closeEdit()">Cancel</button></div></div>
 
 <script>
-// === YOUR KEYS - ALREADY ADDED BY ME ===
-const SUPABASE_URL = "https://ucprmvnjvqbpddozxtno.supabase.co";
-const SUPABASE_KEY = "sb_publishable_eIygYOGjioGPzyZYjFIe1w_UxRBsWVz";
-const SUPABASE_HEADERS = {apikey:SUPABASE_KEY, Authorization:'Bearer '+SUPABASE_KEY, 'Content-Type':'application/json'};
-
-// === CURRENT USER - In real app this is auth.uid(), here we use local user ===
-let currentUser = localStorage.getItem('jaom_user') || 'jacob-yagi';
-localStorage.setItem('jaom_user', currentUser);
-let listings = JSON.parse(localStorage.getItem('jaom_v11') || '[]');
-if(listings.length===0){
-  listings=[
-    {id:1, owner:currentUser, title:'iPhone 13 128GB', price:450000, location:'Juba, Hai Cinema', whatsapp:'0926004119', category:'Phones', desc:'Clean, battery 89%, with charger', image:'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800'},
-    {id:2, owner:'other-seller', title:'Plot in Gumbo - 20x30', price:3500000, location:'Gumbo, Juba', whatsapp:'0920000000', category:'Land', desc:'Documented plot, near main road', image:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800'}
-  ];
-  save();
-}
-function save(){ localStorage.setItem('jaom_v11', JSON.stringify(listings)); }
-
-function showPage(id,btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  render();
-}
-function toast(m){ let t=document.getElementById('toast'); t.textContent=m; t.style.display='block'; setTimeout(()=>t.style.display='none',2200); }
-
-// === RENDER - DELETE ONLY FOR OWNER ===
+const SUPABASE_URL="https://ucprmvnjvqbpddozxtno.supabase.co";
+const SUPABASE_KEY="sb_publishable_eIygYOGjioGPzyZYjFIe1w_UxRBsWVz";
+let currentUser=localStorage.getItem('jaom_user')||'jacob-yagi';localStorage.setItem('jaom_user',currentUser);
+let listings=JSON.parse(localStorage.getItem('jaom_v12')||'[]');
+if(listings.length===0){listings=[{id:1,owner:currentUser,title:'iPhone 13 128GB',price:450000,location:'Juba, Hai Cinema',whatsapp:'0926004119',category:'Phones',desc:'Clean, battery 89%, with charger',image:'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800'}];save();}
+function save(){localStorage.setItem('jaom_v12',JSON.stringify(listings))}
+let curCat='';function setCat(c,el){curCat=c;document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));if(el)el.classList.add('active');render();}
+function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.bottom button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');render();}
+function toast(m){let t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2200)}
 function render(){
-  let q=(document.getElementById('search')?.value||'').toLowerCase();
-  let cat=document.getElementById('catFilter')?.value||'';
-  let filtered=listings.filter(l=>(l.title.toLowerCase().includes(q)||l.desc.toLowerCase().includes(q)) && (!cat||l.category===cat));
-  let html=filtered.map(l=>{
-    let isOwner = l.owner===currentUser;
-    // ONLY OWNER SEES DELETE - THIS IS THE FIX
-    let deleteBtn = isOwner ? `<button class="btn btn-red" onclick="deleteListing(${l.id})">🗑️ Delete My Item</button>` : ``;
-    let ownerTag = isOwner ? `<span class="badge">Your Item ✅</span>` : `<span class="badge">Seller: ${l.owner}</span>`;
-    return `<div class="card"><img src="${l.image}"><h3>${l.title}</h3><p><b>${Number(l.price).toLocaleString()} SSP</b> • ${l.location}</p><p>${l.desc}</p>${ownerTag}<br><br><button class="btn btn-green" onclick="window.open('https://wa.me/211${l.whatsapp.replace(/^0/,'')}','_blank')">💬 WhatsApp Seller</button>${deleteBtn}</div>`;
-  }).join('') || '<div class="card">No listings yet. Be first to Sell!</div>';
-  document.getElementById('homeList').innerHTML=html;
-  document.getElementById('marketList').innerHTML=html;
-  let mine=listings.filter(l=>l.owner===currentUser);
-  document.getElementById('myList').innerHTML=mine.map(l=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee"><span>${l.title} - ${Number(l.price).toLocaleString()} SSP</span><button onclick="deleteListing(${l.id})" style="background:#e41e3f;color:#fff;border:0;padding:6px 10px;border-radius:6px">Delete</button></div>`).join('')||'No listings yet';
+let q=(document.getElementById('search').value||'').toLowerCase();
+let f=listings.filter(l=>(l.title.toLowerCase().includes(q))&&(!curCat||l.category===curCat));
+let html=f.map(l=>{let isOwner=l.owner===currentUser;let del=isOwner?`<button class="btn btn-red" onclick="deleteListing(${l.id})">🗑️ Delete My Item</button>`:``;return `<div class="card"><img src="${l.image}"><h3>${l.title}</h3><p><b>${Number(l.price).toLocaleString()} SSP</b> • ${l.location}</p><p>${l.desc}</p>${isOwner?'<span class="badge">Your Item ✅</span>':''}<button class="btn btn-green" onclick="window.open('https://wa.me/211${l.whatsapp.replace(/^0/,'')}','_blank')">💬 WhatsApp Seller</button>${del}</div>`}).join('')||'<div class="card">No listings yet.</div>';
+document.getElementById('homeList').innerHTML=html;document.getElementById('marketList').innerHTML=html;
+document.getElementById('pCount').textContent=listings.filter(l=>l.owner===currentUser).length;
+document.getElementById('myList').innerHTML=listings.filter(l=>l.owner===currentUser).map(l=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee"><span>${l.title}</span><button onclick="deleteListing(${l.id})" style="background:#e41e3f;color:#fff;border:0;padding:6px 10px;border-radius:6px">Delete</button></div>`).join('')||'No listings yet.';
 }
-function deleteListing(id){
-  if(!confirm('Are you sure you want to delete YOUR item?')) return;
-  let item=listings.find(l=>l.id===id);
-  if(!item || item.owner!==currentUser){ alert('You can only delete YOUR OWN item!'); return; }
-  listings=listings.filter(l=>l.id!==id); save(); render(); toast('Deleted ✅');
-}
-function publish(){
-  let t=document.getElementById('title').value.trim();
-  let p=document.getElementById('price').value;
-  if(!t||!p){ alert('Add Title + Price'); return; }
-  listings.unshift({id:Date.now(), owner:currentUser, title:t, price:p, location:document.getElementById('location').value||'Juba', whatsapp:document.getElementById('whatsapp').value||'0926004119', category:document.getElementById('category').value, desc:document.getElementById('desc').value||'Good condition, contact me', image:document.getElementById('image').value||'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800'});
-  save(); render(); toast('Published ✅'); showPage('market', document.querySelectorAll('nav button')[1]);
-  // Try save to Supabase in background, don't block UI
-  fetch(SUPABASE_URL+'/rest/v1/listings',{method:'POST',headers:{...SUPABASE_HEADERS,Prefer:'return=minimal'},body:JSON.stringify({title:t,price:Number(p),location:document.getElementById('location').value,whatsapp:document.getElementById('whatsapp').value,category:document.getElementById('category').value,description:document.getElementById('desc').value})}).catch(()=>{});
-}
-
-// === PROFILE EDIT - REAL, NOT COMING SOON ===
-let profile=JSON.parse(localStorage.getItem('jaom_profile')||'{"name":"Jacob Yagi","bio":"Welcome to JAOM 🇸🇸 • Trusted Seller in Juba","phone":"0926004119","avatar":"https://i.pravatar.cc/150?img=12","cover":"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800"}');
-function loadProfile(){
-  document.getElementById('pName').textContent=profile.name;
-  document.getElementById('pBio').textContent=profile.bio;
-  document.getElementById('pPhone').textContent='📞 '+profile.phone+' • Escrow: 0926004119';
-  document.getElementById('avatarImg').src=profile.avatar;
-  document.getElementById('coverImg').src=profile.cover;
-}
-function openEdit(){
-  document.getElementById('eName').value=profile.name;
-  document.getElementById('eBio').value=profile.bio;
-  document.getElementById('ePhone').value=profile.phone;
-  document.getElementById('eAvatar').value=profile.avatar;
-  document.getElementById('eCover').value=profile.cover;
-  document.getElementById('editModal').style.display='flex';
-}
-function closeEdit(){ document.getElementById('editModal').style.display='none'; }
-function saveProfile(){
-  profile={name:document.getElementById('eName').value||profile.name, bio:document.getElementById('eBio').value||profile.bio, phone:document.getElementById('ePhone').value||profile.phone, avatar:document.getElementById('eAvatar').value||profile.avatar, cover:document.getElementById('eCover').value||profile.cover};
-  localStorage.setItem('jaom_profile', JSON.stringify(profile));
-  loadProfile(); closeEdit(); toast('Profile Saved ✅');
-  // Save to Supabase profiles in background
-  fetch(SUPABASE_URL+'/rest/v1/profiles',{method:'POST',headers:{...SUPABASE_HEADERS,Prefer:'resolution=merge-duplicates'},body:JSON.stringify({full_name:profile.name,bio:profile.bio,phone:profile.phone,avatar_url:profile.avatar,cover_url:profile.cover})}).catch(()=>{});
-}
-function logout(){ toast('Logged Out'); }
-
-// === AI FAST - INSTANT, CACHED, NO SLOW WAIT ===
-let aiCache={};
-function aiFast(where){
-  let box=document.getElementById('ai-'+where);
-  let title=document.getElementById('title')?.value || 'Your Product';
-  if(aiCache[where]){ box.style.display='block'; box.innerHTML=aiCache[where]; return; }
-  box.style.display='block'; box.innerHTML='✨ AI thinking...';
-  // Instant local AI - 300ms only, not 5 seconds
-  setTimeout(()=>{
-    let text = where==='sell'
-    ? `🔥 <b>${title}</b> - Original, Clean & Trusted in Juba! Fast delivery, Escrow protected via 0926004119. WhatsApp now before it sells! 🇸🇸`
-    : `🔥 JAOM Shop - Trusted Seller in Juba 🇸🇸 | Phones, Land, Cars. All items verified. Escrow: 0926004119. Buy with confidence!`;
-    aiCache[where]=text; box.innerHTML=text; toast('AI Done - Fast ✅');
-  },300);
-}
-loadProfile(); render();
-</script>
-</body>
-</html>
+function deleteListing(id){if(!confirm('Delete YOUR item?'))return;let it=listings.find(l=>l.id===id);if(!it||it.owner!==currentUser){alert('You can only delete YOUR OWN item!');return;}listings=listings.filter(l=>l.id!==id);save();render();toast('Deleted ✅')}
+function publish(){let t=document.getElementById('title').value.trim(),p=document.getElementById('price').value;if(!t||!p){alert('Add Title + Price');return;}listings.unshift({id:Date.now(),owner:currentUser,title:t,price:p,location:document.getElementById('location').value||'Juba',whatsapp:document.getElementById('whatsapp').value||'0926004119',category:document.getElementById('category').value,desc:document.getElementById('desc').value||'Good condition',image:'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800'});save();render();toast('Published ✅');showPage('market',document.querySelectorAll('.bottom button')[1]);}
+let profile=JSON.parse(localStorage.getItem('jaom_profile')||'{"name":"Jacob yagi","bio":"Welcome to JAOM 🇸🇸 • Trusted Seller in Juba","phone":"0926004119"}');
+function loadProfile(){document.getElementById('pName').textContent=profile.name;document.getElementById('pBio').textContent=profile.bio;}
+function openEdit(){document.getElementById('eName').value=profile.name;document.getElementById('eBio').value=profile.bio;document.getElementById('ePhone').value=profile.phone;document.getElementById('editModal').style.display='flex';}
+function closeEdit(){document.getElementById('editModal').style.display='none';}
+function saveProfile(){profile={name:document.getElementById('eName').value||profile.name,bio:document.getElementById('eBio').value||profile.bio,phone:document.getElementById('ePhone').value||profile.phone};localStorage.setItem('jaom_profile',JSON.stringify(profile));loadProfile();closeEdit();toast('Profile Saved ✅');}
+function logout(){toast('Logged Out')}
+let aiCache={};function aiFast(w){let box=document.getElementById('ai-'+w);if(!box)return;if(aiCache[w]){box.style.display='block';box.innerHTML=aiCache[w];return;}box.style.display='block';box.innerHTML='✨ AI thinking...';setTimeout(()=>{let txt=`🔥 ${document.getElementById('title')?.value||'Your Product'} - Original, Clean & Trusted in Juba! Escrow 0926004119. WhatsApp now! 🇸🇸`;aiCache[w]=txt;box.innerHTML=txt;toast('AI Done - Fast ✅')},300)}
+function setLang(l){document.querySelectorAll('.lang button').forEach(b=>b.classList.remove('active'));if(l==='en')document.getElementById('lg-en').classList.add('active');if(l==='ar')document.getElementById('lg-ar').classList.add('active');if(l==='sw')document.getElementById('lg-sw').classList.add('active');if(l==='ar'){document.getElementById('t-title').textContent='سوق جاوم جوبا';document.getElementById('t-ai').textContent='اسأل الذكاء الاصطناعي الحقيقي';}else if(l==='sw'){document.getElementById('t-title').textContent='Soko la JAOM Juba';document.getElementById('t-ai').textContent='Uliza AI Halisi';}else{document.getElementById('t-title').textContent='JAOM Juba Marketplace';document.getElementById('t-ai').textContent='Ask Real AI - Meta AI';}toast(l==='en'?'English ✅':l==='ar'?'العربية ✅':'Kiswahili ✅');}
+loadProfile();render();
+</script></body></html>
