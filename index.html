@@ -1,11 +1,8 @@
-/* ============ PART 1: CONFIG + i18n + UTILITIES ============ */
 const SUPABASE_URL = "https://ucprmvnjvqbpddozxtno.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_eIygYOGjioGPzyZYjFIe1w_UxRBsWVz";
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
 const $ = id => document.getElementById(id);
 const CATS = ["All","Phones","Electronics","Land","Vehicles","Clothes","Home","Other"];
-
 let user = null;
 let listings = [];
 let orders = [];
@@ -14,15 +11,12 @@ let isAdmin = false;
 let channel = null;
 let toastT = null;
 let lang = "en";
-
 const I18N = {
 en:{tagline:"JUBA MARKETPLACE",heroTitle:"Discover something valuable.",heroSub:"Buy and sell with more confidence in Juba and beyond.",postItem:"＋ Post an item",searchPh:"Search…",latestListings:"Latest listings",market:"Marketplace",postListing:"Post a listing",itemTitle:"Item title",price:"Price",currency:"Currency",location:"Location",phone:"WhatsApp / phone",category:"Category",delivery:"Delivery",description:"Description",photo:"Photo",publish:"Publish listing",limitNote:"Max 3 active listings.",orders:"Orders & protection",paymentNote:"Admin verifies payment against MoMo/bank.",adminDesk:"Admin desk",activeListings:"Active listings",ordersCount:"Orders",settings:"Settings",myListings:"My listings",signOut:"Sign out",language:"Language",iconSize:"Icon size",textSize:"Text size",defaultCurrency:"Currency",saveSettings:"Save settings",navHome:"Home",navMarket:"Market",navSell:"Sell",navOrders:"Orders",navProfile:"Profile",authWelcome:"Welcome to JAOM",authSub:"Sign in with your email.",email:"Email",code:"6-digit code",verify:"Verify",anotherEmail:"Another email",close:"Close",view:"View",manage:"Manage",items:"items",noListings:"No listings yet.",signIn:"Sign in to continue.",noOrders:"No orders yet.",nonePosted:"Nothing posted yet.",guest:"Guest",signInManage:"Sign in to manage",enterEmail:"Enter email",sending:"Sending…",checkInbox:"Check your inbox.",enterCode:"Enter the 6-digit code",signedOut:"Signed out",verified:"Welcome!",addFields:"Fill title, price, location",limitReached:"Limit of 3 reached",chooseImage:"Choose an image",imageTooBig:"Image under 5 MB",photoFail:"Upload failed: ",publishFail:"Publish failed: ",published:"Published",cantOrderOwn:"Can't order your own",orderFail:"Order failed: ",orderSent:"Order sent. No payment taken.",requestBuy:"Request to buy",deleteListing:"Delete listing",confirmDelete:"Delete?",deleted:"Deleted",paymentSent:"I sent payment",verifyPayment:"Verify payment",recordPayout:"Record payout",approveRefund:"Approve refund",recordRefund:"Record refund",adminOnly:"Admin only",settingsSaved:"Saved",langChanged:"Language changed",loadFail:"Load failed: ",retry:"Retry",deliveryPrefix:"Delivery: up to ",hoursShort:"h",sellerDeliveryNote:"Delivery promise is by the seller, not guaranteed by JAOM.",noDesc:"No description.",refPrompt:"Enter transaction reference. Never enter your PIN.",payoutPrompt:"Enter payout reference.",refundPrompt:"Enter refund reference.",reasonPrompt:"Refund reason:",confirmVerify:"Confirm money received?",confirmPayout:"Confirm payout sent?",confirmApproveRefund:"Approve 100% refund?",confirmRefund:"Confirm refund sent?",orderUpdated:"Order updated",updateFail:"Update failed: ",reportFail:"Report failed: ",reportSent:"Reported. Admin will verify.",orderLabel:"Order",amount:"Amount",fee:"Fee (5%)",payout:"Payout",created:"Created",noOrdersReview:"No orders to review.",alreadyOrdered:"Already ordered this.",adminFnMissing:"Run the jaom_is_admin() SQL in Supabase."},
 ar:{tagline:"سوق جوبا",heroTitle:"اكتشف شيئًا قيّمًا.",heroSub:"اشترِ وبِع بثقة أكبر في جوبا وخارجها.",postItem:"＋ أضف منتجًا",searchPh:"ابحث…",latestListings:"أحدث الإعلانات",market:"السوق",postListing:"نشر إعلان",itemTitle:"العنوان",price:"السعر",currency:"العملة",location:"الموقع",phone:"واتساب / هاتف",category:"الفئة",delivery:"التسليم",description:"الوصف",photo:"صورة",publish:"نشر",limitNote:"الحد 3 إعلانات.",orders:"الطلبات والحماية",paymentNote:"يتحقق المسؤول من الدفع.",adminDesk:"مكتب المسؤول",activeListings:"إعلانات نشطة",ordersCount:"الطلبات",settings:"الإعدادات",myListings:"إعلاناتي",signOut:"تسجيل الخروج",language:"اللغة",iconSize:"حجم الأيقونات",textSize:"حجم النص",defaultCurrency:"العملة",saveSettings:"حفظ",navHome:"الرئيسية",navMarket:"السوق",navSell:"بيع",navOrders:"الطلبات",navProfile:"الملف",authWelcome:"مرحبًا بك",authSub:"سجّل الدخول ببريدك.",email:"البريد",code:"رمز 6 أرقام",verify:"تحقق",anotherEmail:"بريد آخر",close:"إغلاق",view:"عرض",manage:"إدارة",items:"عناصر",noListings:"لا إعلانات.",signIn:"سجّل الدخول.",noOrders:"لا طلبات.",nonePosted:"لا شيء بعد.",guest:"زائر",signInManage:"سجّل الدخول",enterEmail:"أدخل البريد",sending:"جارٍ الإرسال…",checkInbox:"تحقق من بريدك.",enterCode:"أدخل الرمز",signedOut:"خرجت",verified:"مرحبًا!",addFields:"أضف عنوانًا وسعرًا وموقعًا",limitReached:"الحد 3",chooseImage:"اختر صورة",imageTooBig:"أقل من 5MB",photoFail:"فشل الرفع: ",publishFail:"فشل النشر: ",published:"تم النشر",cantOrderOwn:"لا يمكنك طلب إعلانك",orderFail:"فشل الطلب: ",orderSent:"تم الإرسال.",requestBuy:"طلب الشراء",deleteListing:"حذف",confirmDelete:"حذف؟",deleted:"تم الحذف",paymentSent:"أرسلت الدفع",verifyPayment:"تأكيد الدفع",recordPayout:"تسجيل الدفع",approveRefund:"موافقة استرداد",recordRefund:"تسجيل استرداد",adminOnly:"للمسؤول فقط",settingsSaved:"تم الحفظ",langChanged:"تم تغيير اللغة",loadFail:"فشل التحميل: ",retry:"إعادة",deliveryPrefix:"التسليم: حتى ",hoursShort:"س",sellerDeliveryNote:"وعد البائع غير مضمون من JAOM.",noDesc:"لا وصف.",refPrompt:"أدخل المرجع. لا تدخل رمزك.",payoutPrompt:"مرجع الدفع.",refundPrompt:"مرجع الاسترداد.",reasonPrompt:"سبب الاسترداد:",confirmVerify:"تأكيد استلام المبلغ؟",confirmPayout:"تأكيد إرسال الدفع؟",confirmApproveRefund:"استرداد 100%؟",confirmRefund:"تأكيد إرسال الاسترداد؟",orderUpdated:"تم التحديث",updateFail:"فشل: ",reportFail:"فشل التقرير: ",reportSent:"تم التقرير.",orderLabel:"طلب",amount:"المبلغ",fee:"عمولة (5%)",payout:"دفعة",created:"أُنشئ",noOrdersReview:"لا طلبات.",alreadyOrdered:"طلبت هذا بالفعل.",adminFnMissing:"شغّل SQL jaom_is_admin()."},
 sw:{tagline:"SOKO LA JUBA",heroTitle:"Gundua kitu cha thamani.",heroSub:"Nunua na uuze kwa ujasiri zaidi Juba.",postItem:"＋ Weka bidhaa",searchPh:"Tafuta…",latestListings:"Matangazo mapya",market:"Soko",postListing:"Weka tangazo",itemTitle:"Jina",price:"Bei",currency:"Sarafu",location:"Mahali",phone:"WhatsApp / simu",category:"Kundi",delivery:"Usafirishaji",description:"Maelezo",photo:"Picha",publish:"Chapisha",limitNote:"Kikomo 3.",orders:"Oda na ulinzi",paymentNote:"Msimamizi huthibitisha malipo.",adminDesk:"Dawati la msimamizi",activeListings:"Matangazo hai",ordersCount:"Oda",settings:"Mipangilio",myListings:"Matangazo yangu",signOut:"Toka",language:"Lugha",iconSize:"Ukubwa wa aikoni",textSize:"Ukubwa wa maandishi",defaultCurrency:"Sarafu",saveSettings:"Hifadhi",navHome:"Nyumbani",navMarket:"Soko",navSell:"Uza",navOrders:"Oda",navProfile:"Wasifu",authWelcome:"Karibu JAOM",authSub:"Ingia kwa barua pepe.",email:"Barua pepe",code:"Msimbo wa 6",verify:"Thibitisha",anotherEmail:"Barua nyingine",close:"Funga",view:"Tazama",manage:"Dhibiti",items:"vitu",noListings:"Hakuna matangazo.",signIn:"Ingia.",noOrders:"Hakuna oda.",nonePosted:"Hakuna bado.",guest:"Mgeni",signInManage:"Ingia kudhibiti",enterEmail:"Weka barua pepe",sending:"Inatuma…",checkInbox:"Angalia kikasha.",enterCode:"Weka msimbo",signedOut:"Umetoka",verified:"Karibu!",addFields:"Ongeza jina, bei, mahali",limitReached:"Kikomo 3",chooseImage:"Chagua picha",imageTooBig:"Chini ya MB 5",photoFail:"Imeshindwa: ",publishFail:"Imeshindwa: ",published:"Imechapishwa",cantOrderOwn:"Hauwezi kuagiza yako",orderFail:"Imeshindwa: ",orderSent:"Oda imetumwa.",requestBuy:"Omba kununua",deleteListing:"Futa",confirmDelete:"Futa?",deleted:"Imefutwa",paymentSent:"Nimetuma malipo",verifyPayment:"Thibitisha malipo",recordPayout:"Rekodi malipo",approveRefund:"Idhinisha marejesho",recordRefund:"Rekodi marejesho",adminOnly:"Msimamizi pekee",settingsSaved:"Imehifadhiwa",langChanged:"Lugha imebadilishwa",loadFail:"Imeshindwa: ",retry:"Jaribu tena",deliveryPrefix:"Usafirishaji: hadi ",hoursShort:"saa",sellerDeliveryNote:"Ahadi ya muuzaji, si ya JAOM.",noDesc:"Hakuna maelezo.",refPrompt:"Weka kumbukumbu. Usiweke PIN.",payoutPrompt:"Kumbukumbu ya malipo.",refundPrompt:"Kumbukumbu ya marejesho.",reasonPrompt:"Sababu:",confirmVerify:"Thibitisha pesa zimepokelewa?",confirmPayout:"Thibitisha malipo yametumwa?",confirmApproveRefund:"Marejesho 100%?",confirmRefund:"Thibitisha marejesho yametumwa?",orderUpdated:"Imesasishwa",updateFail:"Imeshindwa: ",reportFail:"Imeshindwa: ",reportSent:"Imeripotiwa.",orderLabel:"Oda",amount:"Kiasi",fee:"Ada (5%)",payout:"Malipo",created:"Imeundwa",noOrdersReview:"Hakuna oda.",alreadyOrdered:"Umeagiza hii.",adminFnMissing:"Endesha SQL ya jaom_is_admin()."}
 };
-
 const t = k => (I18N[lang] && I18N[lang][k]) || I18N.en[k] || k;
-
 function applyI18n(){
   document.querySelectorAll("[data-i18n]").forEach(e => {
     const v = t(e.getAttribute("data-i18n"));
@@ -37,37 +31,32 @@ function applyI18n(){
   categoryButtons();
   renderListings();
 }
-
 const uuid = () => (window.crypto && crypto.randomUUID)
   ? crypto.randomUUID()
   : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
       const r = Math.random() * 16 | 0;
       return (c === "x" ? r : (r & 0x3 | 0x8)).toString(16);
     });
-
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c =>
   ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
-
 function money(v, cur){
   const c = cur || localStorage.getItem("jaomCurrency") || "SSP";
   const n = Number(v);
   const s = Number.isFinite(n) ? n : 0;
   return `${s.toLocaleString()} ${esc(c)}`;
 }
-
 function toast(msg){
   const el = $("toast");
+  if (!el) return;
   el.textContent = msg;
   el.classList.add("show");
   clearTimeout(toastT);
   toastT = setTimeout(() => el.classList.remove("show"), 2800);
 }
-
 function closeModals(){
   document.querySelectorAll(".modal.open").forEach(m => m.classList.remove("open"));
 }
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeModals(); });
-
 function openPage(id){
   document.querySelectorAll(".page").forEach(p => p.classList.toggle("active", p.id === id));
   document.querySelectorAll(".bottom button").forEach(b => b.classList.toggle("active", b.dataset.page === id));
@@ -75,13 +64,11 @@ function openPage(id){
   if (id === "profile" || id === "deals") refreshAccountData();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
-
 function syncSearch(v){
   if ($("search")) $("search").value = v;
   if ($("marketSearch")) $("marketSearch").value = v;
   renderListings();
 }
-
 function setLanguage(v){
   lang = v;
   localStorage.setItem("jaomLang", v);
@@ -100,8 +87,6 @@ function saveSettings(){
   localStorage.setItem("jaomCurrency", $("defaultCurrency").value);
   toast(t("settingsSaved"));
 }
-
-/* ============ AUTH ============ */
 function showAuth(){ $("authModal").classList.add("open"); }
 function closeAuth(){ $("authModal").classList.remove("open"); }
 function backToEmail(){
@@ -109,7 +94,6 @@ function backToEmail(){
   $("codeStep").classList.add("hidden");
   $("authMessage").textContent = "";
 }
-
 async function requestCode(){
   const email = $("authEmail").value.trim();
   if (!email) { toast(t("enterEmail")); return; }
@@ -120,7 +104,6 @@ async function requestCode(){
   $("codeStep").classList.remove("hidden");
   $("authMessage").textContent = t("checkInbox");
 }
-
 async function verifyCode(){
   const email = $("authEmail").value.trim();
   const token = $("authCode").value.trim();
@@ -135,7 +118,6 @@ async function verifyCode(){
   subscribeRealtime();
   toast(t("verified"));
 }
-
 async function signOut(){
   if (channel) { await sb.removeChannel(channel); channel = null; }
   await sb.auth.signOut();
@@ -145,7 +127,6 @@ async function signOut(){
   await refreshAccountData();
   showAuth();
 }
-
 async function ensureProfile(){
   if (!user) return;
   const { data } = await sb.from("profiles").select("id").eq("id", user.id).maybeSingle();
@@ -159,8 +140,6 @@ async function ensureProfile(){
     });
   }
 }
-/* END PART 1 — continue in PART 2 *//* ============ PART 2: LISTINGS + RENDER + PUBLISH ============ */
-
 function categoryButtons(){
   const el = $("categories");
   if (!el) return;
@@ -171,20 +150,17 @@ function categoryButtons(){
     return `<button class="chip ${activeCategory === c ? "active" : ""}" onclick="chooseCategory('${c}')">${esc(label)}</button>`;
   }).join("");
 }
-
 function chooseCategory(c){
   activeCategory = c;
   categoryButtons();
   renderListings();
 }
-
 function showSkeleton(){
   const s = Array.from({ length: 6 }).map(() => `<div class="skeleton"></div>`).join("");
   if ($("listingGrid")) $("listingGrid").innerHTML = s;
   if ($("marketGrid")) $("marketGrid").innerHTML = s;
   if ($("listingCount")) $("listingCount").textContent = "…";
 }
-
 async function loadListings(){
   showSkeleton();
   const { data, error } = await sb
@@ -192,7 +168,6 @@ async function loadListings(){
     .select("id,user_id,title,price,currency,location,whatsapp,category,description,image_url,delivery_hours,created_at")
     .order("created_at", { ascending: false })
     .limit(100);
-
   if (error) {
     console.error(error);
     const msg = t("loadFail") + error.message;
@@ -209,7 +184,6 @@ async function loadListings(){
   categoryButtons();
   renderListings();
 }
-
 function listingCard(l, owner = false){
   const image = l.image_url || "https://placehold.co/600x400/f5f0e5/8b6b2c?text=JAOM";
   return `<article class="card product">
@@ -226,7 +200,6 @@ function listingCard(l, owner = false){
     </div>
   </article>`;
 }
-
 function renderListings(){
   const q = ($("search") && $("search").value || "").toLowerCase();
   const filtered = listings.filter(l =>
@@ -240,7 +213,6 @@ function renderListings(){
   if ($("marketGrid")) $("marketGrid").innerHTML = html;
   if ($("listingCount")) $("listingCount").textContent = `${filtered.length} ${t("items")}`;
 }
-
 async function publishListing(){
   if (!user) { showAuth(); return; }
   const title = $("fTitle").value.trim();
@@ -249,10 +221,8 @@ async function publishListing(){
   if (!title || !Number.isFinite(price) || price <= 0 || !location) {
     toast(t("addFields")); return;
   }
-
   const mine = listings.filter(l => l.user_id === user.id);
   if (mine.length >= 3) { toast(t("limitReached")); return; }
-
   let imageUrl = null;
   const file = $("fImage").files[0];
   if (file) {
@@ -267,23 +237,20 @@ async function publishListing(){
     const { data } = sb.storage.from("listing-images").getPublicUrl(path);
     imageUrl = data.publicUrl;
   }
-
   const row = {
     user_id: user.id,
-    title,
-    price,
+    title: title,
+    price: price,
     currency: $("fCurrency").value,
-    location,
+    location: location,
     whatsapp: $("fPhone").value.trim(),
     category: $("fCategory").value,
     description: $("fDescription").value.trim(),
     image_url: imageUrl,
     delivery_hours: Number($("fDelivery").value) || 24
   };
-
   const { error } = await sb.from("listings").insert(row);
   if (error) { toast(t("publishFail") + error.message); return; }
-
   ["fTitle","fPrice","fLocation","fPhone","fDescription","fImage"].forEach(id => {
     if ($(id)) $(id).value = "";
   });
@@ -291,7 +258,6 @@ async function publishListing(){
   await loadListings();
   openPage("market");
 }
-
 function showListing(id){
   const l = listings.find(x => String(x.id) === String(id));
   if (!l) return;
@@ -314,9 +280,7 @@ function showListing(id){
   `;
   $("detailModal").classList.add("open");
 }
-
 function closeDetail(){ $("detailModal").classList.remove("open"); }
-
 async function deleteListing(id){
   const l = listings.find(x => String(x.id) === String(id));
   if (!l || !user || l.user_id !== user.id) return;
@@ -328,14 +292,11 @@ async function deleteListing(id){
   await loadListings();
   await refreshAccountData();
 }
-/* END PART 2 — continue in PART 3 *//* ============ PART 3: ORDERS + ADMIN + REALTIME + INIT ============ */
-
 async function createOrderRequest(id){
   if (!user) { closeDetail(); showAuth(); return; }
   const l = listings.find(x => String(x.id) === String(id));
   if (!l) return;
   if (l.user_id === user.id) { toast(t("cantOrderOwn")); return; }
-
   const { data: existing } = await sb
     .from("jaom_order_requests")
     .select("id")
@@ -343,9 +304,7 @@ async function createOrderRequest(id){
     .eq("buyer_id", user.id)
     .in("status", ["REQUESTED","PAYMENT_REPORTED","PAYMENT_VERIFIED","SELLER_PAID"])
     .limit(1);
-
   if (existing && existing.length) { toast(t("alreadyOrdered")); return; }
-
   const { error } = await sb.from("jaom_order_requests").insert({
     listing_id: String(l.id),
     buyer_id: user.id,
@@ -355,14 +314,12 @@ async function createOrderRequest(id){
     currency: l.currency || "SSP",
     status: "REQUESTED"
   });
-
   if (error) { toast(t("orderFail") + error.message); return; }
   closeDetail();
   toast(t("orderSent"));
   await refreshAccountData();
   openPage("deals");
 }
-
 async function refreshAccountData(){
   if (!user) {
     isAdmin = false;
@@ -376,11 +333,9 @@ async function refreshAccountData(){
     if ($("postCounter")) $("postCounter").textContent = "0 / 3";
     return;
   }
-
   const name = (user.user_metadata && user.user_metadata.full_name) || user.email.split("@")[0];
   if ($("profileName")) $("profileName").textContent = name;
   if ($("profileEmail")) $("profileEmail").textContent = user.email;
-
   const mine = listings.filter(l => l.user_id === user.id);
   if ($("myListingCount")) $("myListingCount").textContent = mine.length;
   if ($("postCounter")) $("postCounter").textContent = `${mine.length} / 3`;
@@ -389,7 +344,6 @@ async function refreshAccountData(){
       ? mine.map(l => listingCard(l, true)).join("")
       : `<div class="empty">${esc(t("nonePosted"))}</div>`;
   }
-
   const adminCheck = await sb.rpc("jaom_is_admin");
   if (adminCheck.error) {
     console.warn("Admin check failed:", adminCheck.error.message);
@@ -397,16 +351,13 @@ async function refreshAccountData(){
   } else {
     isAdmin = adminCheck.data === true;
   }
-
   const { data, error } = await sb
     .from("jaom_order_requests")
     .select("*")
     .order("created_at", { ascending: false });
-
   orders = data || [];
   const mineOrders = orders.filter(o => o.buyer_id === user.id || o.seller_id === user.id);
   if ($("myOrderCount")) $("myOrderCount").textContent = mineOrders.length;
-
   if ($("ordersList")) {
     $("ordersList").innerHTML = error
       ? `<div class="empty">${esc(error.message)}</div>`
@@ -414,7 +365,6 @@ async function refreshAccountData(){
         ? mineOrders.map(o => renderOrderCard(o)).join("")
         : `<div class="empty">${esc(t("noOrders"))}</div>`;
   }
-
   if ($("adminPanel")) $("adminPanel").classList.toggle("hidden", !isAdmin);
   if (isAdmin && $("adminOrders")) {
     $("adminOrders").innerHTML = orders.length
@@ -422,12 +372,10 @@ async function refreshAccountData(){
       : `<div class="empty">${esc(t("noOrdersReview"))}</div>`;
   }
 }
-
 function renderOrderCard(o, admin = false){
   const fee = Number(o.amount || 0) * 0.05;
   const payout = Number(o.amount || 0) - fee;
   const actions = [];
-
   if (!admin && user && o.buyer_id === user.id && o.status === "REQUESTED") {
     actions.push(`<button class="btn gold" onclick="reportPayment('${esc(o.id)}')">${esc(t("paymentSent"))}</button>`);
   }
@@ -441,7 +389,6 @@ function renderOrderCard(o, admin = false){
   if (admin && o.status === "REFUND_APPROVED") {
     actions.push(`<button class="btn danger" onclick="adminRecordRefund('${esc(o.id)}')">${esc(t("recordRefund"))}</button>`);
   }
-
   return `<div class="card">
     <div class="row between">
       <b>${esc(o.listing_title || t("orderLabel"))}</b>
@@ -461,7 +408,6 @@ function renderOrderCard(o, admin = false){
     <div class="row" style="flex-wrap:wrap;gap:8px">${actions.join("")}</div>
   </div>`;
 }
-
 async function reportPayment(id){
   const ref = prompt(t("refPrompt"));
   if (!ref || !ref.trim()) return;
@@ -474,7 +420,6 @@ async function reportPayment(id){
   toast(t("reportSent"));
   await refreshAccountData();
 }
-
 async function adminUpdateOrder(id, changes, confirmText){
   if (!isAdmin) { toast(t("adminOnly")); return; }
   if (!confirm(confirmText)) return;
@@ -483,7 +428,6 @@ async function adminUpdateOrder(id, changes, confirmText){
   toast(t("orderUpdated"));
   await refreshAccountData();
 }
-
 function adminVerifyPayment(id){
   adminUpdateOrder(id, { status: "PAYMENT_VERIFIED" }, t("confirmVerify"));
 }
@@ -500,21 +444,16 @@ function adminApproveRefund(id){
 function adminRecordRefund(id){
   const ref = prompt(t("refundPrompt"));
   if (!ref || !ref.trim()) return;
-  adminUpdateOrder(id, { status: "REFUNDED", refund_reference: ref.trim() }, t("confirmRefund"));
+  adminUpdateOrder(id, { status:adminUpdateOrder(id, { status: "REFUNDED", refund_reference: ref.trim() }, t("confirmRefund"));
 }
-
-/* ============ REALTIME ============ */
 function subscribeRealtime(){
   if (!user) return;
   if (channel) { sb.removeChannel(channel); channel = null; }
   channel = sb.channel("jaom-order-updates")
-    .on("postgres_changes",
-      { event: "*", schema: "public", table: "jaom_order_requests" },
-      () => { if (user) refreshAccountData(); })
-    .subscribe();
+    .on("postgres_changes", { event: "*", schema: "public", table: "jaom_order_requests" }, () => {
+        if (user) refreshAccountData();
+    }).subscribe();
 }
-
-/* ============ INIT ============ */
 async function init(){
   lang = localStorage.getItem("jaomLang") || "en";
   const icon = localStorage.getItem("jaomIcon") || "22";
@@ -526,10 +465,8 @@ async function init(){
   if ($("settingLang")) $("settingLang").value = lang;
   if ($("defaultCurrency")) $("defaultCurrency").value = localStorage.getItem("jaomCurrency") || "SSP";
   applyI18n();
-
   const { data: { session } } = await sb.auth.getSession();
   user = (session && session.user) || null;
-
   sb.auth.onAuthStateChange((_event, session) => {
     user = (session && session.user) || null;
     if (user) {
@@ -538,11 +475,9 @@ async function init(){
       subscribeRealtime();
     }
   });
-
   categoryButtons();
   await loadListings();
   await refreshAccountData();
-
   if (user) {
     subscribeRealtime();
     closeAuth();
@@ -550,5 +485,4 @@ async function init(){
     showAuth();
   }
 }
-
 init();
