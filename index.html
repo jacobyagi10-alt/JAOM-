@@ -7,196 +7,52 @@
 <title>JAOM — Juba Marketplace</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{
-  --gold:#b58b32;--gold2:#e8d6a7;--gold-soft:#f7f2e7;--ink:#141414;--muted:#78736a;
-  --paper:#faf8f3;--line:#ece6d9;--white:#fff;--danger:#b42318;--green:#18794e;
-  --radius:18px;--icon:22px;--font:15px;
-  --shadow-sm:0 2px 8px rgba(48,37,11,.06);
-  --shadow-md:0 8px 26px rgba(48,37,11,.10);
-  --ease:cubic-bezier(.2,.7,.2,1);
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0}
-body{
-  background:var(--paper);color:var(--ink);
-  font:var(--font) "Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
-  padding-bottom:calc(90px + env(safe-area-inset-bottom));
-  -webkit-font-smoothing:antialiased;
-}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer;transition:transform .15s var(--ease),opacity .15s}
-button:active{transform:scale(.97)}
-button:disabled{opacity:.55;cursor:not-allowed}
-
-/* Topbar */
-.topbar{
-  position:sticky;top:0;z-index:10;
-  background:rgba(255,255,255,.85);backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--line);
-  padding:13px 16px;display:flex;align-items:center;justify-content:space-between;
-}
-.brand{font-size:22px;font-weight:850;letter-spacing:2px;color:var(--gold)}
-.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:2.5px;font-weight:600;margin-top:1px}
-.top-actions{display:flex;gap:8px}
-.iconbtn{
-  width:40px;height:40px;border:1px solid var(--line);border-radius:13px;background:#fff;
-  font-size:var(--icon);display:grid;place-items:center;box-shadow:var(--shadow-sm);
-}
-.iconbtn:hover{background:var(--gold-soft);border-color:var(--gold2)}
-
-main{max-width:760px;margin:auto;padding:14px}
-.page{display:none;animation:fadein .25s var(--ease)}
-.page.active{display:block}
-@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-
-/* Hero */
-.hero{
-  padding:24px;border-radius:24px;color:#fff;margin:6px 0 18px;
-  background:
-    radial-gradient(circle at 90% 10%, #b58b32 0%, transparent 40%),
-    linear-gradient(135deg,#171717,#373027);
-  position:relative;overflow:hidden;box-shadow:var(--shadow-md);
-}
-.hero:after{
-  content:"";position:absolute;width:220px;height:220px;
-  border:1px solid #b58b3255;border-radius:50%;right:-60px;top:-90px;
-  box-shadow:0 0 0 30px #b58b3215,0 0 0 60px #b58b3210;
-}
-.hero h1{font-size:27px;line-height:1.15;margin:0 0 8px;max-width:330px;letter-spacing:-.3px}
-.hero p{color:#e3dccd;margin:0 0 18px;max-width:360px;line-height:1.5}
-
-/* Buttons */
+:root{--gold:#b58b32;--gold2:#e8d6a7;--gold-soft:#f7f2e7;--ink:#141414;--muted:#78736a;--paper:#faf8f3;--line:#ece6d9;--danger:#b42318;--green:#18794e;--radius:18px;--icon:22px;--font:15px;--shadow-sm:0 2px 8px rgba(48,37,11,.06);--shadow-md:0 8px 26px rgba(48,37,11,.10);--ease:cubic-bezier(.2,.7,.2,1)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font:var(--font) Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;padding-bottom:calc(90px + env(safe-area-inset-bottom));-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit}button{cursor:pointer;transition:transform .15s var(--ease),opacity .15s}button:active{transform:scale(.97)}button:disabled{opacity:.55;cursor:not-allowed}
+.topbar{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:13px 16px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-size:22px;font-weight:850;letter-spacing:2px;color:var(--gold)}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:2.5px;font-weight:600;margin-top:1px}
+.top-actions{display:flex;gap:8px}.iconbtn{width:40px;height:40px;border:1px solid var(--line);border-radius:13px;background:#fff;font-size:var(--icon);display:grid;place-items:center;box-shadow:var(--shadow-sm)}.iconbtn:hover{background:var(--gold-soft);border-color:var(--gold2)}
+main{max-width:760px;margin:auto;padding:14px}.page{display:none;animation:fadein .25s var(--ease)}.page.active{display:block}@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.hero{padding:24px;border-radius:24px;color:#fff;margin:6px 0 18px;background:radial-gradient(circle at 90% 10%,#b58b32 0,transparent 40%),linear-gradient(135deg,#171717,#373027);position:relative;overflow:hidden;box-shadow:var(--shadow-md)}
+.hero:after{content:"";position:absolute;width:220px;height:220px;border:1px solid #b58b3255;border-radius:50%;right:-60px;top:-90px;box-shadow:0 0 0 30px #b58b3215,0 0 0 60px #b58b3210}
+.hero h1{font-size:27px;line-height:1.15;margin:0 0 8px;max-width:330px;letter-spacing:-.3px}.hero p{color:#e3dccd;margin:0 0 18px;max-width:360px;line-height:1.5}
 .gold{background:linear-gradient(180deg,#c9a24a,#b58b32);color:#fff;border:0;box-shadow:0 4px 12px #b58b3240}
-.btn{border:0;border-radius:13px;padding:12px 16px;font-weight:750;letter-spacing:.1px}
-.btn.secondary{background:var(--gold-soft);color:#5a4213}
-.btn.outline{background:#fff;border:1px solid var(--line);color:var(--ink);box-shadow:var(--shadow-sm)}
-.btn.danger{background:#fff0ee;color:var(--danger)}
-
-/* Cards & layout */
-.card{
-  background:#fff;border:1px solid var(--line);border-radius:var(--radius);
-  padding:16px;margin:12px 0;box-shadow:var(--shadow-sm);
-  transition:box-shadow .2s var(--ease),transform .2s var(--ease);
-}
-.row{display:flex;align-items:center;gap:10px}
-.between{justify-content:space-between}
-.muted{color:var(--muted)}
-.tiny{font-size:12px}
-.sectionhead{display:flex;justify-content:space-between;align-items:center;margin:20px 2px 8px}
-.sectionhead h2{font-size:18px;margin:0;letter-spacing:-.2px}
-
-/* Forms */
-input,textarea,select{
-  width:100%;padding:13px 14px;border:1px solid #e7e1d6;border-radius:12px;
-  background:#fff;color:var(--ink);margin:6px 0;outline:none;
-  transition:border-color .15s,box-shadow .15s;
-}
-input:focus,textarea:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px #b58b3220}
-textarea{min-height:95px;resize:vertical}
+.btn{border:0;border-radius:13px;padding:12px 16px;font-weight:750;letter-spacing:.1px}.btn.secondary{background:var(--gold-soft);color:#5a4213}.btn.outline{background:#fff;border:1px solid var(--line);color:var(--ink);box-shadow:var(--shadow-sm)}.btn.danger{background:#fff0ee;color:var(--danger)}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin:12px 0;box-shadow:var(--shadow-sm);transition:box-shadow .2s var(--ease),transform .2s var(--ease)}
+.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.muted{color:var(--muted)}.tiny{font-size:12px}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;margin:20px 2px 8px}.sectionhead h2{font-size:18px;margin:0;letter-spacing:-.2px}
+input,textarea,select{width:100%;padding:13px 14px;border:1px solid #e7e1d6;border-radius:12px;background:#fff;color:var(--ink);margin:6px 0;outline:none;transition:border-color .15s,box-shadow .15s}
+input:focus,textarea:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px #b58b3220}textarea{min-height:95px;resize:vertical}
 label{font-size:13px;font-weight:750;color:#514a3e;display:block;margin-top:10px}
-.field-error{color:var(--danger);font-size:12px;margin:2px 0 0}
-
-/* Search */
-.searchbox{
-  display:flex;align-items:center;gap:8px;background:#fff;
-  border:1px solid var(--line);border-radius:15px;padding:0 14px;
-  box-shadow:var(--shadow-sm);
-}
-.searchbox input{border:0;box-shadow:none;margin:0;padding-left:4px}
-
-/* Chips */
-.chips{display:flex;gap:8px;overflow:auto;padding:12px 0;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
-.chip{
-  white-space:nowrap;border:1px solid var(--gold2);background:#fff;
-  border-radius:30px;padding:9px 16px;font-weight:700;color:#5a4213;
-  transition:background .15s,color .15s,border-color .15s;
-}
+.searchbox{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:15px;padding:0 14px;box-shadow:var(--shadow-sm)}.searchbox input{border:0;box-shadow:none;margin:0;padding-left:4px}
+.chips{display:flex;gap:8px;overflow:auto;padding:12px 0;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chip{white-space:nowrap;border:1px solid var(--gold2);background:#fff;border-radius:30px;padding:9px 16px;font-weight:700;color:#5a4213;transition:background .15s,color .15s,border-color .15s}
 .chip.active{background:var(--gold);color:#fff;border-color:var(--gold);box-shadow:0 4px 12px #b58b3240}
-
-/* Product grid */
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.product{
-  padding:0;overflow:hidden;border-radius:16px;
-  display:flex;flex-direction:column;
-}
-.product:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
-.product img{width:100%;height:145px;object-fit:cover;background:#f1eee8;display:block}
-.product-body{padding:12px;display:flex;flex-direction:column;gap:6px;flex:1}
-.product h3{font-size:15px;margin:0;letter-spacing:-.1px;line-height:1.3}
-.price{font-weight:850;color:#87651d;font-size:17px;letter-spacing:-.2px}
-.tag{
-  display:inline-block;border-radius:20px;padding:5px 9px;
-  background:var(--gold-soft);color:#76571b;font-size:11px;font-weight:750;
-}
+.product{padding:0;overflow:hidden;border-radius:16px;display:flex;flex-direction:column}.product:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.product img{width:100%;height:145px;object-fit:cover;background:#f1eee8;display:block}.product-body{padding:12px;display:flex;flex-direction:column;gap:6px;flex:1}
+.product h3{font-size:15px;margin:0;letter-spacing:-.1px;line-height:1.3}.price{font-weight:850;color:#87651d;font-size:17px;letter-spacing:-.2px}
+.tag{display:inline-block;border-radius:20px;padding:5px 9px;background:var(--gold-soft);color:#76571b;font-size:11px;font-weight:750}
 .empty{text-align:center;padding:40px 16px;color:var(--muted)}
-.skeleton{
-  background:linear-gradient(90deg,#f3eee3 25%,#faf6ec 50%,#f3eee3 75%);
-  background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:16px;height:220px;
-}
+.skeleton{background:linear-gradient(90deg,#f3eee3 25%,#faf6ec 50%,#f3eee3 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:16px;height:220px}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
-/* Bottom nav */
-.bottom{
-  position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.95);
-  backdrop-filter:blur(14px);border-top:1px solid var(--line);
-  display:flex;justify-content:space-around;
-  padding:8px 4px calc(8px + env(safe-area-inset-bottom));z-index:20;
-}
-.bottom button{
-  border:0;background:none;color:#8a8478;display:grid;gap:3px;justify-items:center;
-  font-size:11px;font-weight:700;min-width:54px;padding:6px 4px;border-radius:12px;
-}
-.bottom button span:first-child{font-size:var(--icon)}
-.bottom button.active{color:var(--gold)}
-
-/* Notices */
-.notice{
-  padding:12px 14px;border-radius:12px;background:#fff8e8;
-  border:1px solid #f0dfb7;color:#604914;line-height:1.45;font-size:13px;
-}
-.status{padding:10px;border-radius:11px;background:#f2f7f3;color:var(--green);font-size:13px}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom));z-index:20}
+.bottom button{border:0;background:none;color:#8a8478;display:grid;gap:3px;justify-items:center;font-size:11px;font-weight:700;min-width:54px;padding:6px 4px;border-radius:12px}
+.bottom button span:first-child{font-size:var(--icon)}.bottom button.active{color:var(--gold)}
+.notice{padding:12px 14px;border-radius:12px;background:#fff8e8;border:1px solid #f0dfb7;color:#604914;line-height:1.45;font-size:13px}
 .hidden{display:none!important}
-
-/* Modal */
-.modal{
-  position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;
-  display:none;align-items:flex-end;justify-content:center;
-  padding:12px;backdrop-filter:blur(3px);
-}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;display:none;align-items:flex-end;justify-content:center;padding:12px;backdrop-filter:blur(3px)}
 .modal.open{display:flex;animation:fadein .2s var(--ease)}
-.modalbox{
-  background:#fff;border-radius:22px 22px 16px 16px;
-  width:min(100%,520px);max-height:90vh;overflow:auto;padding:20px;
-  box-shadow:0 -10px 40px rgba(0,0,0,.2);
-}
+.modalbox{background:#fff;border-radius:22px 22px 16px 16px;width:min(100%,520px);max-height:90vh;overflow:auto;padding:20px;box-shadow:0 -10px 40px rgba(0,0,0,.2)}
 .modalbox h2{margin:0 0 12px;letter-spacing:-.3px}
-
-.formrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.listing-img{width:100%;max-height:260px;object-fit:cover;border-radius:14px}
+.formrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}.listing-img{width:100%;max-height:260px;object-fit:cover;border-radius:14px}
 .divider{border:0;border-top:1px solid var(--line);margin:14px 0}
-.settingline{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
-.settingline:last-child{border-bottom:0}
-
-/* Toast */
-#toast{
-  position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));
-  transform:translate(-50%,20px);background:#171717;color:#fff;
-  padding:12px 18px;border-radius:30px;z-index:80;
-  display:block;opacity:0;pointer-events:none;
-  max-width:90%;text-align:center;font-weight:600;font-size:14px;
-  transition:opacity .25s var(--ease),transform .25s var(--ease);
-  box-shadow:0 10px 30px rgba(0,0,0,.25);
-}
+.settingline{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}.settingline:last-child{border-bottom:0}
+#toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:#171717;color:#fff;padding:12px 18px;border-radius:30px;z-index:80;display:block;opacity:0;pointer-events:none;max-width:90%;text-align:center;font-weight:600;font-size:14px;transition:opacity .25s var(--ease),transform .25s var(--ease);box-shadow:0 10px 30px rgba(0,0,0,.25)}
 #toast.show{opacity:1;transform:translate(-50%,0)}
-
-@media(min-width:600px){
-  main{padding:20px}
-  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .product img{height:165px}
-  .modal{align-items:center}
-  .modalbox{border-radius:22px}
-}
+@media(min-width:600px){main{padding:20px}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.product img{height:165px}.modal{align-items:center}.modalbox{border-radius:22px}}
 </style>
 </head>
 <body>
@@ -210,43 +66,34 @@ label{font-size:13px;font-weight:750;color:#514a3e;display:block;margin-top:10px
 </header>
 
 <main>
-<!-- HOME -->
 <section id="home" class="page active">
   <div class="hero">
     <h1 data-i18n="heroTitle">Discover something valuable.</h1>
     <p data-i18n="heroSub">Buy and sell with more confidence in Juba and beyond.</p>
     <button class="btn gold" onclick="openPage('sell')" data-i18n="postItem">＋ Post an item</button>
   </div>
-  <div class="searchbox">⌕ <input id="search" data-i18n-ph="searchPh" placeholder="Search products, land, vehicles…" oninput="renderListings()"></div>
+  <div class="searchbox">⌕ <input id="search" data-i18n-ph="searchPh" placeholder="Search…" oninput="renderListings()"></div>
   <div class="chips" id="categories"></div>
-  <div class="sectionhead">
-    <h2 data-i18n="latestListings">Latest listings</h2>
-    <span class="muted tiny" id="listingCount">0</span>
-  </div>
+  <div class="sectionhead"><h2 data-i18n="latestListings">Latest listings</h2><span class="muted tiny" id="listingCount">0</span></div>
   <div id="listingGrid" class="grid"></div>
 </section>
 
-<!-- MARKET -->
 <section id="market" class="page">
   <div class="sectionhead"><h2 data-i18n="market">Marketplace</h2></div>
-  <div class="searchbox">⌕ <input id="marketSearch" data-i18n-ph="searchPh" placeholder="Search marketplace…" oninput="syncSearch(this.value)"></div>
+  <div class="searchbox">⌕ <input id="marketSearch" data-i18n-ph="searchPh" placeholder="Search…" oninput="syncSearch(this.value)"></div>
   <div id="marketGrid" class="grid"></div>
 </section>
 
-<!-- SELL -->
 <section id="sell" class="page">
-  <div class="sectionhead">
-    <h2 data-i18n="postListing">Post a listing</h2>
-    <span class="tag" id="postCounter">0 / 3</span>
-  </div>
+  <div class="sectionhead"><h2 data-i18n="postListing">Post a listing</h2><span class="tag" id="postCounter">0 / 3</span></div>
   <div class="card">
-    <label data-i18n="itemTitle">Item title</label><input id="fTitle" maxlength="90" placeholder="e.g. Samsung Galaxy S22">
+    <label data-i18n="itemTitle">Item title</label><input id="fTitle" maxlength="90">
     <div class="formrow">
       <div><label data-i18n="price">Price</label><input id="fPrice" type="number" min="1"></div>
       <div><label data-i18n="currency">Currency</label><select id="fCurrency"><option>SSP</option><option>USD</option></select></div>
     </div>
-    <label data-i18n="location">Location</label><input id="fLocation" placeholder="e.g. Gudele, Juba">
-    <label data-i18n="phone">WhatsApp / phone</label><input id="fPhone" placeholder="+211 …">
+    <label data-i18n="location">Location</label><input id="fLocation">
+    <label data-i18n="phone">WhatsApp / phone</label><input id="fPhone">
     <div class="formrow">
       <div><label data-i18n="category">Category</label><select id="fCategory">
         <option>Phones</option><option>Electronics</option><option>Land</option>
@@ -254,42 +101,31 @@ label{font-size:13px;font-weight:750;color:#514a3e;display:block;margin-top:10px
       </select></div>
       <div><label data-i18n="delivery">Delivery promise</label><select id="fDelivery">
         <option value="24">24h</option><option value="48">48h</option>
-        <option value="72">3 days</option><option value="168">7 days</option>
+        <option value="72">3d</option><option value="168">7d</option>
       </select></div>
     </div>
-    <label data-i18n="description">Description</label>
-    <textarea id="fDescription" maxlength="1200"></textarea>
+    <label data-i18n="description">Description</label><textarea id="fDescription" maxlength="1200"></textarea>
     <label data-i18n="photo">Listing photo</label><input id="fImage" type="file" accept="image/*">
-    <div class="notice" style="margin-top:10px" data-i18n="photoNote">
-      You can edit a copy of your photo with Adobe Express or remove.bg before uploading.
-    </div>
     <button class="btn gold" style="width:100%;margin-top:14px" onclick="publishListing()" data-i18n="publish">Publish listing</button>
     <p class="muted tiny" style="margin-top:10px" data-i18n="limitNote">Maximum 3 active listings per account.</p>
   </div>
 </section>
 
-<!-- DEALS -->
 <section id="deals" class="page">
   <div class="sectionhead"><h2 data-i18n="orders">Orders & protection</h2></div>
-  <div class="notice" data-i18n="paymentNote">
-    JAOM never asks for your PIN. Payment is verified by an admin against the real MoMo/bank account.
-  </div>
+  <div class="notice" data-i18n="paymentNote">Payment is verified by an admin against the real MoMo/bank account.</div>
   <div id="ordersList"></div>
   <section id="adminPanel" class="card hidden">
-    <div class="sectionhead"><h2 data-i18n="adminDesk">JAOM Admin desk</h2><span class="tag">ADMIN</span></div>
+    <div class="sectionhead"><h2 data-i18n="adminDesk">Admin desk</h2><span class="tag">ADMIN</span></div>
     <button class="btn outline" onclick="refreshAccountData()">↻</button>
     <div id="adminOrders"></div>
   </section>
 </section>
 
-<!-- PROFILE -->
 <section id="profile" class="page">
   <div class="card">
     <div class="row between">
-      <div>
-        <h2 id="profileName" style="margin:0">Your account</h2>
-        <p id="profileEmail" class="muted tiny" style="margin:4px 0 0"></p>
-      </div>
+      <div><h2 id="profileName" style="margin:0">Your account</h2><p id="profileEmail" class="muted tiny" style="margin:4px 0 0"></p></div>
       <span class="tag">MEMBER</span>
     </div>
     <hr class="divider">
@@ -304,47 +140,22 @@ label{font-size:13px;font-weight:750;color:#514a3e;display:block;margin-top:10px
   <button class="btn outline" style="width:100%" onclick="signOut()" data-i18n="signOut">Sign out</button>
 </section>
 
-<!-- SETTINGS -->
 <section id="settings" class="page">
   <div class="sectionhead"><h2 data-i18n="settings">Settings</h2></div>
   <div class="card">
     <div class="settingline">
-      <div><b data-i18n="language">Language</b><div class="muted tiny" data-i18n="langHint">Interface language</div></div>
+      <div><b data-i18n="language">Language</b></div>
       <select id="settingLang" style="width:145px" onchange="setLanguage(this.value)">
-        <option value="en">English</option>
-        <option value="ar">العربية</option>
-        <option value="sw">Kiswahili</option>
+        <option value="en">English</option><option value="ar">العربية</option><option value="sw">Kiswahili</option>
       </select>
     </div>
-    <div class="settingline">
-      <div><b data-i18n="iconSize">Icon size</b></div>
-      <select id="iconSize" style="width:110px" onchange="setIconSize(this.value)">
-        <option value="18">S</option><option value="22" selected>M</option><option value="28">L</option>
-      </select>
-    </div>
-    <div class="settingline">
-      <div><b data-i18n="textSize">Text size</b></div>
-      <select id="fontSize" style="width:110px" onchange="setFontSize(this.value)">
-        <option value="14">S</option><option value="15" selected>M</option>
-        <option value="17">L</option><option value="19">XL</option>
-      </select>
-    </div>
-    <div class="settingline">
-      <div><b data-i18n="defaultCurrency">Default currency</b></div>
-      <select id="defaultCurrency" style="width:100px">
-        <option>SSP</option><option>USD</option>
-      </select>
-    </div>
-    <div class="settingline">
-      <div><b data-i18n="emailAlerts">Email alerts</b></div>
-      <input id="emailAlerts" type="checkbox" checked style="width:22px">
-    </div>
+    <div class="settingline"><div><b data-i18n="iconSize">Icon size</b></div>
+      <select id="iconSize" style="width:110px" onchange="setIconSize(this.value)"><option value="18">S</option><option value="22" selected>M</option><option value="28">L</option></select></div>
+    <div class="settingline"><div><b data-i18n="textSize">Text size</b></div>
+      <select id="fontSize" style="width:110px" onchange="setFontSize(this.value)"><option value="14">S</option><option value="15" selected>M</option><option value="17">L</option><option value="19">XL</option></select></div>
+    <div class="settingline"><div><b data-i18n="defaultCurrency">Currency</b></div>
+      <select id="defaultCurrency" style="width:100px"><option>SSP</option><option>USD</option></select></div>
     <button class="btn gold" style="width:100%;margin-top:14px" onclick="saveSettings()" data-i18n="saveSettings">Save settings</button>
-  </div>
-  <div class="card">
-    <h3 data-i18n="security">Account security</h3>
-    <p class="muted tiny" data-i18n="securityNote">Your account uses one-time email codes.</p>
-    <button class="btn outline" onclick="sendVerification()" data-i18n="sendCode">Send a new email code</button>
   </div>
 </section>
 </main>
@@ -357,139 +168,50 @@ label{font-size:13px;font-weight:750;color:#514a3e;display:block;margin-top:10px
   <button data-page="profile" onclick="openPage('profile')"><span>◉</span><span data-i18n="navProfile">Profile</span></button>
 </nav>
 
-<!-- AUTH MODAL -->
 <div id="authModal" class="modal"><div class="modalbox">
-  <h2 id="authTitle" data-i18n="authWelcome">Welcome to JAOM</h2>
+  <h2 data-i18n="authWelcome">Welcome to JAOM</h2>
   <p class="muted tiny" data-i18n="authSub">Sign in or create an account with your email.</p>
   <div id="emailStep">
     <label data-i18n="email">Email</label>
     <input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com">
-    <button class="btn gold" style="width:100%;margin-top:8px" onclick="requestCode()" data-i18n="sendCode">Send verification code</button>
+    <button class="btn gold" style="width:100%;margin-top:8px" onclick="requestCode()" data-i18n="sendCode">Send code</button>
   </div>
   <div id="codeStep" class="hidden">
-    <label data-i18n="code">6-digit email code</label>
+    <label data-i18n="code">6-digit code</label>
     <input id="authCode" inputmode="numeric" maxlength="6" placeholder="123456">
     <button class="btn gold" style="width:100%;margin-top:8px" onclick="verifyCode()" data-i18n="verify">Verify</button>
-    <button class="btn outline" style="width:100%;margin-top:8px" onclick="backToEmail()" data-i18n="anotherEmail">Use another email</button>
+    <button class="btn outline" style="width:100%;margin-top:8px" onclick="backToEmail()" data-i18n="anotherEmail">Another email</button>
   </div>
   <p id="authMessage" class="tiny muted" style="margin-top:10px"></p>
 </div></div>
 
-<!-- DETAIL MODAL -->
 <div id="detailModal" class="modal"><div class="modalbox">
   <button class="btn outline" onclick="closeDetail()" style="margin-bottom:12px" data-i18n="close">Close</button>
   <div id="detailContent"></div>
 </div></div>
 
-<div id="toast" role="status" aria-live="polite"></div>
+<div id="toast"></div>
 
 <script>
-/* ============ CONFIG ============ */
-const SUPABASE_URL = "https://ucprmvnjvqbpddozxtno.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_eIygYOGjioGPzyZYjFIe1w_UxRBsWVz";
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const SUPABASE_URL="https://ucprmvnjvqbpddozxtno.supabase.co";
+const SUPABASE_ANON_KEY="sb_publishable_eIygYOGjioGPzyZYjFIe1w_UxRBsWVz";
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const $=id=>document.getElementById(id);
+const CATS=["All","Phones","Electronics","Land","Vehicles","Clothes","Home","Other"];
+let user=null,listings=[],orders=[],activeCategory="All",isAdmin=false,channel=null,toastT=null;
 
-const $ = id => document.getElementById(id);
-const DEFAULTS = { currency: "SSP", icon: "22", font: "15", lang: "en" };
-const CATEGORIES = ["All","Phones","Electronics","Land","Vehicles","Clothes","Home","Other"];
+const I18N={
+en:{tagline:"JUBA MARKETPLACE",heroTitle:"Discover something valuable.",heroSub:"Buy and sell with more confidence in Juba and beyond.",postItem:"＋ Post an item",searchPh:"Search…",latestListings:"Latest listings",market:"Marketplace",postListing:"Post a listing",itemTitle:"Item title",price:"Price",currency:"Currency",location:"Location",phone:"WhatsApp / phone",category:"Category",delivery:"Delivery",description:"Description",photo:"Photo",publish:"Publish listing",limitNote:"Max 3 active listings.",orders:"Orders & protection",paymentNote:"Admin verifies payment against MoMo/bank.",adminDesk:"Admin desk",activeListings:"Active listings",ordersCount:"Orders",settings:"Settings",myListings:"My listings",signOut:"Sign out",language:"Language",iconSize:"Icon size",textSize:"Text size",defaultCurrency:"Currency",saveSettings:"Save settings",navHome:"Home",navMarket:"Market",navSell:"Sell",navOrders:"Orders",navProfile:"Profile",authWelcome:"Welcome to JAOM",authSub:"Sign in with your email.",email:"Email",code:"6-digit code",verify:"Verify",anotherEmail:"Another email",close:"Close",view:"View",manage:"Manage",items:"items",noListings:"No listings yet.",signIn:"Sign in to continue.",noOrders:"No orders yet.",nonePosted:"Nothing posted yet.",guest:"Guest",signInManage:"Sign in to manage",enterEmail:"Enter email",sending:"Sending…",checkInbox:"Check your inbox.",enterCode:"Enter the 6-digit code",signedOut:"Signed out",verified:"Welcome!",addFields:"Fill title, price, location",limitReached:"Limit of 3 reached",chooseImage:"Choose an image",imageTooBig:"Image under 5 MB",photoFail:"Upload failed: ",publishFail:"Publish failed: ",published:"Published",cantOrderOwn:"Can't order your own",orderFail:"Order failed: ",orderSent:"Order sent. No payment taken.",requestBuy:"Request to buy",deleteListing:"Delete listing",confirmDelete:"Delete?",deleted:"Deleted",paymentSent:"I sent payment",verifyPayment:"Verify payment",recordPayout:"Record payout",approveRefund:"Approve refund",recordRefund:"Record refund",adminOnly:"Admin only",settingsSaved:"Saved",langChanged:"Language changed",loadFail:"Load failed: ",retry:"Retry",deliveryPrefix:"Delivery: up to ",hoursShort:"h",sellerDeliveryNote:"Delivery promise is by the seller, not guaranteed by JAOM.",noDesc:"No description.",refPrompt:"Enter transaction reference. Never enter your PIN.",payoutPrompt:"Enter payout reference.",refundPrompt:"Enter refund reference.",reasonPrompt:"Refund reason:",confirmVerify:"Confirm money received?",confirmPayout:"Confirm payout sent?",confirmApproveRefund:"Approve 100% refund?",confirmRefund:"Confirm refund sent?",orderUpdated:"Order updated",updateFail:"Update failed: ",reportFail:"Report failed: ",reportSent:"Reported. Admin will verify.",orderLabel:"Order",amount:"Amount",fee:"Fee (5%)",payout:"Payout",created:"Created",noOrdersReview:"No orders to review.",alreadyOrdered:"Already ordered this.",adminFnMissing:"Run the jaom_is_admin() SQL in Supabase."},
+ar:{tagline:"سوق جوبا",heroTitle:"اكتشف شيئًا قيّمًا.",heroSub:"اشترِ وبِع بثقة أكبر في جوبا وخارجها.",postItem:"＋ أضف منتجًا",searchPh:"ابحث…",latestListings:"أحدث الإعلانات",market:"السوق",postListing:"نشر إعلان",itemTitle:"العنوان",price:"السعر",currency:"العملة",location:"الموقع",phone:"واتساب / هاتف",category:"الفئة",delivery:"التسليم",description:"الوصف",photo:"صورة",publish:"نشر",limitNote:"الحد 3 إعلانات.",orders:"الطلبات والحماية",paymentNote:"يتحقق المسؤول من الدفع.",adminDesk:"مكتب المسؤول",activeListings:"إعلانات نشطة",ordersCount:"الطلبات",settings:"الإعدادات",myListings:"إعلاناتي",signOut:"تسجيل الخروج",language:"اللغة",iconSize:"حجم الأيقونات",textSize:"حجم النص",defaultCurrency:"العملة",saveSettings:"حفظ",navHome:"الرئيسية",navMarket:"السوق",navSell:"بيع",navOrders:"الطلبات",navProfile:"الملف",authWelcome:"مرحبًا بك",authSub:"سجّل الدخول ببريدك.",email:"البريد",code:"رمز 6 أرقام",verify:"تحقق",anotherEmail:"بريد آخر",close:"إغلاق",view:"عرض",manage:"إدارة",items:"عناصر",noListings:"لا إعلانات.",signIn:"سجّل الدخول.",noOrders:"لا طلبات.",nonePosted:"لا شيء بعد.",guest:"زائر",signInManage:"سجّل الدخول",enterEmail:"أدخل البريد",sending:"جارٍ الإرسال…",checkInbox:"تحقق من بريدك.",enterCode:"أدخل الرمز",signedOut:"خرجت",verified:"مرحبًا!",addFields:"أضف عنوانًا وسعرًا وموقعًا",limitReached:"الحد 3",chooseImage:"اختر صورة",imageTooBig:"أقل من 5MB",photoFail:"فشل الرفع: ",publishFail:"فشل النشر: ",published:"تم النشر",cantOrderOwn:"لا يمكنك طلب إعلانك",orderFail:"فشل الطلب: ",orderSent:"تم الإرسال.",requestBuy:"طلب الشراء",deleteListing:"حذف",confirmDelete:"حذف؟",deleted:"تم الحذف",paymentSent:"أرسلت الدفع",verifyPayment:"تأكيد الدفع",recordPayout:"تسجيل الدفع",approveRefund:"موافقة استرداد",recordRefund:"تسجيل استرداد",adminOnly:"للمسؤول فقط",settingsSaved:"تم الحفظ",langChanged:"تم تغيير اللغة",loadFail:"فشل التحميل: ",retry:"إعادة",deliveryPrefix:"التسليم: حتى ",hoursShort:"س",sellerDeliveryNote:"وعد البائع غير مضمون من JAOM.",noDesc:"لا وصف.",refPrompt:"أدخل المرجع. لا تدخل رمزك.",payoutPrompt:"مرجع الدفع.",refundPrompt:"مرجع الاسترداد.",reasonPrompt:"سبب الاسترداد:",confirmVerify:"تأكيد استلام المبلغ؟",confirmPayout:"تأكيد إرسال الدفع؟",confirmApproveRefund:"استرداد 100%؟",confirmRefund:"تأكيد إرسال الاسترداد؟",orderUpdated:"تم التحديث",updateFail:"فشل: ",reportFail:"فشل التقرير: ",reportSent:"تم التقرير.",orderLabel:"طلب",amount:"المبلغ",fee:"عمولة (5%)",payout:"دفعة",created:"أُنشئ",noOrdersReview:"لا طلبات.",alreadyOrdered:"طلبت هذا بالفعل.",adminFnMissing:"شغّل SQL jaom_is_admin()."},
+sw:{tagline:"SOKO LA JUBA",heroTitle:"Gundua kitu cha thamani.",heroSub:"Nunua na uuze kwa ujasiri zaidi Juba.",postItem:"＋ Weka bidhaa",searchPh:"Tafuta…",latestListings:"Matangazo mapya",market:"Soko",postListing:"Weka tangazo",itemTitle:"Jina",price:"Bei",currency:"Sarafu",location:"Mahali",phone:"WhatsApp / simu",category:"Kundi",delivery:"Usafirishaji",description:"Maelezo",photo:"Picha",publish:"Chapisha",limitNote:"Kikomo 3.",orders:"Oda na ulinzi",paymentNote:"Msimamizi huthibitisha malipo.",adminDesk:"Dawati la msimamizi",activeListings:"Matangazo hai",ordersCount:"Oda",settings:"Mipangilio",myListings:"Matangazo yangu",signOut:"Toka",language:"Lugha",iconSize:"Ukubwa wa aikoni",textSize:"Ukubwa wa maandishi",defaultCurrency:"Sarafu",saveSettings:"Hifadhi",navHome:"Nyumbani",navMarket:"Soko",navSell:"Uza",navOrders:"Oda",navProfile:"Wasifu",authWelcome:"Karibu JAOM",authSub:"Ingia kwa barua pepe.",email:"Barua pepe",code:"Msimbo wa 6",verify:"Thibitisha",anotherEmail:"Barua nyingine",close:"Funga",view:"Tazama",manage:"Dhibiti",items:"vitu",noListings:"Hakuna matangazo.",signIn:"Ingia.",noOrders:"Hakuna oda.",nonePosted:"Hakuna bado.",guest:"Mgeni",signInManage:"Ingia kudhibiti",enterEmail:"Weka barua pepe",sending:"Inatuma…",checkInbox:"Angalia kikasha.",enterCode:"Weka msimbo",signedOut:"Umetoka",verified:"Karibu!",addFields:"Ongeza jina, bei, mahali",limitReached:"Kikomo 3",chooseImage:"Chagua picha",imageTooBig:"Chini ya MB 5",photoFail:"Imeshindwa: ",publishFail:"Imeshindwa: ",published:"Imechapishwa",cantOrderOwn:"Hauwezi kuagiza yako",orderFail:"Imeshindwa: ",orderSent:"Oda imetumwa.",requestBuy:"Omba kununua",deleteListing:"Futa",confirmDelete:"Futa?",deleted:"Imefutwa",paymentSent:"Nimetuma malipo",verifyPayment:"Thibitisha malipo",recordPayout:"Rekodi malipo",approveRefund:"Idhinisha marejesho",recordRefund:"Rekodi marejesho",adminOnly:"Msimamizi pekee",settingsSaved:"Imehifadhiwa",langChanged:"Lugha imebadilishwa",loadFail:"Imeshindwa: ",retry:"Jaribu tena",deliveryPrefix:"Usafirishaji: hadi ",hoursShort:"saa",sellerDeliveryNote:"Ahadi ya muuzaji, si ya JAOM.",noDesc:"Hakuna maelezo.",refPrompt:"Weka kumbukumbu. Usiweke PIN.",payoutPrompt:"Kumbukumbu ya malipo.",refundPrompt:"Kumbukumbu ya marejesho.",reasonPrompt:"Sababu:",confirmVerify:"Thibitisha pesa zimepokelewa?",confirmPayout:"Thibitisha malipo yametumwa?",confirmApproveRefund:"Marejesho 100%?",confirmRefund:"Thibitisha marejesho yametumwa?",orderUpdated:"Imesasishwa",updateFail:"Imeshindwa: ",reportFail:"Imeshindwa: ",reportSent:"Imeripotiwa.",orderLabel:"Oda",amount:"Kiasi",fee:"Ada (5%)",payout:"Malipo",created:"Imeundwa",noOrdersReview:"Hakuna oda.",alreadyOrdered:"Umeagiza hii.",adminFnMissing:"Endesha SQL ya jaom_is_admin()."}};
 
-let user = null;
-let listings = [];
-let orders = [];
-let activeCategory = "All";
-let currentListing = null;
-let isJaomAdmin = false;
-let realtimeChannel = null;
-
-/* ============ i18n ============ */
-const I18N = {
-  en: {
-    tagline:"JUBA MARKETPLACE", heroTitle:"Discover something valuable.",
-    heroSub:"Buy and sell with more confidence in Juba and beyond.",
-    postItem:"＋ Post an item", searchPh:"Search products, land, vehicles…",
-    latestListings:"Latest listings", market:"Marketplace", postListing:"Post a listing",
-    itemTitle:"Item title", price:"Price", currency:"Currency", location:"Location",
-    phone:"WhatsApp / phone", category:"Category", delivery:"Delivery promise",
-    description:"Description", photo:"Listing photo",
-    photoNote:"You can edit a copy of your photo with Adobe Express or remove.bg before uploading.",
-    publish:"Publish listing", limitNote:"Maximum 3 active listings per account.",
-    orders:"Orders & protection",
-    paymentNote:"JAOM never asks for your PIN. Payment is verified by an admin against the real MoMo/bank account.",
-    adminDesk:"JAOM Admin desk", activeListings:"Active listings", ordersCount:"Orders",
-    settings:"Settings", myListings:"My listings", signOut:"Sign out",
-    language:"Language", langHint:"Interface language", iconSize:"Icon size",
-    textSize:"Text size", defaultCurrency:"Default currency", emailAlerts:"Email alerts",
-    saveSettings:"Save settings", security:"Account security",
-    securityNote:"Your account uses one-time email codes.", sendCode:"Send a new email code",
-    navHome:"Home", navMarket:"Market", navSell:"Sell", navOrders:"Orders", navProfile:"Profile",
-    authWelcome:"Welcome to JAOM", authSub:"Sign in or create an account with your email.",
-    email:"Email", code:"6-digit email code", verify:"Verify", anotherEmail:"Use another email",
-    close:"Close", view:"View item", manage:"Manage", items:"items",
-    noListings:"No matching listings yet.", signInListings:"Sign in to see your listings.",
-    signInOrders:"Sign in to view orders.", noOrders:"No orders yet.",
-    nonePosted:"You have not posted anything yet.",
-    guest:"Guest", signInManage:"Sign in to manage your account",
-    enterEmail:"Enter your email address", sending:"Sending code…",
-    checkInbox:"Check your inbox for the 6-digit code.",
-    enterCode:"Enter the 6-digit code", signedOut:"Signed out",
-    verified:"Email verified. Welcome to JAOM!",
-    addFields:"Add a title, valid price and location",
-    limitReached:"You have reached the 3 active listing limit",
-    chooseImage:"Choose an image file", imageTooBig:"Image must be under 5 MB",
-    photoFail:"Photo upload failed: ", publishFail:"Could not publish: ",
-    published:"Listing published", cantOrderOwn:"You cannot order your own listing",
-    orderFail:"Order request failed: ", orderSent:"Order request sent. No payment was taken.",
-    requestBuy:"Request to buy", deleteListing:"Delete my listing",
-    confirmDelete:"Delete this listing?", deleted:"Listing deleted",
-    paymentSent:"I sent payment", verifyPayment:"Verify payment received",
-    recordPayout:"Record seller payout", approveRefund:"Approve full refund",
-    recordRefund:"Record refund sent", adminOnly:"Admin access required",
-    settingsSaved:"Settings saved", langChanged:"Language changed",
-    loadFail:"Could not load listings: ",
-    deliveryPrefix:"Delivery promise: up to ", hours:"h",
-    sellerDeliveryNote:"Delivery promise is provided by the seller and is not independently guaranteed by JAOM.",
-    noDesc:"No description provided.",
-    refPrompt:"Enter your MoMo/bank transaction reference. Do not enter a PIN or password.",
-    payoutPrompt:"Enter the transaction reference after you have sent the seller the amount shown.",
-    refundPrompt:"Enter the transaction reference after you have sent the full refund to the buyer.",
-    reasonPrompt:"Reason for approving the full buyer refund:",
-    confirmVerify:"Have you checked your MoMo/bank account and confirmed the money was actually received?",
-    confirmPayout:"Confirm that you have already sent the seller payout manually.",
-    confirmApproveRefund:"Approve a 100% refund for this order?",
-    confirmRefund:"Confirm that you have already sent the full refund manually.",
-    orderUpdated:"Order record updated", updateFail:"Update failed: ",
-    reportFail:"Could not report payment: ", reportSent:"Payment report sent. Admin must verify it.",
-    orderLabel:"Order", amount:"Amount", fee:"JAOM fee (5%)", payout:"Seller payout",
-    created:"Created", refBuyer:"Buyer payment reference", refPayout:"Seller payout reference",
-    refRefund:"Refund reference", adminNote:"Admin note", noOrdersReview:"No orders to review.",
-    codeSentMsg:"Verification email requested"
-  },
-  ar: {
-    tagline:"سوق جوبا", heroTitle:"اكتشف شيئًا قيّمًا.",
-    heroSub:"اشترِ وبِع بثقة أكبر في جوبا وخارجها.",
-    postItem:"＋ أضف منتجًا", searchPh:"ابحث عن منتجات، أراضٍ، سيارات…",
-    latestListings:"أحدث الإعلانات", market:"السوق", postListing:"نشر إعلان",
-    itemTitle:"عنوان المنتج", price:"السعر", currency:"العملة", location:"الموقع",
-    phone:"واتساب / هاتف", category:"الفئة", delivery:"وعد التسليم",
-    description:"الوصف", photo:"صورة الإعلان",
-    photoNote:"يمكنك تعديل نسخة من صورتك عبر Adobe Express أو remove.bg قبل الرفع.",
-    publish:"نشر الإعلان", limitNote:"بحد أقصى 3 إعلانات نشطة لكل حساب.",
-    orders:"الطلبات والحماية",
-    paymentNote:"لا يطلب JAOM رمزك السري أبدًا. يتحقق المسؤول من الدفع مقابل حساب MoMo/البنك الحقيقي.",
-    adminDesk:"مكتب مسؤول JAOM", activeListings:"إعلانات نشطة", ordersCount:"الطلبات",
-    settings:"الإعدادات", myListings:"إعلاناتي", signOut:"تسجيل الخروج",
-    language:"اللغة", langHint:"لغة الواجهة", iconSize:"حجم الأيقونات",
-    textSize:"حجم النص", defaultCurrency:"العملة الافتراضية", emailAlerts:"تنبيهات البريد",
-    saveSettings:"حفظ الإعدادات", security:"أمان الحساب",
-    securityNote:"يستخدم حسابك رموز بريد إلكتروني لمرة واحدة.", sendCode:"إرسال رمز بريد جديد",
-    navHome:"الرئيسية", navMarket:"السوق", navSell:"بيع", navOrders:"الطلبات", navProfile:"الملف",
-    authWelcome:"مرحبًا بك في JAOM", authSub:"سجّل الدخول أو أنشئ حسابًا ببريدك الإلكتروني.",
-    email:"البريد الإلكتروني", code:"رمز البريد المكون من 6 أرقام",
-    verify:"تحقق", anotherEmail:"استخدم بريدًا آخر", close:"إغلاق",
-    view:"عرض المنتج", manage:"إدارة", items:"عناصر",
-    noListings:"لا توجد إعلانات مطابقة بعد.", signInListings:"سجّل الدخول لرؤية إعلاناتك.",
-    signInOrders:"سجّل الدخول لعرض الطلبات.", noOrders:"لا توجد طلبات بعد.",
-    nonePosted:"لم تنشر أي شيء بعد.",
-    guest:"زائر", signInManage:"سجّل الدخول لإدارة حسابك",
-    enterEmail:"أدخل بريدك الإلكتروني", sending:"جارٍ إرسال الرمز…",
-    checkInbox:"تحقق من بريدك بحثًا عن الرمز المكون من 6 أ
+let lang="en";
+const t=k=>(I18N[lang]&&I18N[lang][k])||I18N.en[k]||k;
+function applyI18n(){
+  document.querySelectorAll("[data-i18n]").forEach(e=>{const v=t(e.getAttribute("data-i18n"));if(v)e.textContent=v});
+  document.querySelectorAll("[data-i18n-ph]").forEach(e=>{const v=t(e.getAttribute("data-i18n-ph"));if(v)e.placeholder=v});
+  document.documentElement.lang=lang;
+  document.documentElement.dir=lang==="ar"?"rtl":"ltr";
+  categoryButtons();renderListings();
+}
+const uuid=()=>
