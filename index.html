@@ -2,310 +2,317 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#b58b32">
-<title>JAOM Juba Marketplace</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#b28a36">
+<title>JAOM | Juba Marketplace</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--gold:#b58b32;--goldlight:#f6efdf;--ink:#191919;--muted:#777;--bg:#faf9f6;--line:#eae5da;--white:#fff;--red:#b42318;--green:#18794e}
+:root{--gold:#b28a36;--gold2:#8b6825;--cream:#f8f3e8;--ink:#191a1c;--muted:#777b80;--bg:#f7f7f5;--line:#e9e6df;--red:#b42318;--green:#18794e}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px Arial,sans-serif;padding-bottom:85px}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,Arial;padding-bottom:88px}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
-header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:13px 16px;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:25px;font-weight:900;color:var(--gold);letter-spacing:2px}
-.logo small{display:block;font-size:10px;color:#777;letter-spacing:3px}
-main{max-width:760px;margin:auto;padding:15px}
-.page{display:none}.page.active{display:block}
-.hero{padding:25px;border-radius:22px;background:linear-gradient(130deg,#171717,#514027);color:white;margin-bottom:17px}
-.hero h1{font-size:27px;margin:0 0 10px}.hero p{color:#eee1c5;line-height:1.5}
-.card{background:white;border:1px solid var(--line);border-radius:17px;padding:15px;margin:12px 0}
-h2{font-size:20px}h3{font-size:16px}
-.btn{border:0;border-radius:12px;padding:12px 15px;font-weight:bold}
-.gold{background:var(--gold);color:white}.light{background:var(--goldlight);color:#624b1b}
+header{height:74px;position:sticky;top:0;z-index:8;background:#ffffffed;backdrop-filter:blur(14px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 18px}
+.brand{border:0;background:none;text-align:left;padding:0}
+.logo{font-size:27px;font-weight:950;letter-spacing:2px;color:var(--gold);line-height:1}
+.logo small{display:block;font-size:9px;letter-spacing:3px;color:#777;margin-top:6px}
+.icon{width:43px;height:43px;border:1px solid var(--line);background:white;border-radius:14px;font-size:19px}
+main{max-width:1000px;margin:auto;padding:22px 16px}
+.page{display:none}
+.page.active{display:block;animation:fade .18s}
+@keyframes fade{from{opacity:.5;transform:translateY(4px)}to{opacity:1;transform:none}}
+h1{font-size:26px;letter-spacing:-.5px;margin:0 0 15px}
+h2{font-size:20px;margin:0 0 12px}
+.eyebrow{font-size:10px;letter-spacing:2px;color:var(--gold2);font-weight:850;margin-bottom:8px}
+.hero{padding:30px 24px;border-radius:25px;background:radial-gradient(circle at 90% 10%,#b28a3655,transparent 35%),linear-gradient(125deg,#171717,#514027);color:white;margin-bottom:19px}
+.hero h1{font-size:clamp(30px,6vw,42px);line-height:1.1;max-width:480px;margin:0 0 12px}
+.hero p{color:#e9dfc9;max-width:420px;margin:0 0 20px}
+.btn{border:0;border-radius:13px;padding:12px 16px;font-weight:750}
+.gold{background:linear-gradient(135deg,var(--gold),#987128);color:white;box-shadow:0 5px 13px #b28a3630}
 .outline{background:white;border:1px solid var(--line);color:var(--ink)}
+.light{background:var(--cream);color:#72551c}
 .danger{background:#fff0ee;color:var(--red)}
-input,select,textarea{display:block;width:100%;padding:13px;border:1px solid var(--line);border-radius:11px;background:white;margin:7px 0 13px}
-textarea{min-height:90px}
-label{font-weight:bold;font-size:13px}
-.row{display:flex;gap:10px;align-items:center}
-.row>*{flex:1;min-width:0}
-.between{justify-content:space-between}
-.muted{color:var(--muted)}.small{font-size:12px}
-.search{margin:12px 0}
-.chips{display:flex;gap:7px;overflow:auto;padding:8px 0}
-.chip{border:1px solid var(--gold);border-radius:25px;background:white;padding:8px 13px;white-space:nowrap}
+.card{background:white;border:1px solid var(--line);border-radius:19px;padding:16px;margin:13px 0;box-shadow:0 3px 12px #00000008}
+.search{margin:15px 0}
+.search input{padding-left:15px;margin:0}
+.chips{display:flex;gap:8px;overflow:auto;padding:6px 0 13px;scrollbar-width:none}
+.chip{white-space:nowrap;border:1px solid #d7c18f;border-radius:30px;background:white;padding:9px 14px;font-size:13px}
 .chip.active{background:var(--gold);color:white}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.product{padding:0;overflow:hidden}
-.product img{width:100%;height:140px;object-fit:cover;background:#eee}
-.product-body{padding:11px}
-.product h3{margin:6px 0}
-.price{font-weight:900;color:#89651c;font-size:17px}
-.tag{font-size:11px;background:var(--goldlight);color:#72551c;padding:5px 8px;border-radius:20px}
-.bottom{position:fixed;bottom:0;left:0;right:0;z-index:6;background:white;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:9px 2px}
-.bottom button{border:0;background:none;color:#777;font-size:12px}
-.bottom button.active{color:var(--gold);font-weight:bold}
-.bottom span{display:block;font-size:21px;margin-bottom:3px}
-.notice{background:#fff8e8;border:1px solid #ead8ae;padding:12px;border-radius:12px;font-size:13px;line-height:1.5}
-.empty{text-align:center;padding:25px;color:#777}
-.modal{display:none;position:fixed;inset:0;background:#0008;z-index:10;align-items:flex-end;justify-content:center;padding:10px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.product{padding:0;overflow:hidden;margin:0}
+.product img{width:100%;height:145px;object-fit:cover;background:#eee;display:block}
+.product-body{padding:12px}
+.product h3{font-size:14px;line-height:1.3;margin:7px 0;min-height:36px}
+.price{font-size:17px;font-weight:900;color:#89651c}
+.tag{font-size:10px;font-weight:750;background:var(--cream);color:#72551c;border-radius:20px;padding:5px 9px}
+.product .btn{width:100%;margin-top:9px;font-size:12px}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.empty{grid-column:1/-1;text-align:center;padding:30px 12px;color:var(--muted);background:white;border:1px dashed #ddd7c9;border-radius:16px}
+label{display:block;font-size:13px;font-weight:750;margin-top:5px}
+input,select,textarea{width:100%;display:block;padding:14px;border:1px solid #e5e2da;border-radius:13px;background:white;margin:7px 0 15px;min-height:48px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px #b28a3620}
+textarea{min-height:100px}
+.row{display:flex;gap:12px}
+.row>*{flex:1;min-width:0}
+.hint,.notice{background:#fbf7ed;border:1px solid #eee1c3;border-radius:13px;padding:12px;color:#66542e;font-size:12px;line-height:1.55}
+.bottom{position:fixed;bottom:0;left:0;right:0;z-index:9;display:flex;justify-content:space-around;background:#ffffffed;backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:8px 3px calc(8px + env(safe-area-inset-bottom))}
+.bottom button{flex:1;min-width:0;border:0;background:none;color:#858585;font-size:10px;font-weight:650;padding:4px}
+.bottom button.active{color:var(--gold)}
+.navicon{display:block;font-size:21px;line-height:1.2;margin-bottom:3px}
+.modal{display:none;position:fixed;inset:0;background:#0009;z-index:20;align-items:flex-end;justify-content:center;padding:10px}
 .modal.open{display:flex}
-.modalbox{background:white;border-radius:22px;padding:20px;width:100%;max-width:520px;max-height:90vh;overflow:auto}
-#toast{display:none;position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#191919;color:white;padding:12px 18px;border-radius:30px;z-index:20;max-width:90%;text-align:center}
-hr{border:0;border-top:1px solid var(--line);margin:15px 0}
+.modalbox{background:white;border-radius:23px;padding:20px;width:100%;max-width:540px;max-height:92vh;overflow:auto}
+.modalbox img{width:100%;max-height:270px;object-fit:cover;border-radius:15px}
+#toast{display:none;position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#202020;color:white;padding:12px 17px;border-radius:14px;z-index:30;max-width:90%;text-align:center;font-size:13px}
+.profilebox{background:linear-gradient(130deg,#fff,#fbf6ea);border:1px solid #eadfc8;border-radius:21px;padding:20px}
+.avatar{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:var(--cream);color:#87651f;font-weight:900;font-size:20px}
+.orderstatus{display:inline-block;background:#f1efe9;border-radius:30px;padding:5px 9px;font-size:10px;font-weight:850}
 .hidden{display:none!important}
-@media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.modal{align-items:center}}
+hr{border:0;border-top:1px solid var(--line);margin:15px 0}
+button:disabled{opacity:.6;cursor:wait}
+[dir=rtl] .brand{text-align:right}
+[dir=rtl] .search input{padding-left:14px;padding-right:15px}
+@media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.product img{height:175px}.modal{align-items:center}.bottom{left:50%;right:auto;transform:translateX(-50%);width:min(100%,700px);border:1px solid var(--line);border-bottom:0;border-radius:18px 18px 0 0}}
+@media(max-width:360px){.row{display:block}}
 </style>
 </head>
 <body>
 <header>
- <div class="logo">JAOM<small>JUBA MARKETPLACE</small></div>
- <button class="btn outline" onclick="go('settings')" aria-label="Settings">⚙</button>
+<button class="brand" onclick="go('home')"><span class="logo">JAOM<small>JUBA MARKETPLACE</small></span></button>
+<button class="icon" onclick="go('settings')" aria-label="Settings">⚙</button>
 </header>
-
 <main>
 <section id="home" class="page active">
- <div class="hero">
-  <h1 data-t="welcome">Discover something valuable.</h1>
-  <p data-t="tagline">Buy and sell with confidence in Juba.</p>
-  <button class="btn gold" onclick="go('sell')" data-t="post">＋ Post an item</button>
- </div>
- <input id="search" class="search" placeholder="Search products..." oninput="renderListings()">
- <div id="categories" class="chips"></div>
- <h2 data-t="latest">Latest listings</h2>
- <div id="listingGrid" class="grid"></div>
+<div class="hero"><div class="eyebrow">JUBA MARKETPLACE</div><h1 data-t="welcome">Discover something valuable.</h1><p data-t="tagline">Buy and sell with confidence in Juba.</p><button class="btn gold" onclick="go('sell')" data-t="post">＋ Post an item</button></div>
+<div class="search"><input id="search" placeholder="Search products..." oninput="renderListings()"></div>
+<div id="categories" class="chips"></div>
+<div class="row" style="align-items:center;justify-content:space-between"><h2 data-t="latest">Latest listings</h2><button class="btn light" onclick="refreshListings()">Refresh</button></div>
+<div id="listingGrid" class="grid"></div>
 </section>
-
 <section id="market" class="page">
- <h2 data-t="market">Marketplace</h2>
- <input id="marketSearch" placeholder="Search..." oninput="document.getElementById('search').value=this.value;renderListings()">
- <div id="marketGrid" class="grid"></div>
+<div class="eyebrow">EXPLORE</div><h1 data-t="market">Marketplace</h1>
+<div class="search"><input id="marketSearch" placeholder="Search products..." oninput="renderListings()"></div>
+<div id="marketCategories" class="chips"></div><div id="marketGrid" class="grid"></div>
 </section>
-
 <section id="sell" class="page">
- <h2 data-t="postTitle">Post a listing</h2>
- <div class="card">
-  <label data-t="title">Item title</label>
-  <input id="fTitle" maxlength="90" placeholder="Product name">
-  <div class="row">
-   <div><label data-t="price">Price</label><input id="fPrice" type="number" min="1"></div>
-   <div><label data-t="currency">Currency</label><select id="fCurrency"><option>SSP</option><option>USD</option></select></div>
-  </div>
-  <label data-t="location">Location</label>
-  <input id="fLocation" placeholder="e.g. Gudele, Juba">
-  <label data-t="phone">WhatsApp / phone</label>
-  <input id="fPhone" placeholder="+211...">
-  <label data-t="category">Category</label>
-  <select id="fCategory">
-   <option>Phones</option><option>Electronics</option><option>Vehicles</option>
-   <option>Land</option><option>Clothes</option><option>Home</option><option>Other</option>
-  </select>
-  <label data-t="delivery">Delivery promise</label>
-  <select id="fDelivery">
-   <option value="24">Within 24 hours</option>
-   <option value="48">Within 48 hours</option>
-   <option value="72">Within 3 days</option>
-   <option value="168">Within 7 days</option>
-  </select>
-  <label data-t="description">Description</label>
-  <textarea id="fDescription"></textarea>
-  <label data-t="photo">Product photo</label>
-  <input id="fImage" type="file" accept="image/jpeg,image/png,image/webp">
-  <button class="btn gold" style="width:100%" onclick="publishListing()" data-t="publish">Publish listing</button>
-  <p class="small muted">Maximum 3 active listings per seller.</p>
- </div>
-</section>
-
+<div class="eyebrow">SELLER TOOLS</div><h1 data-t="postTitle">Post a listing</h1>
+<div class="card"><h2>Item details</h2>
+<label>Item title</label><input id="fTitle" maxlength="90" placeholder="Product name">
+<div class="row"><div><label>Price</label><input id="fPrice" type="number" min="1" step="any" placeholder="0"></div><div><label>Currency</label><select id="fCurrency"><option>SSP</option><option>USD</option></select></div></div>
+<label>Location</label><input id="fLocation" placeholder="e.g. Gudele, Juba">
+<label>WhatsApp / phone</label><input id="fPhone" placeholder="+211...">
+<label>Category</label><select id="fCategory"><option>Phones</option><option>Electronics</option><option>Vehicles</option><option>Land</option><option>Clothes</option><option>Home</option><option>Other</option></select>
+<label>Delivery promise</label><select id="fDelivery"><option value="24">Within 24 hours</option><option value="48">Within 48 hours</option><option value="72">Within 3 days</option><option value="168">Within 7 days</option></select>
+<label>Description</label><textarea id="fDescription" maxlength="1500" placeholder="Describe the item's condition and details..."></textarea>
+<label>Product photo</label><input id="fImage" type="file" accept="image/jpeg,image/png,image/webp">
+<p class="small muted">JPG, PNG or WEBP, maximum 5 MB.</p>
+<div class="hint">Maximum 3 active listings per seller. Make sure your details are accurate.</div>
+<button id="publishBtn" class="btn gold" style="width:100%;margin-top:15px" onclick="publishListing()">Publish listing</button>
+</div></section>
 <section id="orders" class="page">
- <h2 data-t="orders">My orders</h2>
- <div class="notice">Only pay using payment instructions confirmed by JAOM. Never share your PIN or password. Admins must verify payments before recording a payout or refund.</div>
- <div id="ordersList"></div>
- <div id="adminPanel" class="card hidden">
-  <h2>JAOM Admin</h2>
-  <button class="btn outline" onclick="loadOrders()">Refresh orders</button>
-  <div id="adminOrders"></div>
- </div>
+<h1 data-t="orders">My orders</h1>
+<div class="notice">Only use payment instructions confirmed by JAOM. Never share your PIN or password. Payments must be verified before recording a payout or refund.</div>
+<button class="btn light" style="margin-top:12px" onclick="loadOrders()">Refresh orders</button>
+<div id="ordersList"></div>
+<div id="adminPanel" class="card hidden"><h2>JAOM Admin</h2><div id="adminOrders"></div></div>
 </section>
-
 <section id="profile" class="page">
- <div class="card">
-  <h2 id="profileName">My account</h2>
-  <p id="profileEmail" class="muted small"></p>
-  <p>My listings: <b id="myCount">0</b> / 3</p>
- </div>
- <h2>My listings</h2>
- <div id="myListings"></div>
- <button class="btn danger" style="width:100%" onclick="signOut()">Sign out</button>
+<div class="profilebox"><div class="row" style="align-items:center"><div class="avatar" id="avatar">J</div><div><div class="eyebrow">ACCOUNT</div><h2 id="profileName">My account</h2><p id="profileEmail" class="small muted"></p></div></div><hr>My listings: <b id="myCount">0</b> / 3</div>
+<h2 style="margin-top:22px">My listings</h2><div id="myListings"></div>
+<button class="btn danger" style="width:100%" onclick="signOut()">Sign out</button>
 </section>
-
 <section id="settings" class="page">
- <h2 data-t="settings">Settings</h2>
- <div class="card">
-  <label>Language</label>
-  <select id="language" onchange="setLanguage(this.value)">
-   <option value="en">English</option>
-   <option value="ar">العربية</option>
-   <option value="sw">Kiswahili</option>
-  </select>
-  <label>Default currency</label>
-  <select id="defaultCurrency"><option>SSP</option><option>USD</option></select>
-  <button class="btn gold" style="width:100%" onclick="saveSettings()">Save settings</button>
- </div>
+<div class="eyebrow">PREFERENCES</div><h1 data-t="settings">Settings</h1>
+<div class="card"><label>Language</label><select id="language" onchange="setLanguage(this.value)"><option value="en">English</option><option value="ar">العربية</option><option value="sw">Kiswahili</option></select>
+<label>Default currency</label><select id="defaultCurrency"><option>SSP</option><option>USD</option></select>
+<button class="btn gold" style="width:100%;margin-top:8px" onclick="saveSettings()">Save settings</button></div>
 </section>
 </main>
-
 <nav class="bottom">
- <button class="active" data-page="home" onclick="go('home')"><span>⌂</span><span data-t="home">Home</span></button>
- <button data-page="market" onclick="go('market')"><span>▦</span><span data-t="market">Market</span></button>
- <button data-page="sell" onclick="go('sell')"><span>＋</span><span data-t="sell">Sell</span></button>
- <button data-page="orders" onclick="go('orders')"><span>⇄</span><span data-t="orders">Orders</span></button>
- <button data-page="profile" onclick="go('profile')"><span>◉</span><span data-t="profile">Profile</span></button>
+<button class="active" data-page="home" onclick="go('home')"><span class="navicon">⌂</span><span data-t="home">Home</span></button>
+<button data-page="market" onclick="go('market')"><span class="navicon">▦</span><span data-t="marketShort">Market</span></button>
+<button data-page="sell" onclick="go('sell')"><span class="navicon">＋</span><span data-t="sell">Sell</span></button>
+<button data-page="orders" onclick="go('orders')"><span class="navicon">⇄</span><span data-t="ordersShort">Orders</span></button>
+<button data-page="profile" onclick="go('profile')"><span class="navicon">◉</span><span data-t="profile">Profile</span></button>
 </nav>
-
-<div id="authModal" class="modal">
- <div class="modalbox">
-  <h2>Welcome to JAOM</h2>
-  <p class="muted">Sign in or create an account using your email.</p>
-  <div id="emailStep">
-   <label>Email address</label>
-   <input id="authEmail" type="email" placeholder="you@example.com">
-   <button class="btn gold" style="width:100%" onclick="sendCode()">Send 6-digit code</button>
-  </div>
-  <div id="codeStep" class="hidden">
-   <label>6-digit email code</label>
-   <input id="authCode" inputmode="numeric" maxlength="6" placeholder="123456">
-   <button class="btn gold" style="width:100%" onclick="verifyCode()">Verify and continue</button>
-   <button class="btn outline" style="width:100%;margin-top:8px" onclick="backToEmail()">Use another email</button>
-  </div>
-  <p id="authMessage" class="muted small"></p>
- </div>
-</div>
-
-<div id="detailModal" class="modal">
- <div class="modalbox">
-  <button class="btn outline" onclick="closeDetail()">Close</button>
-  <div id="detailContent"></div>
- </div>
-</div>
+<div id="authModal" class="modal"><div class="modalbox">
+<div class="row" style="justify-content:space-between;align-items:center"><h2>Welcome to JAOM</h2><button class="icon" onclick="closeAuth()">×</button></div>
+<p class="muted">Sign in or create an account using your email.</p>
+<div id="emailStep"><label>Email address</label><input id="authEmail" type="email" placeholder="you@example.com"><button id="sendBtn" class="btn gold" style="width:100%" onclick="sendCode()">Send 6-digit code</button></div>
+<div id="codeStep" class="hidden"><label>6-digit email code</label><input id="authCode" inputmode="numeric" maxlength="6" placeholder="123456"><button id="verifyBtn" class="btn gold" style="width:100%" onclick="verifyCode()">Verify and continue</button><button class="btn outline" style="width:100%;margin-top:8px" onclick="backToEmail()">Use another email</button></div>
+<p id="authMessage" class="small muted"></p></div></div>
+<div id="detailModal" class="modal"><div class="modalbox"><div class="row" style="justify-content:space-between"><h2>Item details</h2><button class="icon" onclick="closeDetail()">×</button></div><div id="detailContent"></div></div></div>
 <div id="toast"></div><script>
+"use strict";
 const SUPABASE_URL="https://ucprmvnjvqbpddozxtno.supabase.co";
 const SUPABASE_KEY="sb_publishable_eIygYOGjioGPzyZYjFIe1w_UxRBsWVz";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-
-let user=null, listings=[], orders=[], category="All", admin=false;
 const $=id=>document.getElementById(id);
+let user=null,listings=[],orders=[],admin=false,category="All",lang="en",busy=false;
 
+const cats=["All","Phones","Electronics","Vehicles","Land","Clothes","Home","Other"];
 const words={
- en:{welcome:"Discover something valuable.",tagline:"Buy and sell with confidence in Juba.",post:"＋ Post an item",latest:"Latest listings",market:"Marketplace",postTitle:"Post a listing",title:"Item title",price:"Price",currency:"Currency",location:"Location",phone:"WhatsApp / phone",category:"Category",delivery:"Delivery promise",description:"Description",photo:"Product photo",publish:"Publish listing",orders:"My orders",settings:"Settings",home:"Home",sell:"Sell",profile:"Profile"},
- sw:{welcome:"Gundua bidhaa nzuri.",tagline:"Nunua na uza kwa uaminifu mjini Juba.",post:"＋ Weka bidhaa",latest:"Bidhaa mpya",market:"Soko",postTitle:"Weka bidhaa sokoni",title:"Jina la bidhaa",price:"Bei",currency:"Sarafu",location:"Mahali",phone:"WhatsApp / simu",category:"Aina",delivery:"Muda wa kuwasilisha",description:"Maelezo",photo:"Picha ya bidhaa",publish:"Weka sokoni",orders:"Oda zangu",settings:"Mipangilio",home:"Nyumbani",sell:"Uza",profile:"Wasifu"},
- ar:{welcome:"اكتشف شيئاً قيّماً.",tagline:"اشترِ وبع بثقة في جوبا.",post:"＋ أضف منتجاً",latest:"أحدث المنتجات",market:"السوق",postTitle:"إضافة منتج",title:"اسم المنتج",price:"السعر",currency:"العملة",location:"الموقع",phone:"واتساب / الهاتف",category:"الفئة",delivery:"موعد التسليم",description:"الوصف",photo:"صورة المنتج",publish:"نشر المنتج",orders:"طلباتي",settings:"الإعدادات",home:"الرئيسية",sell:"بيع",profile:"حسابي"}
+en:{welcome:"Discover something valuable.",tagline:"Buy and sell with confidence in Juba.",post:"＋ Post an item",latest:"Latest listings",market:"Marketplace",postTitle:"Post a listing",orders:"My orders",settings:"Settings",home:"Home",marketShort:"Market",ordersShort:"Orders",sell:"Sell",profile:"Profile"},
+sw:{welcome:"Gundua bidhaa nzuri.",tagline:"Nunua na uza kwa uaminifu mjini Juba.",post:"＋ Weka bidhaa",latest:"Bidhaa mpya",market:"Soko",postTitle:"Weka bidhaa sokoni",orders:"Oda zangu",settings:"Mipangilio",home:"Nyumbani",marketShort:"Soko",ordersShort:"Oda",sell:"Uza",profile:"Wasifu"},
+ar:{welcome:"اكتشف شيئاً قيّماً.",tagline:"اشترِ وبع بثقة في جوبا.",post:"＋ أضف منتجاً",latest:"أحدث المنتجات",market:"السوق",postTitle:"إضافة منتج",orders:"طلباتي",settings:"الإعدادات",home:"الرئيسية",marketShort:"السوق",ordersShort:"الطلبات",sell:"بيع",profile:"حسابي"}
 };
 
-function toast(s){$("toast").textContent=s;$("toast").style.display="block";clearTimeout(window.tt);window.tt=setTimeout(()=>$("toast").style.display="none",3000)}
+function t(k){return words[lang]?.[k]||words.en[k]||k}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function toast(s){$("toast").textContent=s;$("toast").style.display="block";clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>$("toast").style.display="none",3200)}
+function busyBtn(id,on,msg){const b=$(id);if(!b)return;b.disabled=on;if(on){b.dataset.old=b.innerHTML;b.textContent=msg||"Please wait..."}else if(b.dataset.old){b.innerHTML=b.dataset.old;delete b.dataset.old}}
 function go(id){
- document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));
- document.querySelectorAll(".bottom button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+ document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active",x.id===id));
+ document.querySelectorAll(".bottom button").forEach(x=>x.classList.toggle("active",x.dataset.page===id));
  if(["sell","profile","orders"].includes(id)&&!user){$("authModal").classList.add("open");return}
  if(id==="profile")loadProfile();
  if(id==="orders")loadOrders();
  window.scrollTo(0,0);
 }
-function setLanguage(lang){
- const w=words[lang]||words.en;
- document.documentElement.lang=lang;
- document.documentElement.dir=lang==="ar"?"rtl":"ltr";
- document.querySelectorAll("[data-t]").forEach(el=>{const k=el.dataset.t;if(w[k])el.textContent=w[k]});
- localStorage.setItem("jaom-language",lang);
+function setLanguage(v){
+ lang=v;document.documentElement.lang=v;document.documentElement.dir=v==="ar"?"rtl":"ltr";
+ document.querySelectorAll("[data-t]").forEach(x=>{x.textContent=t(x.dataset.t)});
+ localStorage.setItem("jaom-language",v);
 }
 function saveSettings(){
  localStorage.setItem("jaom-currency",$("defaultCurrency").value);
+ $("fCurrency").value=$("defaultCurrency").value;
  toast("Settings saved");
 }
-function backToEmail(){$("emailStep").classList.remove("hidden");$("codeStep").classList.add("hidden")}
+function closeAuth(){if(user)$("authModal").classList.remove("open")}
+function backToEmail(){
+ $("emailStep").classList.remove("hidden");
+ $("codeStep").classList.add("hidden");
+ $("authMessage").textContent="";
+}
 async function sendCode(){
  const email=$("authEmail").value.trim();
- if(!email){toast("Enter your email");return}
- $("authMessage").textContent="Sending code...";
- const {error}=await db.auth.signInWithOtp({email,options:{shouldCreateUser:true}});
- if(error){$("authMessage").textContent=error.message;return}
- $("emailStep").classList.add("hidden");
- $("codeStep").classList.remove("hidden");
- $("authMessage").textContent="Check your email for the six-digit code.";
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast("Enter a valid email");return}
+ busyBtn("sendBtn",true,"Sending...");
+ $("authMessage").textContent="Sending your code...";
+ try{
+  const {error}=await db.auth.signInWithOtp({email,options:{shouldCreateUser:true}});
+  if(error)throw error;
+  $("emailStep").classList.add("hidden");
+  $("codeStep").classList.remove("hidden");
+  $("authMessage").textContent="Check your email for the six-digit code.";
+ }catch(e){$("authMessage").textContent=e.message}
+ finally{busyBtn("sendBtn",false)}
 }
 async function verifyCode(){
  const email=$("authEmail").value.trim(),token=$("authCode").value.trim();
  if(!/^\d{6}$/.test(token)){toast("Enter the six-digit code");return}
- const {data,error}=await db.auth.verifyOtp({email,token,type:"email"});
- if(error){$("authMessage").textContent=error.message;return}
- user=data.user;
- $("authModal").classList.remove("open");
- await ensureProfile();await loadListings();toast("Welcome to JAOM!");
+ busyBtn("verifyBtn",true,"Verifying...");
+ try{
+  const {data,error}=await db.auth.verifyOtp({email,token,type:"email"});
+  if(error)throw error;
+  user=data.user;
+  $("authModal").classList.remove("open");
+  await ensureProfile();
+  await loadListings();
+  await loadProfile();
+  toast("Welcome to JAOM!");
+ }catch(e){$("authMessage").textContent=e.message}
+ finally{busyBtn("verifyBtn",false)}
 }
 async function ensureProfile(){
  if(!user)return;
- const {data}=await db.from("profiles").select("id").eq("id",user.id).maybeSingle();
+ const {data,error}=await db.from("profiles").select("id").eq("id",user.id).maybeSingle();
+ if(error){console.warn("Profile check:",error.message);return}
  if(!data){
-  const name=user.email.split("@")[0];
-  const {error}=await db.from("profiles").insert({id:user.id,email:user.email,name,full_name:name,role:"user"});
-  if(error)console.warn(error.message);
+  const name=(user.email||"JAOM user").split("@")[0];
+  const {error:e}=await db.from("profiles").insert({id:user.id,email:user.email,name,full_name:name,role:"user"});
+  if(e)console.warn("Profile creation:",e.message);
  }
 }
 async function signOut(){
- await db.auth.signOut();user=null;orders=[];toast("Signed out");$("authModal").classList.add("open");
+ const {error}=await db.auth.signOut();
+ if(error){toast(error.message);return}
+ user=null;admin=false;orders=[];
+ $("authModal").classList.add("open");
+ go("home");toast("Signed out");
 }
-const cats=["All","Phones","Electronics","Vehicles","Land","Clothes","Home","Other"];
-function drawCategories(){
- $("categories").innerHTML=cats.map(c=>`<button class="chip ${category===c?"active":""}" onclick="chooseCategory('${c}')">${c}</button>`).join("");
+function drawCats(){
+ const html=cats.map(c=>`<button class="chip ${category===c?"active":""}" onclick="chooseCategory('${c}')">${esc(c)}</button>`).join("");
+ $("categories").innerHTML=html;
+ $("marketCategories").innerHTML=html;
 }
-function chooseCategory(c){category=c;drawCategories();renderListings()}
+function chooseCategory(c){category=c;drawCats();renderListings()}
 async function loadListings(){
- const {data,error}=await db.from("listings").select("*").order("created_at",{ascending:false}).limit(100);
- if(error){toast("Listings error: "+error.message);return}
- listings=data||[];drawCategories();renderListings();
+ if(busy)return;
+ busy=true;
+ try{
+  const {data,error}=await db.from("listings").select("*").order("created_at",{ascending:false}).limit(100);
+  if(error)throw error;
+  listings=data||[];
+  drawCats();renderListings();
+ }catch(e){toast("Listings error: "+e.message)}
+ finally{busy=false}
 }
-function card(l,own=false){
- const image=l.image_url||"https://placehold.co/600x400/f5f0e5/8b6b2c?text=JAOM";
- return `<article class="card product"><img src="${esc(image)}" alt="${esc(l.title)}"><div class="product-body"><span class="tag">${esc(l.category)}</span><h3>${esc(l.title)}</h3><div class="price">${Number(l.price).toLocaleString()} ${esc(l.currency||"SSP")}</div><p class="muted small">${esc(l.location||"")}</p><button class="btn ${own?"outline":"gold"}" style="width:100%" onclick="showListing('${esc(l.id)}')">${own?"Manage":"View item"}</button></div></article>`;
+async function refreshListings(){await loadListings();if(user)await loadProfile()}
+function fmt(n,c){return Number(n||0).toLocaleString()+" "+esc(c||"SSP")}
+function productCard(l,own=false){
+ const img=l.image_url||"https://placehold.co/600x420/f5f0e5/8b6b2c?text=JAOM";
+ return `<article class="card product"><img src="${esc(img)}" alt="${esc(l.title)}" loading="lazy"><div class="product-body"><span class="tag">${esc(l.category||"Other")}</span><h3>${esc(l.title)}</h3><div class="price">${fmt(l.price,l.currency)}</div><p class="muted small">${esc(l.location||"Juba")}</p><button class="btn ${own?"outline":"gold"}" onclick="showListing('${esc(l.id)}')">${own?"Manage listing":"View item"}</button></div></article>`;
 }
 function renderListings(){
  const q=($("search").value||"").toLowerCase();
- const found=listings.filter(l=>(category==="All"||l.category===category)&&[l.title,l.description,l.location,l.category].join(" ").toLowerCase().includes(q));
- $("listingGrid").innerHTML=found.length?found.map(l=>card(l)).join(""):'<div class="empty">No listings found.</div>';
- $("marketGrid").innerHTML=found.length?found.map(l=>card(l)).join(""):'<div class="empty">No listings found.</div>';
+ const mq=($("marketSearch").value||"").toLowerCase();
+ const filter=s=>listings.filter(l=>(category==="All"||l.category===category)&&[l.title,l.description,l.location,l.category].join(" ").toLowerCase().includes(s));
+ const home=filter(q),market=filter(mq);
+ $("listingGrid").innerHTML=home.length?home.map(l=>productCard(l)).join(""):'<div class="empty">No listings found. Be the first to post an item.</div>';
+ $("marketGrid").innerHTML=market.length?market.map(l=>productCard(l)).join(""):'<div class="empty">No listings found.</div>';
 }
 async function publishListing(){
  if(!user){$("authModal").classList.add("open");return}
- const title=$("fTitle").value.trim(),price=Number($("fPrice").value),location=$("fLocation").value.trim();
- if(!title||!price||price<=0||!location){toast("Enter title, valid price and location");return}
+ const title=$("fTitle").value.trim();
+ const price=Number($("fPrice").value);
+ const location=$("fLocation").value.trim();
+ if(!title||!Number.isFinite(price)||price<=0||!location){toast("Enter item title, valid price and location");return}
  const mine=listings.filter(l=>l.user_id===user.id);
  if(mine.length>=3){toast("Maximum 3 active listings");return}
- const file=$("fImage").files[0];let image_url=null;
+ const file=$("fImage").files[0];
+ let image_url=null;
  if(file){
   if(!["image/jpeg","image/png","image/webp"].includes(file.type)){toast("Use JPG, PNG or WEBP");return}
   if(file.size>5*1024*1024){toast("Photo must be below 5 MB");return}
   const ext=file.name.split(".").pop().toLowerCase();
   const path=`${user.id}/${crypto.randomUUID()}.${ext}`;
-  const {error}=await db.storage.from("listing-images").upload(path,file,{contentType:file.type});
-  if(error){toast("Photo upload: "+error.message);return}
-  image_url=db.storage.from("listing-images").getPublicUrl(path).data.publicUrl;
+  busyBtn("publishBtn",true,"Uploading photo...");
+  try{
+   const {error}=await db.storage.from("listing-images").upload(path,file,{contentType:file.type});
+   if(error)throw error;
+   image_url=db.storage.from("listing-images").getPublicUrl(path).data.publicUrl;
+  }catch(e){toast("Photo upload failed: "+e.message);busyBtn("publishBtn",false);return}
  }
  const row={
   user_id:user.id,title,price,currency:$("fCurrency").value,
-  location,whatsapp:$("fPhone").value.trim(),category:$("fCategory").value,
-  description:$("fDescription").value.trim(),image_url,
-  delivery_hours:Number($("fDelivery").value)
+  location,whatsapp:$("fPhone").value.trim(),
+  category:$("fCategory").value,
+  description:$("fDescription").value.trim(),
+  image_url
  };
- const {error}=await db.from("listings").insert(row);
- if(error){toast("Publish failed: "+error.message);return}
- ["fTitle","fPrice","fLocation","fPhone","fDescription","fImage"].forEach(id=>$(id).value="");
- toast("Listing published");await loadListings();go("market");
-}
-async function showListing(id){
- const l=listings.find(x=>String(x.id)===String(id));if(!l)return;
- const own=user&&l.user_id===user.id;
- $("detailContent").innerHTML=`<img style="width:100%;max-height:260px;object-fit:cover;border-radius:12px" src="${esc(l.image_url||"https://placehold.co/600x400?text=JAOM")}"><h2>${esc(l.title)}</h2><div class="price">${Number(l.price).toLocaleString()} ${esc(l.currency||"SSP")}</div><p>${esc(l.description)}</p><p>Location: ${esc(l.location)}</p><p>Delivery: ${esc(l.delivery_hours||24)} hours</p>${own?`<button class="btn danger" onclick="deleteListing('${esc(l.id)}')">Delete listing</button>`:`<button class="btn gold" style="width:100%" onclick="createOrder('${esc(l.id)}')">Request to buy</button>`}`;
+ busyBtn("publishBtn",true,"Publishing...");
+ try{
+  const {error}=await db.from("listings").insert(row);
+  if(error)throw error;
+  ["fTitle","fPrice","fLocation","fPhone","fDescription","fImage"].forEach(id=>$(id).value="");
+  toast("Listing published successfully");
+  await loadListings();await loadProfile();go("market");
+ }catch(e){toast("Publish failed: "+e.message)}
+ finally{busyBtn("publishBtn",false)}
+}function showListing(id){
+ const l=listings.find(x=>String(x.id)===String(id));
+ if(!l)return;
+ const own=!!(user&&l.user_id===user.id);
+ $("detailContent").innerHTML=`
+ <img src="${esc(l.image_url||"https://placehold.co/600x420?text=JAOM")}" alt="${esc(l.title)}">
+ <h2>${esc(l.title)}</h2>
+ <div class="price">${fmt(l.price,l.currency)}</div>
+ <p>${esc(l.description||"No description provided.")}</p>
+ <p>Location: ${esc(l.location)}</p>
+ ${own?`<button class="btn danger" onclick="deleteListing('${esc(l.id)}')">Delete listing</button>`:`<button class="btn gold" style="width:100%" onclick="createOrder('${esc(l.id)}')">Request to buy</button>`}`;
  $("detailModal").classList.add("open");
 }
 function closeDetail(){$("detailModal").classList.remove("open")}
@@ -313,61 +320,93 @@ async function deleteListing(id){
  const l=listings.find(x=>String(x.id)===String(id));
  if(!l||l.user_id!==user?.id)return;
  if(!confirm("Delete this listing?"))return;
- const {error}=await db.from("listings").delete().eq("id",id).eq("user_id",user.id);
- if(error){toast(error.message);return}
- closeDetail();await loadListings();await loadProfile();toast("Listing deleted");
-}async function createOrder(id){
+ try{
+  const {error}=await db.from("listings").delete().eq("id",id).eq("user_id",user.id);
+  if(error)throw error;
+  closeDetail();await loadListings();await loadProfile();toast("Listing deleted");
+ }catch(e){toast("Delete failed: "+e.message)}
+}
+async function createOrder(id){
  if(!user){closeDetail();$("authModal").classList.add("open");return}
- const l=listings.find(x=>String(x.id)===String(id));if(!l)return;
+ const l=listings.find(x=>String(x.id)===String(id));
+ if(!l)return;
  if(l.user_id===user.id){toast("You cannot buy your own listing");return}
- const {error}=await db.from("jaom_order_requests").insert({
-  listing_id:String(l.id),buyer_id:user.id,seller_id:l.user_id,
-  listing_title:l.title,amount:Number(l.price),
-  currency:l.currency||"SSP",status:"REQUESTED"
- });
- if(error){toast("Order failed: "+error.message);return}
- closeDetail();toast("Order request created");go("orders");
+ if(!confirm("Create an order request for this item?"))return;
+ try{
+  const {error}=await db.from("jaom_order_requests").insert({
+   listing_id:String(l.id),buyer_id:user.id,seller_id:l.user_id,
+   listing_title:l.title,amount:Number(l.price),
+   currency:l.currency||"SSP",status:"REQUESTED"
+  });
+  if(error)throw error;
+  closeDetail();toast("Order request created");go("orders");
+ }catch(e){toast("Order failed: "+e.message)}
 }
 function orderCard(o,isAdmin=false){
- const fee=Number(o.amount)*0.05,payout=Number(o.amount)-fee;
+ const fee=Number(o.amount)*0.05;
+ const payout=Number(o.amount)-fee;
  let buttons="";
- if(!isAdmin&&o.buyer_id===user.id&&o.status==="REQUESTED")
-  buttons=`<button class="btn gold" onclick="reportPayment('${o.id}')">Report payment</button>`;
+ if(!isAdmin&&o.buyer_id===user?.id&&o.status==="REQUESTED")
+  buttons=`<button class="btn gold" onclick="reportPayment('${esc(o.id)}')">Report payment</button>`;
  if(isAdmin&&o.status==="PAYMENT_REPORTED")
-  buttons=`<button class="btn gold" onclick="verifyPayment('${o.id}')">Verify received</button>`;
+  buttons=`<button class="btn gold" onclick="verifyPayment('${esc(o.id)}')">Verify payment received</button>`;
  if(isAdmin&&o.status==="PAYMENT_VERIFIED")
-  buttons=`<button class="btn gold" onclick="recordPayout('${o.id}')">Record seller payout</button><button class="btn danger" onclick="approveRefund('${o.id}')">Approve full refund</button>`;
+  buttons=`<button class="btn gold" onclick="recordPayout('${esc(o.id)}')">Record seller payout</button><button class="btn danger" onclick="approveRefund('${esc(o.id)}')">Approve full refund</button>`;
  if(isAdmin&&o.status==="REFUND_APPROVED")
-  buttons=`<button class="btn danger" onclick="recordRefund('${o.id}')">Record refund sent</button>`;
- return `<div class="card"><b>${esc(o.listing_title)}</b><p class="tag">${esc(o.status)}</p><p class="small">Amount: ${Number(o.amount).toLocaleString()} ${esc(o.currency)}<br>JAOM 5%: ${fee.toLocaleString()}<br>Seller amount: ${payout.toLocaleString()}</p>${o.payment_reference?`<p class="small">Payment reference: ${esc(o.payment_reference)}</p>`:""}${o.admin_note?`<p class="small">Admin note: ${esc(o.admin_note)}</p>`:""}<div class="row">${buttons}</div></div>`;
+  buttons=`<button class="btn danger" onclick="recordRefund('${esc(o.id)}')">Record refund sent</button>`;
+ return `<div class="card"><b>${esc(o.listing_title)}</b>
+ <p><span class="orderstatus">${esc(o.status)}</span></p>
+ <p class="small">Amount: ${fmt(o.amount,o.currency)}<br>
+ JAOM 5% commission: ${fmt(fee,o.currency)}<br>
+ Seller amount: ${fmt(payout,o.currency)}</p>
+ ${o.payment_reference?`<p class="small">Payment reference: ${esc(o.payment_reference)}</p>`:""}
+ ${o.admin_note?`<p class="small">Admin note: ${esc(o.admin_note)}</p>`:""}
+ <div class="row">${buttons}</div></div>`;
 }
 async function loadOrders(){
  if(!user)return;
- const {data,error}=await db.from("jaom_order_requests").select("*").order("created_at",{ascending:false});
- if(error){$("ordersList").innerHTML=`<p>${esc(error.message)}</p>`;return}
- orders=data||[];
- const mine=orders.filter(o=>o.buyer_id===user.id||o.seller_id===user.id);
- $("ordersList").innerHTML=mine.length?mine.map(o=>orderCard(o)).join():'<div class="empty">No orders yet.</div>';
- const check=await db.rpc("jaom_is_admin");
- admin=!check.error&&check.data===true;
- $("adminPanel").classList.toggle("hidden",!admin);
- if(admin)$("adminOrders").innerHTML=orders.length?orders.map(o=>orderCard(o,true)).join():'<div class="empty">No orders.</div>';
+ $("ordersList").innerHTML='<div class="empty">Loading orders...</div>';
+ try{
+  const {data,error}=await db.from("jaom_order_requests").select("*").order("created_at",{ascending:false});
+  if(error)throw error;
+  orders=data||[];
+  const mine=orders.filter(o=>o.buyer_id===user.id||o.seller_id===user.id);
+  $("ordersList").innerHTML=mine.length?mine.map(o=>orderCard(o)).join(""):'<div class="empty">No orders yet.</div>';
+  const check=await db.rpc("jaom_is_admin");
+  admin=!check.error&&check.data===true;
+  $("adminPanel").classList.toggle("hidden",!admin);
+  if(admin)$("adminOrders").innerHTML=orders.length?orders.map(o=>orderCard(o,true)).join(""):'<div class="empty">No orders.</div>';
+ }catch(e){
+  $("ordersList").innerHTML=`<div class="empty">Could not load orders: ${esc(e.message)}</div>`;
+  $("adminPanel").classList.add("hidden");
+ }
 }
 async function reportPayment(id){
  const ref=prompt("Enter your transaction reference. Never enter your PIN.");
  if(!ref?.trim())return;
- const {error}=await db.from("jaom_order_requests").update({status:"PAYMENT_REPORTED",payment_reference:ref.trim()}).eq("id",id).eq("buyer_id",user.id).eq("status","REQUESTED");
- if(error){toast(error.message);return}
- toast("Payment report submitted");loadOrders();
+ try{
+  const {data,error}=await db.from("jaom_order_requests")
+   .update({status:"PAYMENT_REPORTED",payment_reference:ref.trim()})
+   .eq("id",id).eq("buyer_id",user.id).eq("status","REQUESTED")
+   .select("id");
+  if(error)throw error;
+  if(!data?.length){toast("Order could not be updated. Refresh and check its status.");return}
+  toast("Payment report submitted");await loadOrders();
+ }catch(e){toast("Payment report failed: "+e.message)}
 }
 async function adminUpdate(id,changes,message){
  if(!admin){toast("Admin access required");return}
  if(!confirm(message))return;
- const {error}=await db.from("jaom_order_requests").update(changes).eq("id",id);
- if(error){toast(error.message);return}
- toast("Order updated");loadOrders();
+ try{
+  const {data,error}=await db.from("jaom_order_requests").update(changes).eq("id",id).select("id");
+  if(error)throw error;
+  if(!data?.length){toast("No order updated. Check admin permissions.");return}
+  toast("Order updated");await loadOrders();
+ }catch(e){toast("Update failed: "+e.message)}
 }
-function verifyPayment(id){adminUpdate(id,{status:"PAYMENT_VERIFIED"},"Have you confirmed the money arrived in your account?")}
+function verifyPayment(id){
+ adminUpdate(id,{status:"PAYMENT_VERIFIED"},"Have you personally confirmed that the money arrived?");
+}
 function recordPayout(id){
  const ref=prompt("Enter payout reference after manually paying the seller.");
  if(ref?.trim())adminUpdate(id,{status:"SELLER_PAID",payout_reference:ref.trim()},"Have you already paid the seller?");
@@ -382,26 +421,46 @@ function recordRefund(id){
 }
 async function loadProfile(){
  if(!user)return;
- $("profileName").textContent=user.user_metadata?.full_name||user.email.split("@")[0];
- $("profileEmail").textContent=user.email;
+ $("profileName").textContent=user.user_metadata?.full_name||(user.email||"JAOM user").split("@")[0];
+ $("profileEmail").textContent=user.email||"";
+ $("avatar").textContent=$("profileName").textContent.charAt(0).toUpperCase();
  const mine=listings.filter(l=>l.user_id===user.id);
  $("myCount").textContent=mine.length;
- $("myListings").innerHTML=mine.length?mine.map(l=>card(l,true)).join():'<div class="empty">You have no listings.</div>';
+ $("myListings").innerHTML=mine.length?mine.map(l=>productCard(l,true)).join(""):'<div class="empty">You have no listings yet.</div>';
 }
 async function init(){
- $("language").value=localStorage.getItem("jaom-language")||"en";
- setLanguage($("language").value);
- $("defaultCurrency").value=localStorage.getItem("jaom-currency")||"SSP";
- drawCategories();
- const {data:{session}}=await db.auth.getSession();
- user=session?.user||null;
- db.auth.onAuthStateChange((_event,session)=>{
-  user=session?.user||null;
-  if(user){setTimeout(async()=>{await ensureProfile();await loadListings()},0)}
- });
- await loadListings();
- if(user){await ensureProfile();await loadProfile()}
- else $("authModal").classList.add("open");
+ try{
+  $("language").value=localStorage.getItem("jaom-language")||"en";
+  setLanguage($("language").value);
+  $("defaultCurrency").value=localStorage.getItem("jaom-currency")||"SSP";
+  $("fCurrency").value=$("defaultCurrency").value;
+  drawCats();
+  const {data,error}=await db.auth.getSession();
+  if(error)throw error;
+  user=data.session?.user||null;
+  db.auth.onAuthStateChange((_event,session)=>{
+   user=session?.user||null;
+   if(user){
+    setTimeout(async()=>{
+     await ensureProfile();
+     await loadListings();
+     await loadProfile();
+    },0);
+   }else{
+    admin=false;
+   }
+  });
+  await loadListings();
+  if(user){
+   await ensureProfile();
+   await loadProfile();
+  }else{
+   $("authModal").classList.add("open");
+  }
+ }catch(e){
+  toast("App startup error: "+e.message);
+  console.error(e);
+ }
 }
 init();
 </script>
