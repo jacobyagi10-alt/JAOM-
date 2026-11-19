@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,996 +5,111 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ffffff">
 <title>JAOM | Juba Marketplace</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
-
 <style>
-:root {
-  --gold: #c49a38;
-  --gold-dark: #a77c20;
-  --gold-light: #f8efd9;
-  --white: #ffffff;
-  --bg: #f6f6f4;
-  --text: #222222;
-  --muted: #777777;
-  --border: #eeeeea;
-  --danger: #d64545;
-  --radius: 16px;
-  --shadow: 0 5px 22px rgba(0,0,0,.06);
-}
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Arial, Helvetica, sans-serif;
-}
-button, input, textarea, select { font: inherit; }
-button { cursor: pointer; }
-header {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: rgba(255,255,255,.97);
-  border-bottom: 1px solid var(--border);
-}
-.topbar {
-  max-width: 1200px;
-  margin: auto;
-  padding: 13px 18px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.logo {
-  font-size: 25px;
-  font-weight: 900;
-  color: var(--gold-dark);
-  letter-spacing: 1px;
-}
-.logo span { color: #222; }
-.search {
-  flex: 1;
-  max-width: 500px;
-  position: relative;
-}
-.search input {
-  width: 100%;
-  padding: 12px 42px 12px 15px;
-  border: 1px solid var(--border);
-  border-radius: 30px;
-  background: #f7f7f5;
-  outline: none;
-}
-.search input:focus { border-color: var(--gold); }
-.icon-btn {
-  border: 0;
-  background: transparent;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  display: inline-grid;
-  place-items: center;
-  color: #444;
-}
-.icon-btn:hover { background: var(--gold-light); color: var(--gold-dark); }
-.primary {
-  border: 0;
-  background: var(--gold);
-  color: white;
-  padding: 12px 18px;
-  border-radius: 25px;
-  font-weight: bold;
-}
-.primary:hover { background: var(--gold-dark); }
-.secondary {
-  border: 1px solid var(--border);
-  background: white;
-  padding: 11px 16px;
-  border-radius: 24px;
-}
-.layout {
-  max-width: 1200px;
-  margin: 20px auto;
-  padding: 0 16px;
-  display: grid;
-  grid-template-columns: 220px minmax(0,1fr);
-  gap: 20px;
-}
-.sidebar {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 12px;
-  height: max-content;
-  position: sticky;
-  top: 82px;
-}
-.nav-btn {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 13px;
-  border: 0;
-  border-radius: 12px;
-  background: transparent;
-  text-align: left;
-  color: #555;
-  margin-bottom: 4px;
-}
-.nav-btn.active, .nav-btn:hover {
-  background: var(--gold-light);
-  color: var(--gold-dark);
-  font-weight: bold;
-}
-.content { min-width: 0; }
-.panel {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  margin-bottom: 18px;
-  box-shadow: var(--shadow);
-}
-h1,h2,h3,p { margin-top: 0; }
-.muted { color: var(--muted); }
-.hero {
-  background: linear-gradient(120deg,#fff,#f7eedb);
-  border: 1px solid #efe1bd;
-  border-radius: 20px;
-  padding: 28px;
-  margin-bottom: 18px;
-}
-.hero h1 { color: #8d681e; margin-bottom: 8px; }
-.categories {
-  display: flex;
-  gap: 9px;
-  overflow-x: auto;
-  padding: 4px 0 14px;
-}
-.category {
-  border: 1px solid var(--border);
-  background: white;
-  border-radius: 22px;
-  padding: 10px 16px;
-  white-space: nowrap;
-}
-.category.active {
-  background: var(--gold);
-  color: white;
-  border-color: var(--gold);
-}
-.products {
-  display: grid;
-  grid-template-columns: repeat(3,minmax(0,1fr));
-  gap: 15px;
-}
-.product {
-  border: 1px solid var(--border);
-  border-radius: 15px;
-  overflow: hidden;
-  background: white;
-  transition: .2s;
-}
-.product:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
-.product img {
-  width: 100%;
-  height: 170px;
-  object-fit: cover;
-  background: #f0f0f0;
-}
-.product-info { padding: 13px; }
-.product-info h3 { font-size: 15px; margin-bottom: 8px; }
-.price { color: var(--gold-dark); font-weight: 800; font-size: 17px; }
-.product-actions { display:flex; gap:8px; margin-top:12px; }
-.product-actions button { flex:1; }
-.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.field { margin-bottom: 13px; }
-.field label { display:block; font-size:13px; font-weight:bold; margin-bottom:7px; }
-.field input,.field textarea,.field select {
-  width:100%; padding:12px; border:1px solid #ddd;
-  border-radius:10px; outline:none; background:white;
-}
-.field input:focus,.field textarea:focus,.field select:focus {
-  border-color:var(--gold);
-}
-.field textarea { min-height:100px; resize:vertical; }
-.hidden { display:none !important; }
-.status {
-  display:inline-block; padding:5px 10px; border-radius:20px;
-  background:#f1f1f1; font-size:12px;
-}
-.profile-cover {
-  height:190px;
-  border-radius:15px;
-  background:linear-gradient(120deg,#d4b56d,#f5e9ca,#b58b35);
-  position:relative;
-}
-.profile-avatar {
-  width:110px; height:110px; border-radius:50%;
-  border:5px solid white; background:#eee;
-  object-fit:cover; position:absolute; left:25px; bottom:-48px;
-}
-.profile-heading { padding:58px 20px 15px; }
-.profile-stats {
-  display:flex; gap:25px; flex-wrap:wrap;
-  border-top:1px solid var(--border); padding-top:15px;
-}
-.profile-stat strong { display:block; font-size:18px; }
-.modal {
-  position:fixed; inset:0; background:rgba(0,0,0,.55);
-  display:none; align-items:center; justify-content:center;
-  z-index:100; padding:15px;
-}
-.modal.open { display:flex; }
-.modal-card {
-  width:min(480px,100%); max-height:90vh; overflow:auto;
-  background:white; border-radius:18px; padding:22px;
-}
-.toast {
-  position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
-  background:#222; color:white; padding:12px 18px;
-  border-radius:25px; z-index:200; display:none;
-  max-width:90%; text-align:center;
-}
-.empty {
-  text-align:center; padding:35px 15px; color:var(--muted);
-}
-.bottom-nav { display:none; }
-[dir="rtl"] { direction:rtl; }
-[dir="rtl"] .nav-btn { text-align:right; }
-[dir="rtl"] .profile-avatar { left:auto; right:25px; }
-@media(max-width:800px) {
-  .layout { display:block; margin:12px auto; padding-bottom:75px; }
-  .sidebar { display:none; }
-  .products { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
-  .product img { height:140px; }
-  .bottom-nav {
-    display:flex; position:fixed; bottom:0; left:0; right:0;
-    background:white; border-top:1px solid var(--border);
-    z-index:30; justify-content:space-around; padding:8px 3px;
-  }
-  .bottom-nav button {
-    border:0; background:transparent; color:#666;
-    display:grid; justify-items:center; gap:3px;
-    font-size:10px; padding:5px;
-  }
-  .bottom-nav button.active { color:var(--gold-dark); }
-  .topbar { gap:7px; padding:10px; }
-  .logo { font-size:21px; }
-  .topbar .primary { padding:10px 12px; font-size:12px; }
-}
-@media(max-width:420px) {
-  .products { grid-template-columns:repeat(2,minmax(0,1fr)); }
-  .product img { height:120px; }
-  .form-grid { grid-template-columns:1fr; }
-  .hero { padding:20px; }
-}
+:root{--gold:#c49a38;--gold-dark:#a77c20;--gold-light:#f8efd9;--white:#fff;--bg:#f6f6f4;--text:#222;--muted:#777;--border:#eeeeea;--danger:#d64545;--radius:16px;--shadow:0 5px 22px rgba(0,0,0,.06)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}
+header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.97);border-bottom:1px solid var(--border)}
+.topbar{max-width:1200px;margin:auto;padding:13px 18px;display:flex;align-items:center;gap:14px}.logo{font-size:25px;font-weight:900;color:var(--gold-dark);letter-spacing:1px}.logo span{color:#222}
+.search{flex:1;max-width:500px;position:relative}.search input{width:100%;padding:12px 42px 12px 15px;border:1px solid var(--border);border-radius:30px;background:#f7f7f5;outline:none}.search input:focus{border-color:var(--gold)}
+.icon-btn{border:0;background:transparent;width:42px;height:42px;border-radius:50%;display:inline-grid;place-items:center;color:#444}.icon-btn:hover{background:var(--gold-light);color:var(--gold-dark)}
+.primary{border:0;background:var(--gold);color:white;padding:12px 18px;border-radius:25px;font-weight:bold}.primary:hover{background:var(--gold-dark)}.secondary{border:1px solid var(--border);background:white;padding:11px 16px;border-radius:24px}
+.layout{max-width:1200px;margin:20px auto;padding:0 16px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px}.sidebar{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:12px;height:max-content;position:sticky;top:82px}
+.nav-btn{width:100%;display:flex;align-items:center;gap:12px;padding:13px;border:0;border-radius:12px;background:transparent;text-align:left;color:#555;margin-bottom:4px}.nav-btn.active,.nav-btn:hover{background:var(--gold-light);color:var(--gold-dark);font-weight:bold}
+.content{min-width:0}.panel{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}h1,h2,h3,p{margin-top:0}.muted{color:var(--muted)}
+.hero{background:linear-gradient(120deg,#fff,#f7eedb);border:1px solid #efe1bd;border-radius:20px;padding:28px;margin-bottom:18px}.hero h1{color:#8d681e;margin-bottom:8px}
+.categories{display:flex;gap:9px;overflow-x:auto;padding:4px 0 14px}.category{border:1px solid var(--border);background:white;border-radius:22px;padding:10px 16px;white-space:nowrap}.category.active{background:var(--gold);color:white;border-color:var(--gold)}
+.products{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.product{border:1px solid var(--border);border-radius:15px;overflow:hidden;background:white;transition:.2s}.product:hover{transform:translateY(-3px);box-shadow:var(--shadow)}.product img{width:100%;height:170px;object-fit:cover;background:#f0f0f0}.product-info{padding:13px}.product-info h3{font-size:15px;margin-bottom:8px}.price{color:var(--gold-dark);font-weight:800;font-size:17px}.old-price{text-decoration:line-through;color:#999;font-size:12px;margin-left:6px}.product-actions{display:flex;gap:8px;margin-top:12px}.product-actions button{flex:1}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-bottom:13px}.field label{display:block;font-size:13px;font-weight:bold;margin-bottom:7px}.field input,.field textarea,.field select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;outline:none;background:white}.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--gold)}.field textarea{min-height:100px;resize:vertical}
+.hidden{display:none!important}.status{display:inline-block;padding:5px 10px;border-radius:20px;background:#f1f1f1;font-size:12px}
+.profile-cover{height:190px;border-radius:15px;background:linear-gradient(120deg,#d4b56d,#f5e9ca,#b58b35);position:relative}.profile-avatar{width:110px;height:110px;border-radius:50%;border:5px solid white;background:#eee;object-fit:cover;position:absolute;left:25px;bottom:-48px}.profile-heading{padding:58px 20px 15px}.profile-stats{display:flex;gap:25px;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:15px}.profile-stat strong{display:block;font-size:18px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:15px}.modal.open{display:flex}.modal-card{width:min(520px,100%);max-height:90vh;overflow:auto;background:white;border-radius:18px;padding:22px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:white;padding:12px 18px;border-radius:25px;z-index:200;display:none;max-width:90%;text-align:center}.empty{text-align:center;padding:35px 15px;color:var(--muted)}.bottom-nav{display:none}
+.badge-deal{display:inline-block;background:#fff0e9;color:#b33b22;padding:5px 9px;border-radius:20px;font-size:11px;font-weight:bold;margin-bottom:8px}.timer{font-size:12px;color:#a33;font-weight:bold;margin-top:7px}.stars{color:#d5a326;letter-spacing:2px}.review{border-bottom:1px solid #eee;padding:12px 0}.payment-note{background:#fffaf0;border:1px solid #efdfb9;padding:14px;border-radius:12px}
+[dir=rtl]{direction:rtl}[dir=rtl] .nav-btn{text-align:right}[dir=rtl] .profile-avatar{left:auto;right:25px}
+@media(max-width:800px){.layout{display:block;margin:12px auto;padding-bottom:75px}.sidebar{display:none}.products{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.product img{height:140px}.bottom-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--border);z-index:30;justify-content:space-around;padding:8px 3px}.bottom-nav button{border:0;background:transparent;color:#666;display:grid;justify-items:center;gap:3px;font-size:10px;padding:5px}.bottom-nav button.active{color:var(--gold-dark)}.topbar{gap:7px;padding:10px}.logo{font-size:21px}.topbar .primary{padding:10px 12px;font-size:12px}}
+@media(max-width:420px){.products{grid-template-columns:repeat(2,minmax(0,1fr))}.product img{height:120px}.form-grid{grid-template-columns:1fr}.hero{padding:20px}}
 </style>
 </head>
-
 <body>
-
-<header>
-  <div class="topbar">
-    <div class="logo">JAOM<span>.</span></div>
-    <div class="search">
-      <input id="searchInput" placeholder="Search products..." oninput="renderListings()">
-    </div>
-    <button class="icon-btn" onclick="openAuth()" title="Account">
-      <i data-lucide="user-round"></i>
-    </button>
-    <button class="primary" onclick="showPage('sell')">
-      <i data-lucide="plus" style="width:15px;vertical-align:middle"></i>
-      Sell
-    </button>
-  </div>
-</header>
-
+<header><div class="topbar"><div class="logo">JAOM<span>.</span></div><div class="search"><input id="searchInput" placeholder="Search products..." oninput="renderListings()"></div><button class="icon-btn" onclick="openAuth()" title="Account"><i data-lucide="user-round"></i></button><button class="primary" onclick="showPage('sell')"><i data-lucide="plus" style="width:15px;vertical-align:middle"></i> Sell</button></div></header>
 <div class="layout">
-  <aside class="sidebar">
-    <button class="nav-btn active" data-page="home" onclick="showPage('home')"><i data-lucide="house"></i> Home</button>
-    <button class="nav-btn" data-page="sell" onclick="showPage('sell')"><i data-lucide="plus-circle"></i> Sell a product</button>
-    <button class="nav-btn" data-page="orders" onclick="showPage('orders')"><i data-lucide="shopping-bag"></i> My orders</button>
-    <button class="nav-btn" data-page="profile" onclick="showPage('profile')"><i data-lucide="user-round"></i> My profile</button>
-    <button class="nav-btn" data-page="settings" onclick="showPage('settings')"><i data-lucide="settings"></i> Settings</button>
-    <hr style="border:0;border-top:1px solid #eee;margin:12px 0">
-    <button class="nav-btn" onclick="signOut()"><i data-lucide="log-out"></i> Sign out</button>
-  </aside>
-
-  <main class="content">
-
-    <section id="page-home">
-      <div class="hero">
-        <h1>Welcome to JAOM</h1>
-        <p>Discover products. Connect with sellers. Shop across South Sudan.</p>
-        <button class="primary" onclick="showPage('sell')">Start selling</button>
-      </div>
-
-      <div class="categories" id="categories">
-        <button class="category active" onclick="setCategory('All',this)">All</button>
-        <button class="category" onclick="setCategory('Electronics',this)">Electronics</button>
-        <button class="category" onclick="setCategory('Fashion',this)">Fashion</button>
-        <button class="category" onclick="setCategory('Vehicles',this)">Vehicles</button>
-        <button class="category" onclick="setCategory('Home',this)">Home</button>
-        <button class="category" onclick="setCategory('Other',this)">Other</button>
-      </div>
-
-      <div class="panel">
-        <h2>Latest products</h2>
-        <p class="muted">Discover what's available on JAOM.</p>
-        <div id="products" class="products">
-          <div class="empty">Loading products...</div>
-        </div>
-      </div>
-    </section>
-
-    <section id="page-sell" class="hidden">
-      <div class="panel">
-        <h2>Sell a product</h2>
-        <p class="muted">Add accurate information about your product.</p>
-        <form id="listingForm">
-          <div class="field">
-            <label>Product name</label>
-            <input id="productTitle" required maxlength="100">
-          </div>
-          <div class="form-grid">
-            <div class="field">
-              <label>Price</label>
-              <input id="productPrice" type="number" min="0.01" step="0.01" required>
-            </div>
-            <div class="field">
-              <label>Currency</label>
-              <select id="productCurrency">
-                <option value="SSP">SSP</option>
-                <option value="USD">USD</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-grid">
-            <div class="field">
-              <label>Category</label>
-              <select id="productCategory">
-                <option>Electronics</option>
-                <option>Fashion</option>
-                <option>Vehicles</option>
-                <option>Home</option>
-                <option>Other</option>
-              </select>
-            </div>
-            <div class="field">
-              <label>Location</label>
-              <input id="productLocation" required placeholder="e.g. Juba">
-            </div>
-          </div>
-          <div class="field">
-            <label>WhatsApp number</label>
-            <input id="productWhatsapp" required placeholder="Include country code">
-          </div>
-          <div class="field">
-            <label>Description</label>
-            <textarea id="productDescription" required maxlength="2000"></textarea>
-          </div>
-          <div class="field">
-            <label>Product image</label>
-            <input id="productImage" type="file" accept="image/*">
-          </div>
-          <button class="primary" type="submit" id="publishBtn">Publish product</button>
-        </form>
-      </div>
-    </section>
-
-    <section id="page-orders" class="hidden">
-      <div class="panel">
-        <h2>My orders</h2>
-        <p class="muted">Track your buying and selling requests.</p>
-        <div id="ordersList"><div class="empty">Sign in to view your orders.</div></div>
-      </div>
-    </section>
-
-    <section id="page-profile" class="hidden">
-      <div class="panel">
-        <div class="profile-cover">
-          <img id="profileAvatar" class="profile-avatar"
-            src="https://placehold.co/120x120?text=JAOM" alt="Profile picture">
-        </div>
-        <div class="profile-heading">
-          <h2 id="profileName">Your profile</h2>
-          <p id="profileEmail" class="muted">Sign in to manage your profile</p>
-          <p id="profileLocation" class="muted"></p>
-          <div class="profile-stats">
-            <div class="profile-stat"><strong id="profileListings">0</strong><span class="muted">Listings</span></div>
-            <div class="profile-stat"><strong id="profileOrders">0</strong><span class="muted">Orders</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="panel">
-        <h3>Edit profile</h3>
-        <div class="field">
-          <label>Display name</label>
-          <input id="editName" maxlength="60">
-        </div>
-        <div class="field">
-          <label>Location</label>
-          <input id="editLocation" maxlength="100">
-        </div>
-        <button class="primary" onclick="saveProfile()">Save profile</button>
-      </div>
-    </section>
-
-    <section id="page-settings" class="hidden">
-      <div class="panel">
-        <h2>Settings</h2>
-        <div class="field">
-          <label>Language</label>
-          <select id="languageSelect" onchange="changeLanguage(this.value)">
-            <option value="en">English</option>
-            <option value="ar">العربية</option>
-            <option value="sw">Kiswahili</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Currency preference</label>
-          <select id="currencySelect" onchange="localStorage.setItem('jaom_currency',this.value)">
-            <option value="SSP">SSP</option>
-            <option value="USD">USD</option>
-          </select>
-        </div>
-        <button class="secondary" onclick="signOut()">Sign out</button>
-      </div>
-    </section>
-
-  </main>
-</div>
-
-<nav class="bottom-nav">
-  <button class="active" data-page="home" onclick="showPage('home')"><i data-lucide="house"></i>Home</button>
-  <button data-page="sell" onclick="showPage('sell')"><i data-lucide="plus-circle"></i>Sell</button>
-  <button data-page="orders" onclick="showPage('orders')"><i data-lucide="shopping-bag"></i>Orders</button>
-  <button data-page="profile" onclick="showPage('profile')"><i data-lucide="user-round"></i>Profile</button>
-</nav>
-
-<div id="authModal" class="modal">
-  <div class="modal-card">
-    <button class="icon-btn" style="float:right" onclick="closeAuth()"><i data-lucide="x"></i></button>
-    <h2>Welcome to JAOM</h2>
-    <p class="muted">Sign in using your email address.</p>
-    <div class="field">
-      <label>Email address</label>
-      <input id="authEmail" type="email" required placeholder="you@example.com">
-    </div>
-    <button class="primary" onclick="sendOTP()" id="sendOtpBtn">Send verification code</button>
-    <div id="otpArea" class="hidden" style="margin-top:18px">
-      <div class="field">
-        <label>Verification code</label>
-        <input id="authOTP" inputmode="numeric" autocomplete="one-time-code" placeholder="Enter your email code">
-      </div>
-      <button class="primary" onclick="verifyOTP()">Verify and sign in</button>
-    </div>
-    <p id="authMessage" class="muted" style="margin-top:15px"></p>
-  </div>
-</div>
-
-<div id="detailModal" class="modal">
-  <div class="modal-card">
-    <button class="icon-btn" style="float:right" onclick="closeDetail()"><i data-lucide="x"></i></button>
-    <div id="detailContent"></div>
-  </div>
-</div>
-
+<aside class="sidebar">
+<button class="nav-btn active" data-page="home" onclick="showPage('home')"><i data-lucide="house"></i> Home</button>
+<button class="nav-btn" data-page="sell" onclick="showPage('sell')"><i data-lucide="plus-circle"></i> Sell a product</button>
+<button class="nav-btn" data-page="orders" onclick="showPage('orders')"><i data-lucide="shopping-bag"></i> My orders</button>
+<button class="nav-btn" data-page="profile" onclick="showPage('profile')"><i data-lucide="user-round"></i> My profile</button>
+<button class="nav-btn" data-page="settings" onclick="showPage('settings')"><i data-lucide="settings"></i> Settings</button>
+<hr style="border:0;border-top:1px solid #eee;margin:12px 0"><button class="nav-btn" onclick="signOut()"><i data-lucide="log-out"></i> Sign out</button>
+</aside>
+<main class="content">
+<section id="page-home"><div class="hero"><h1>Welcome to JAOM</h1><p>Discover products. Connect with sellers. Shop across South Sudan.</p><button class="primary" onclick="showPage('sell')">Start selling</button></div>
+<div class="categories" id="categories"><button class="category active" onclick="setCategory('All',this)">All</button><button class="category" onclick="setCategory('Electronics',this)">Electronics</button><button class="category" onclick="setCategory('Fashion',this)">Fashion</button><button class="category" onclick="setCategory('Vehicles',this)">Vehicles</button><button class="category" onclick="setCategory('Home',this)">Home</button><button class="category" onclick="setCategory('Other',this)">Other</button></div>
+<div class="panel"><h2>Latest products</h2><p class="muted">Discover what's available on JAOM.</p><div id="products" class="products"><div class="empty">Loading products...</div></div></div></section>
+<section id="page-sell" class="hidden"><div class="panel"><h2>Sell a product</h2><p class="muted">Add accurate information about your product.</p><form id="listingForm">
+<div class="field"><label>Product name</label><input id="productTitle" required maxlength="100"></div>
+<div class="form-grid"><div class="field"><label>Price</label><input id="productPrice" type="number" min="0.01" step="0.01" required></div><div class="field"><label>Currency</label><select id="productCurrency"><option value="SSP">SSP</option><option value="USD">USD</option></select></div></div>
+<div class="form-grid"><div class="field"><label>Category</label><select id="productCategory"><option>Electronics</option><option>Fashion</option><option>Vehicles</option><option>Home</option><option>Other</option></select></div><div class="field"><label>Location</label><input id="productLocation" required placeholder="e.g. Juba"></div></div>
+<div class="field"><label>WhatsApp number</label><input id="productWhatsapp" required placeholder="Include country code"></div>
+<div class="field"><label>Description</label><textarea id="productDescription" required maxlength="2000"></textarea></div>
+<div class="field"><label>Product image</label><input id="productImage" type="file" accept="image/*"></div>
+<div class="panel" style="box-shadow:none;background:#fffaf0"><h3>Special deal (optional)</h3><div class="field"><label>Discounted deal price</label><input id="dealPrice" type="number" min="0.01" step="0.01" placeholder="Leave blank for no deal"></div><div class="field"><label>Deal end date and time</label><input id="dealEndsAt" type="datetime-local"></div><div class="field"><label>Estimated delivery time (days)</label><input id="deliveryDays" type="number" min="1" max="60" value="3"></div></div>
+<button class="primary" type="submit" id="publishBtn">Publish product</button></form></div></section>
+<section id="page-orders" class="hidden"><div class="panel"><h2>My orders</h2><p class="muted">Track your buying and selling requests.</p><div id="ordersList"><div class="empty">Sign in to view your orders.</div></div></div></section>
+<section id="page-profile" class="hidden"><div class="panel"><div class="profile-cover"><img id="profileAvatar" class="profile-avatar" src="https://placehold.co/120x120?text=JAOM" alt="Profile picture"></div><div class="profile-heading"><h2 id="profileName">Your profile</h2><p id="profileEmail" class="muted">Sign in to manage your profile</p><p id="profileLocation" class="muted"></p><div class="profile-stats"><div class="profile-stat"><strong id="profileListings">0</strong><span class="muted">Listings</span></div><div class="profile-stat"><strong id="profileOrders">0</strong><span class="muted">Orders</span></div><div class="profile-stat"><strong id="profileRating">—</strong><span class="muted">Seller rating</span></div></div></div></div>
+<div class="panel"><h3>Edit profile</h3><div class="field"><label>Display name</label><input id="editName" maxlength="60"></div><div class="field"><label>Location</label><input id="editLocation" maxlength="100"></div><div class="field"><label>Profile picture</label><input id="profileImage" type="file" accept="image/*"></div><button class="primary" onclick="saveProfile()">Save profile</button></div><div class="panel"><h3>Seller reviews</h3><div id="myReviews" class="muted">Sign in to view reviews.</div></div></section>
+<section id="page-settings" class="hidden"><div class="panel"><h2>Settings</h2><div class="field"><label>Language</label><select id="languageSelect" onchange="changeLanguage(this.value)"><option value="en">English</option><option value="ar">العربية</option><option value="sw">Kiswahili</option></select></div><div class="field"><label>Currency preference</label><select id="currencySelect" onchange="localStorage.setItem('jaom_currency',this.value)"><option value="SSP">SSP</option><option value="USD">USD</option></select></div><button class="secondary" onclick="enableNotifications()">Enable browser notifications</button> <button class="secondary" onclick="signOut()">Sign out</button></div>
+<div class="panel"><h3>Payment instructions</h3><div class="payment-note"><p><strong>Recipient:</strong> Yagi Joseph</p><p><strong>Payment phone:</strong> 0926004129</p><p class="muted">Confirm payment details directly with the recipient. JAOM does not collect, transfer, or automatically verify payments. Never send money until you have independently confirmed the transaction.</p></div></div></section>
+</main></div>
+<nav class="bottom-nav"><button class="active" data-page="home" onclick="showPage('home')"><i data-lucide="house"></i>Home</button><button data-page="sell" onclick="showPage('sell')"><i data-lucide="plus-circle"></i>Sell</button><button data-page="orders" onclick="showPage('orders')"><i data-lucide="shopping-bag"></i>Orders</button><button data-page="profile" onclick="showPage('profile')"><i data-lucide="user-round"></i>Profile</button></nav>
+<div id="authModal" class="modal"><div class="modal-card"><button class="icon-btn" style="float:right" onclick="closeAuth()"><i data-lucide="x"></i></button><h2>Welcome to JAOM</h2><p class="muted">Sign in using your email. No SMS is sent.</p><div class="field"><label>Email address</label><input id="authEmail" type="email" required placeholder="you@example.com"></div><button class="primary" onclick="sendOTP()" id="sendOtpBtn">Send email verification code</button><div id="otpArea" class="hidden" style="margin-top:18px"><div class="field"><label>Verification code</label><input id="authOTP" inputmode="numeric" autocomplete="one-time-code" placeholder="Enter your email code"></div><button class="primary" onclick="verifyOTP()">Verify and sign in</button></div><p id="authMessage" class="muted" style="margin-top:15px"></p></div></div>
+<div id="detailModal" class="modal"><div class="modal-card"><button class="icon-btn" style="float:right" onclick="closeDetail()"><i data-lucide="x"></i></button><div id="detailContent"></div></div></div>
+<div id="reviewModal" class="modal"><div class="modal-card"><button class="icon-btn" style="float:right" onclick="closeReview()"><i data-lucide="x"></i></button><h2>Rate this seller</h2><input type="hidden" id="reviewSellerId"><input type="hidden" id="reviewOrderId"><div class="field"><label>Rating</label><select id="reviewRating"><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select></div><div class="field"><label>Review</label><textarea id="reviewText" maxlength="500" placeholder="Share your experience"></textarea></div><button class="primary" onclick="submitReview()">Submit review</button></div></div>
 <div id="toast" class="toast"></div>
-</body>
-
 <script>
-/* JAOM CONFIGURATION */
-const SUPABASE_URL = "https://ucprmvnjvqbpddozxtno.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_eIygYOGjioGPzyZYjFIe1w_UxRBsWVz";
-
-const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-let currentUser = null;
-let listings = [];
-let selectedCategory = "All";
-let profile = null;
-let currentLanguage = "en";
-
-const $ = id => document.getElementById(id);
-
-function toast(message) {
-  const el = $("toast");
-  el.textContent = message;
-  el.style.display = "block";
-  clearTimeout(window.jaomToastTimer);
-  window.jaomToastTimer = setTimeout(() => el.style.display = "none", 3000);
-}
-
-function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
-  })[c]);
-}
-
-function money(value, currency) {
-  return `${Number(value || 0).toLocaleString()} ${escapeHTML(currency || "SSP")}`;
-}
-
-function refreshIcons() {
-  if (window.lucide) lucide.createIcons();
-}
-
-function showPage(page) {
-  const pages = ["home","sell","orders","profile","settings"];
-  pages.forEach(p => {
-    $("page-" + p).classList.toggle("hidden", p !== page);
-  });
-  document.querySelectorAll("[data-page]").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.page === page);
-  });
-
-  if (page === "orders") loadOrders();
-  if (page === "profile") loadProfile();
-  if (page === "sell" && !currentUser) openAuth();
-
-  window.scrollTo({top:0,behavior:"smooth"});
-  refreshIcons();
-}
-
-function openAuth() {
-  $("authModal").classList.add("open");
-  $("authMessage").textContent = "";
-}
-
-function closeAuth() {
-  $("authModal").classList.remove("open");
-}
-
-function closeDetail() {
-  $("detailModal").classList.remove("open");
-}
-
-async function sendOTP() {
-  const email = $("authEmail").value.trim();
-  if (!email) return toast("Enter your email address.");
-
-  $("sendOtpBtn").disabled = true;
-  $("authMessage").textContent = "Sending verification email...";
-
-  try {
-    const {error} = await db.auth.signInWithOtp({
-      email,
-      options: {shouldCreateUser:true}
-    });
-    if (error) throw error;
-
-    $("otpArea").classList.remove("hidden");
-    $("authMessage").textContent = "Check your email for your verification code.";
-  } catch (error) {
-    $("authMessage").textContent = error.message;
-  } finally {
-    $("sendOtpBtn").disabled = false;
-  }
-}
-
-async function verifyOTP() {
-  const email = $("authEmail").value.trim();
-  const token = $("authOTP").value.trim();
-
-  if (!email || !token) return toast("Enter your email and verification code.");
-
-  $("authMessage").textContent = "Verifying...";
-
-  try {
-    const {data,error} = await db.auth.verifyOtp({
-      email,
-      token,
-      type:"email"
-    });
-    if (error) throw error;
-
-    currentUser = data.user;
-    closeAuth();
-    await ensureProfile();
-    await loadProfile();
-    await loadListings();
-    toast("Welcome to JAOM!");
-  } catch (error) {
-    $("authMessage").textContent = error.message;
-  }
-}
-
-async function signOut() {
-  const {error} = await db.auth.signOut();
-  if (error) return toast(error.message);
-
-  currentUser = null;
-  profile = null;
-  toast("You have signed out.");
-  await loadListings();
-  showPage("home");
-}
-
-async function ensureProfile() {
-  if (!currentUser) return;
-
-  const {data,error} = await db.from("profiles")
-    .select("*")
-    .eq("id",currentUser.id)
-    .maybeSingle();
-
-  if (error) {
-    console.error("Profile read:",error);
-    return;
-  }
-
-  if (!data) {
-    const {error:insertError} = await db.from("profiles").insert({
-      id:currentUser.id,
-      email:currentUser.email,
-      name:currentUser.email.split("@")[0]
-    });
-    if (insertError) console.error("Profile create:",insertError);
-  }
-}
-
-async function loadProfile() {
-  if (!currentUser) {
-    $("profileName").textContent = "Your profile";
-    $("profileEmail").textContent = "Sign in to manage your profile";
-    return;
-  }
-
-  const {data,error} = await db.from("profiles")
-    .select("*")
-    .eq("id",currentUser.id)
-    .maybeSingle();
-
-  if (error) {
-    console.error(error);
-    return;
-  }
-
-  profile = data || {};
-  $("profileName").textContent = profile.name || currentUser.email;
-  $("profileEmail").textContent = currentUser.email;
-  $("profileLocation").textContent = profile.location || "";
-  $("editName").value = profile.name || "";
-  $("editLocation").value = profile.location || "";
-
-  const ownListings = listings.filter(x => x.user_id === currentUser.id);
-  $("profileListings").textContent = ownListings.length;
-}
-
-async function saveProfile() {
-  if (!currentUser) return openAuth();
-
-  const name = $("editName").value.trim();
-  const location = $("editLocation").value.trim();
-
-  if (!name) return toast("Please enter your display name.");
-
-  const {error} = await db.from("profiles").upsert({
-    id:currentUser.id,
-    email:currentUser.email,
-    name,
-    location
-  },{onConflict:"id"});
-
-  if (error) return toast(error.message);
-
-  await loadProfile();
-  toast("Profile updated.");
-}
-
-async function loadListings() {
-  $("products").innerHTML = '<div class="empty">Loading products...</div>';
-
-  const {data,error} = await db.from("listings")
-    .select("*")
-    .order("created_at",{ascending:false})
-    .limit(100);
-
-  if (error) {
-    console.error(error);
-    $("products").innerHTML = '<div class="empty">Could not load products. Check your Supabase permissions.</div>';
-    return;
-  }
-
-  listings = data || [];
-  renderListings();
-  if (currentUser) loadProfile();
-}
-
-function setCategory(category,button) {
-  selectedCategory = category;
-  document.querySelectorAll(".category").forEach(b => b.classList.remove("active"));
-  button.classList.add("active");
-  renderListings();
-}
-
-function renderListings() {
-  const query = ($("searchInput")?.value || "").toLowerCase();
-
-  const filtered = listings.filter(item => {
-    const matchesCategory = selectedCategory === "All" || item.category === selectedCategory;
-    const text = `${item.title || ""} ${item.description || ""} ${item.location || ""}`.toLowerCase();
-    return matchesCategory && text.includes(query);
-  });
-
-  if (!filtered.length) {
-    $("products").innerHTML = '<div class="empty">No products found.</div>';
-    return;
-  }
-
-  $("products").innerHTML = filtered.map(item => {
-    const image = item.image_url || "https://placehold.co/600x400?text=JAOM";
-    return `
-      <article class="product">
-        <img src="${escapeHTML(image)}" alt="${escapeHTML(item.title)}"
-          onerror="this.src='https://placehold.co/600x400?text=JAOM'">
-        <div class="product-info">
-          <h3>${escapeHTML(item.title)}</h3>
-          <div class="price">${money(item.price,item.currency)}</div>
-          <p class="muted" style="font-size:12px;margin:8px 0">
-            <i data-lucide="map-pin" style="width:13px;vertical-align:middle"></i>
-            ${escapeHTML(item.location || "South Sudan")}
-          </p>
-          <div class="product-actions">
-            <button class="primary" onclick="showDetails('${item.id}')">View</button>
-            <button class="secondary" onclick="contactSeller('${item.id}')" title="Contact seller">
-              <i data-lucide="message-circle"></i>
-            </button>
-          </div>
-        </div>
-      </article>`;
-  }).join("");
-
-  refreshIcons();
-}
-
-function findListing(id) {
-  return listings.find(item => String(item.id) === String(id));
-}
-
-function showDetails(id) {
-  const item = findListing(id);
-  if (!item) return;
-
-  $("detailContent").innerHTML = `
-    <img src="${escapeHTML(item.image_url || "https://placehold.co/600x400?text=JAOM")}"
-      style="width:100%;height:210px;object-fit:cover;border-radius:12px">
-    <h2 style="margin-top:15px">${escapeHTML(item.title)}</h2>
-    <div class="price">${money(item.price,item.currency)}</div>
-    <p>${escapeHTML(item.description || "")}</p>
-    <p class="muted">${escapeHTML(item.category || "")} · ${escapeHTML(item.location || "")}</p>
-    <button class="primary" onclick="requestOrder('${item.id}')">Request to buy</button>
-    <button class="secondary" onclick="contactSeller('${item.id}')">Contact seller</button>
-  `;
-
-  $("detailModal").classList.add("open");
-}
-
-function contactSeller(id) {
-  const item = findListing(id);
-  if (!item) return;
-
-  const number = String(item.whatsapp || "").replace(/[^\d]/g,"");
-  if (!number) return toast("Seller has not provided a WhatsApp number.");
-
-  window.open("https://wa.me/" + number,"_blank","noopener");
-}
-
-async function publishListing(event) {
-  event.preventDefault();
-
-  if (!currentUser) return openAuth();
-
-  const title = $("productTitle").value.trim();
-  const price = Number($("productPrice").value);
-
-  if (!title || !Number.isFinite(price) || price <= 0) {
-    return toast("Enter a valid product name and price.");
-  }
-
-  const button = $("publishBtn");
-  button.disabled = true;
-  button.textContent = "Publishing...";
-
-  try {
-    let imageUrl = "";
-    const file = $("productImage").files[0];
-
-    if (file) {
-      if (!file.type.startsWith("image/")) throw new Error("Choose an image file.");
-      if (file.size > 5 * 1024 * 1024) throw new Error("Image must be smaller than 5 MB.");
-
-      const extension = file.name.split(".").pop().toLowerCase().replace(/[^a-z0-9]/g,"") || "jpg";
-      const path = `${currentUser.id}/${crypto.randomUUID()}.${extension}`;
-
-      const {error:uploadError} = await db.storage
-        .from("listing-images")
-        .upload(path,file,{upsert:false,contentType:file.type});
-
-      if (uploadError) throw uploadError;
-
-      const {data} = db.storage.from("listing-images").getPublicUrl(path);
-      imageUrl = data.publicUrl;
-    }
-
-    const listing = {
-      user_id:currentUser.id,
-      title,
-      price,
-      currency:$("productCurrency").value,
-      category:$("productCategory").value,
-      location:$("productLocation").value.trim(),
-      whatsapp:$("productWhatsapp").value.trim(),
-      description:$("productDescription").value.trim(),
-      image_url:imageUrl
-    };
-
-    const {error} = await db.from("listings").insert(listing);
-    if (error) throw error;
-
-    $("listingForm").reset();
-    toast("Your product has been published!");
-    await loadListings();
-    showPage("home");
-  } catch (error) {
-    console.error(error);
-    toast("Could not publish: " + error.message);
-  } finally {
-    button.disabled = false;
-    button.textContent = "Publish product";
-  }
-}
-
-async function requestOrder(id) {
-  if (!currentUser) {
-    closeDetail();
-    return openAuth();
-  }
-
-  const item = findListing(id);
-  if (!item) return toast("Product not found.");
-  if (item.user_id === currentUser.id) return toast("You cannot order your own listing.");
-
-  const amount = Number(item.price);
-  const commission = amount * 0.05;
-
-  const confirmed = confirm(
-    `Request to buy ${item.title}?\n` +
-    `Price: ${money(amount,item.currency)}\n` +
-    `Platform commission (5%): ${money(commission,item.currency)}\n\n` +
-    `This sends an order request. It does not transfer money.`
-  );
-  if (!confirmed) return;
-
-  const {error} = await db.from("jaom_order_requests").insert({
-    listing_id:item.id,
-    buyer_id:currentUser.id,
-    seller_id:item.user_id,
-    listing_title:item.title,
-    amount,
-    currency:item.currency,
-    status:"pending"
-  });
-
-  if (error) return toast("Order request failed: " + error.message);
-
-  closeDetail();
-  toast("Order request sent.");
-  showPage("orders");
-}
-
-async function loadOrders() {
-  if (!currentUser) {
-    $("ordersList").innerHTML = '<div class="empty">Please sign in to view your orders.</div>';
-    return;
-  }
-
-  $("ordersList").innerHTML = '<div class="empty">Loading orders...</div>';
-
-  const {data,error} = await db.from("jaom_order_requests")
-    .select("*")
-    .or(`buyer_id.eq.${currentUser.id},seller_id.eq.${currentUser.id}`)
-    .order("created_at",{ascending:false});
-
-  if (error) {
-    console.error(error);
-    $("ordersList").innerHTML = '<div class="empty">Could not load orders. Check your table permissions.</div>';
-    return;
-  }
-
-  const orders = data || [];
-  $("profileOrders").textContent = orders.length;
-
-  if (!orders.length) {
-    $("ordersList").innerHTML = '<div class="empty">You do not have any orders yet.</div>';
-    return;
-  }
-
-  $("ordersList").innerHTML = orders.map(order => `
-    <div style="padding:15px 0;border-bottom:1px solid #eee">
-      <strong>${escapeHTML(order.listing_title || "Order")}</strong>
-      <p class="muted">${money(order.amount,order.currency)}</p>
-      <span class="status">${escapeHTML(order.status || "pending")}</span>
-      <p class="muted" style="font-size:12px">Order ID: ${escapeHTML(order.id)}</p>
-    </div>
-  `).join("");
-}
-
-const translations = {
-  en:{
-    title:"JAOM",home:"Home",sell:"Sell a product",orders:"My orders",
-    profile:"My profile",settings:"Settings"
-  },
-  ar:{
-    title:"جاوم",home:"الرئيسية",sell:"بيع منتج",orders:"طلباتي",
-    profile:"ملفي الشخصي",settings:"الإعدادات"
-  },
-  sw:{
-    title:"JAOM",home:"Nyumbani",sell:"Uza bidhaa",orders:"Oda zangu",
-    profile:"Wasifu wangu",settings:"Mipangilio"
-  }
-};
-
-function changeLanguage(language) {
-  currentLanguage = language;
-  document.documentElement.lang = language;
-  document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
-
-  const t = translations[language] || translations.en;
-  document.querySelectorAll("[data-page]").forEach(button => {
-    const key = button.dataset.page;
-    const icon = button.querySelector("i");
-    const label = t[key];
-    if (label && icon) {
-      button.innerHTML = "";
-      button.append(icon);
-      button.append(document.createTextNode(label));
-    }
-  });
-
-  toast(language === "ar" ? "تم تغيير اللغة" :
-        language === "sw" ? "Lugha imebadilishwa" : "Language changed");
-  refreshIcons();
-}
-
-async function initializeApp() {
-  $("currencySelect").value = localStorage.getItem("jaom_currency") || "SSP";
-
-  const {data,error} = await db.auth.getSession();
-  if (error) console.error(error);
-
-  currentUser = data.session?.user || null;
-
-  if (currentUser) {
-    await ensureProfile();
-    await loadProfile();
-  }
-
-  await loadListings();
-
-  db.auth.onAuthStateChange(async (_event,session) => {
-    currentUser = session?.user || null;
-
-    if (currentUser) {
-      await ensureProfile();
-      await loadProfile();
-    } else {
-      profile = null;
-    }
-
-    await loadListings();
-  });
-
-  refreshIcons();
-}
-
+const SUPABASE_URL="https://ucprmvnjvqbpddozxtno.supabase.co";
+const SUPABASE_ANON_KEY="sb_publishable_eIygYOGjioGPzyZYjFIe1w_UxRBsWVz";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+let currentUser=null,listings=[],selectedCategory="All",profile=null,currentLanguage="en";
+const $=id=>document.getElementById(id);
+function toast(message){const el=$("toast");el.textContent=message;el.style.display="block";clearTimeout(window.jaomToastTimer);window.jaomToastTimer=setTimeout(()=>el.style.display="none",3500)}
+function escapeHTML(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function money(value,currency){return `${Number(value||0).toLocaleString()} ${escapeHTML(currency||"SSP")}`}
+function refreshIcons(){if(window.lucide)lucide.createIcons()}
+function showPage(page){["home","sell","orders","profile","settings"].forEach(p=>$("page-"+p).classList.toggle("hidden",p!==page));document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===page));if(page==="orders")loadOrders();if(page==="profile")loadProfile();if(page==="sell"&&!currentUser)openAuth();window.scrollTo({top:0,behavior:"smooth"});refreshIcons()}
+function openAuth(){$("authModal").classList.add("open");$("authMessage").textContent=""}
+function closeAuth(){$("authModal").classList.remove("open")}
+function closeDetail(){$("detailModal").classList.remove("open")}
+function closeReview(){$("reviewModal").classList.remove("open")}
+async function sendOTP(){const email=$("authEmail").value.trim();if(!email)return toast("Enter your email address.");$("sendOtpBtn").disabled=true;$("authMessage").textContent="Sending verification email...";try{const{error}=await db.auth.signInWithOtp({email,options:{shouldCreateUser:true}});if(error)throw error;$("otpArea").classList.remove("hidden");$("authMessage").textContent="Check your email for your verification code."}catch(e){$("authMessage").textContent=e.message}finally{$("sendOtpBtn").disabled=false}}
+async function verifyOTP(){const email=$("authEmail").value.trim(),token=$("authOTP").value.trim();if(!email||!token)return toast("Enter your email and verification code.");$("authMessage").textContent="Verifying...";try{const{data,error}=await db.auth.verifyOtp({email,token,type:"email"});if(error)throw error;currentUser=data.user;closeAuth();await ensureProfile();await loadProfile();await loadListings();toast("Welcome to JAOM!")}catch(e){$("authMessage").textContent=e.message}}
+async function signOut(){const{error}=await db.auth.signOut();if(error)return toast(error.message);currentUser=null;profile=null;$("profileEmail").textContent="Sign in to manage your profile";$("profileAvatar").src="https://placehold.co/120x120?text=JAOM";toast("You have signed out.");await loadListings();showPage("home")}
+async function ensureProfile(){if(!currentUser)return;const{data,error}=await db.from("profiles").select("*").eq("id",currentUser.id).maybeSingle();if(error){console.error("Profile read:",error);return}if(!data){const{error:ie}=await db.from("profiles").insert({id:currentUser.id,email:currentUser.email,name:(currentUser.email||"JAOM user").split("@")[0]});if(ie)console.error("Profile create:",ie)}}
+async function loadProfile(){if(!currentUser){$("profileName").textContent="Your profile";$("profileEmail").textContent="Sign in to manage your profile";$("profileLocation").textContent="";$("profileAvatar").src="https://placehold.co/120x120?text=JAOM";return}const{data,error}=await db.from("profiles").select("*").eq("id",currentUser.id).maybeSingle();if(error){console.error(error);return}profile=data||{};$("profileName").textContent=profile.name||"JAOM user";$("profileEmail").textContent="Your account email is private";$("profileLocation").textContent=profile.location||"";$("profileAvatar").src=profile.avatar_url||"https://placehold.co/120x120?text=JAOM";$("editName").value=profile.name||"";$("editLocation").value=profile.location||"";$("profileListings").textContent=listings.filter(x=>x.user_id===currentUser.id).length;await loadSellerRating(currentUser.id);await loadMyReviews()}
+async function saveProfile(){if(!currentUser)return openAuth();const name=$("editName").value.trim(),location=$("editLocation").value.trim();if(!name)return toast("Please enter your display name.");try{let avatar_url=profile?.avatar_url||null;const file=$("profileImage").files[0];if(file){if(!file.type.startsWith("image/"))throw new Error("Choose an image file.");if(file.size>5*1024*1024)throw new Error("Profile image must be smaller than 5 MB.");const ext=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";const path=`${currentUser.id}/profile-${crypto.randomUUID()}.${ext}`;const{error:upErr}=await db.storage.from("listing-images").upload(path,file,{upsert:false,contentType:file.type});if(upErr)throw upErr;avatar_url=db.storage.from("listing-images").getPublicUrl(path).data.publicUrl}const{error}=await db.from("profiles").upsert({id:currentUser.id,email:currentUser.email,name,location,avatar_url},{onConflict:"id"});if(error)throw error;await loadProfile();$("profileImage").value="";toast("Profile updated.")}catch(e){toast("Could not save profile: "+e.message)}}
+async function loadListings(){$("products").innerHTML='<div class="empty">Loading products...</div>';const{data,error}=await db.from("listings").select("*").order("created_at",{ascending:false}).limit(100);if(error){console.error(error);$("products").innerHTML='<div class="empty">Could not load products. Check your Supabase permissions and database setup.</div>';return}listings=data||[];renderListings();if(currentUser)loadProfile()}
+function setCategory(category,button){selectedCategory=category;document.querySelectorAll(".category").forEach(b=>b.classList.remove("active"));button.classList.add("active");renderListings()}
+function dealActive(item){return Number(item.deal_price)>0&&Number(item.deal_price)<Number(item.price)&&item.deal_ends_at&&new Date(item.deal_ends_at).getTime()>Date.now()}
+function countdown(date){const ms=new Date(date).getTime()-Date.now();if(!Number.isFinite(ms)||ms<=0)return"Ended";const d=Math.floor(ms/86400000),h=Math.floor(ms%86400000/3600000),m=Math.floor(ms%3600000/60000);return d?`${d}d ${h}h left`:`${h}h ${m}m left`}
+function renderListings(){const q=($("searchInput")?.value||"").toLowerCase();const filtered=listings.filter(x=>{const cat=selectedCategory==="All"||x.category===selectedCategory;const text=`${x.title||""} ${x.description||""} ${x.location||""}`.toLowerCase();return cat&&text.includes(q)});if(!filtered.length){$("products").innerHTML='<div class="empty">No products found.</div>';return}$("products").innerHTML=filtered.map(item=>{const image=item.image_url||"https://placehold.co/600x400?text=JAOM",deal=dealActive(item);return `<article class="product"><img src="${escapeHTML(image)}" alt="${escapeHTML(item.title)}" onerror="this.src='https://placehold.co/600x400?text=JAOM'"><div class="product-info">${deal?`<span class="badge-deal">SPECIAL DEAL</span>`:""}<h3>${escapeHTML(item.title)}</h3><div class="price">${money(deal?item.deal_price:item.price,item.currency)}${deal?`<span class="old-price">${money(item.price,item.currency)}</span>`:""}</div>${deal?`<div class="timer">Ends in ${escapeHTML(countdown(item.deal_ends_at))}</div>`:""}<p class="muted" style="font-size:12px;margin:8px 0"><i data-lucide="map-pin" style="width:13px;vertical-align:middle"></i> ${escapeHTML(item.location||"South Sudan")}</p><div class="product-actions"><button class="primary" onclick="showDetails('${item.id}')">View</button><button class="secondary" onclick="contactSeller('${item.id}')" title="Contact seller"><i data-lucide="message-circle"></i></button></div></div></article>`}).join("");refreshIcons()}
+function findListing(id){return listings.find(x=>String(x.id)===String(id))}function showDetails(id){const item=findListing(id);if(!item)return;const deal=dealActive(item);$("detailContent").innerHTML=`<img src="${escapeHTML(item.image_url||"https://placehold.co/600x400?text=JAOM")}" style="width:100%;height:210px;object-fit:cover;border-radius:12px"><h2 style="margin-top:15px">${escapeHTML(item.title)}</h2>${deal?'<span class="badge-deal">SPECIAL DEAL</span>':""}<div class="price">${money(deal?item.deal_price:item.price,item.currency)}${deal?`<span class="old-price">${money(item.price,item.currency)}</span>`:""}</div>${deal?`<p class="timer">Deal ends in ${escapeHTML(countdown(item.deal_ends_at))}</p>`:""}<p>${escapeHTML(item.description||"")}</p><p class="muted">${escapeHTML(item.category||"")} · ${escapeHTML(item.location||"")}</p><p class="muted">Estimated delivery: ${Math.max(1,Number(item.delivery_days)||3)} day(s), agreed with seller.</p><div id="sellerRatingInfo" class="muted">Seller rating loading...</div><button class="primary" onclick="requestOrder('${item.id}')">Request to buy</button> <button class="secondary" onclick="contactSeller('${item.id}')">Contact seller</button>`;$("detailModal").classList.add("open");loadSellerRating(item.user_id,"sellerRatingInfo")}
+function contactSeller(id){const item=findListing(id);if(!item)return;const n=String(item.whatsapp||"").replace(/[^\d]/g,"");if(!n)return toast("Seller has not provided a WhatsApp number.");window.open("https://wa.me/"+n,"_blank","noopener")}
+async function publishListing(event){event.preventDefault();if(!currentUser)return openAuth();const title=$("productTitle").value.trim(),price=Number($("productPrice").value),dealRaw=$("dealPrice").value.trim(),dealPrice=dealRaw?Number(dealRaw):null,dealDate=$("dealEndsAt").value?new Date($("dealEndsAt").value).toISOString():null,deliveryDays=Math.max(1,Math.min(60,Number($("deliveryDays").value)||3));if(!title||!Number.isFinite(price)||price<=0)return toast("Enter a valid product name and price.");if(dealRaw&&(!Number.isFinite(dealPrice)||dealPrice<=0||dealPrice>=price||!dealDate||new Date(dealDate)<=new Date()))return toast("A deal needs a lower price and a future end date.");const btn=$("publishBtn");btn.disabled=true;btn.textContent="Publishing...";try{let imageUrl="";const file=$("productImage").files[0];if(file){if(!file.type.startsWith("image/"))throw new Error("Choose an image file.");if(file.size>5*1024*1024)throw new Error("Image must be smaller than 5 MB.");const ext=file.name.split(".").pop().toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg",path=`${currentUser.id}/${crypto.randomUUID()}.${ext}`;const{error:ue}=await db.storage.from("listing-images").upload(path,file,{upsert:false,contentType:file.type});if(ue)throw ue;imageUrl=db.storage.from("listing-images").getPublicUrl(path).data.publicUrl}const listing={user_id:currentUser.id,title,price,currency:$("productCurrency").value,category:$("productCategory").value,location:$("productLocation").value.trim(),whatsapp:$("productWhatsapp").value.trim(),description:$("productDescription").value.trim(),image_url:imageUrl,deal_price:dealPrice,deal_ends_at:dealDate,delivery_days:deliveryDays};const{error}=await db.from("listings").insert(listing);if(error)throw error;$("listingForm").reset();$("deliveryDays").value=3;toast("Your product has been published!");await loadListings();showPage("home")}catch(e){console.error(e);toast("Could not publish: "+e.message)}finally{btn.disabled=false;btn.textContent="Publish product"}}
+async function requestOrder(id){if(!currentUser){closeDetail();return openAuth()}const item=findListing(id);if(!item)return toast("Product not found.");if(item.user_id===currentUser.id)return toast("You cannot order your own listing.");const amount=dealActive(item)?Number(item.deal_price):Number(item.price),commission=amount*.05,days=Math.max(1,Number(item.delivery_days)||3);if(!confirm(`Request to buy ${item.title}?\nPrice: ${money(amount,item.currency)}\nPlatform commission (5%): ${money(commission,item.currency)}\nEstimated delivery: ${days} day(s)\n\nThis sends an order request only. It does not transfer money.`))return;const created=new Date(),deliveryDue=new Date(created.getTime()+days*86400000),refundUntil=new Date(deliveryDue.getTime()+7*86400000);const{error}=await db.from("jaom_order_requests").insert({listing_id:item.id,buyer_id:currentUser.id,seller_id:item.user_id,listing_title:item.title,amount,currency:item.currency,status:"pending",delivery_days:days,delivery_due_at:deliveryDue.toISOString(),refund_deadline:refundUntil.toISOString()});if(error)return toast("Order request failed: "+error.message);closeDetail();toast("Order request sent.");showPage("orders")}
+async function loadOrders(){if(!currentUser){$("ordersList").innerHTML='<div class="empty">Please sign in to view your orders.</div>';return}$("ordersList").innerHTML='<div class="empty">Loading orders...</div>';const{data,error}=await db.from("jaom_order_requests").select("*").or(`buyer_id.eq.${currentUser.id},seller_id.eq.${currentUser.id}`).order("created_at",{ascending:false});if(error){console.error(error);$("ordersList").innerHTML='<div class="empty">Could not load orders. Check your table permissions and SQL setup.</div>';return}const orders=data||[];$("profileOrders").textContent=orders.length;if(!orders.length){$("ordersList").innerHTML='<div class="empty">You do not have any orders yet.</div>';return}$("ordersList").innerHTML=orders.map(o=>{const buyer=o.buyer_id===currentUser.id,deadline=o.delivery_due_at?new Date(o.delivery_due_at):null,refund=o.refund_deadline?new Date(o.refund_deadline):null,canRefund=buyer&&refund&&Date.now()<=refund.getTime()&&!["cancelled","refunded"].includes(o.status);return `<div style="padding:15px 0;border-bottom:1px solid #eee"><strong>${escapeHTML(o.listing_title||"Order")}</strong><p class="muted">${money(o.amount,o.currency)} · ${buyer?"Buyer":"Seller"}</p><span class="status">${escapeHTML(o.status||"pending")}</span>${deadline?`<p class="timer">Estimated delivery: ${deadline.toLocaleString()} (${deadline>Date.now()?countdown(deadline):"date passed"})</p>`:""}${refund?`<p class="muted" style="font-size:12px">Refund request deadline: ${refund.toLocaleString()} ${Date.now()<=refund.getTime()?"· "+countdown(refund):"· Deadline passed"}</p>`:""}<p class="muted" style="font-size:12px">Order ID: ${escapeHTML(o.id)}</p>${canRefund?`<button class="secondary" onclick="requestRefund('${o.id}')">Request refund</button>`:""}${buyer&&o.status==="completed"?` <button class="secondary" onclick="openReview('${o.seller_id}','${o.id}')">Rate seller</button>`:""}</div>`}).join("")}
+async function requestRefund(orderId){if(!currentUser)return openAuth();const reason=prompt("Briefly explain why you are requesting a refund:");if(!reason||!reason.trim())return;const{data:order,error:oe}=await db.from("jaom_order_requests").select("*").eq("id",orderId).eq("buyer_id",currentUser.id).maybeSingle();if(oe||!order)return toast("Could not find this order.");if(!order.refund_deadline||Date.now()>new Date(order.refund_deadline).getTime())return toast("The refund request deadline has passed.");const{error}=await db.from("jaom_refund_requests").insert({order_id:orderId,buyer_id:currentUser.id,reason:reason.trim(),status:"requested"});if(error)return toast("Refund request failed: "+error.message);toast("Refund request submitted for review. No automatic refund has been made.");loadOrders()}
+async function loadSellerRating(userId,targetId){const target=$(targetId||"profileRating");if(!target)return;const{data,error}=await db.from("jaom_seller_reviews").select("rating").eq("seller_id",userId);if(error){target.textContent=targetId?"Seller rating unavailable":"—";return}const rows=data||[];if(!rows.length){target.textContent=targetId?"No seller ratings yet":"—";return}const avg=rows.reduce((s,x)=>s+Number(x.rating||0),0)/rows.length;target.textContent=targetId?`★ ${avg.toFixed(1)} / 5 (${rows.length} reviews)`:`★ ${avg.toFixed(1)} / 5 (${rows.length})`}
+async function loadMyReviews(){if(!currentUser){$("myReviews").textContent="Sign in to view reviews.";return}const{data,error}=await db.from("jaom_seller_reviews").select("*").eq("seller_id",currentUser.id).order("created_at",{ascending:false}).limit(30);if(error){$("myReviews").textContent="Reviews are unavailable until the review table is configured.";return}if(!data?.length){$("myReviews").textContent="No reviews yet.";return}$("myReviews").innerHTML=data.map(r=>`<div class="review"><div class="stars">${"★".repeat(Number(r.rating)||0)}${"☆".repeat(5-(Number(r.rating)||0))}</div><p>${escapeHTML(r.review_text||"")}</p><small class="muted">${new Date(r.created_at).toLocaleDateString()}</small></div>`).join("")}
+function openReview(sellerId,orderId){$("reviewSellerId").value=sellerId;$("reviewOrderId").value=orderId;$("reviewText").value="";$("reviewModal").classList.add("open")}
+async function submitReview(){if(!currentUser)return openAuth();const seller_id=$("reviewSellerId").value,order_id=$("reviewOrderId").value,rating=Number($("reviewRating").value),review_text=$("reviewText").value.trim();if(!review_text)return toast("Please write a short review.");const{error}=await db.from("jaom_seller_reviews").insert({seller_id,buyer_id:currentUser.id,order_id,rating,review_text});if(error)return toast("Review could not be submitted: "+error.message);closeReview();toast("Thank you for reviewing the seller.");await loadOrders();await loadSellerRating(currentUser.id);await loadMyReviews()}
+async function enableNotifications(){if(!("Notification"in window))return toast("This browser does not support notifications.");if(!window.isSecureContext)return toast("Notifications require HTTPS.");const permission=await Notification.requestPermission();if(permission==="granted"){new Notification("JAOM notifications enabled",{body:"You can receive notifications while this page is open."});toast("Browser notifications enabled.")}else toast("Notification permission was not granted.")}
+const translations={en:{home:"Home",sell:"Sell a product",orders:"My orders",profile:"My profile",settings:"Settings"},ar:{home:"الرئيسية",sell:"بيع منتج",orders:"طلباتي",profile:"ملفي الشخصي",settings:"الإعدادات"},sw:{home:"Nyumbani",sell:"Uza bidhaa",orders:"Oda zangu",profile:"Wasifu wangu",settings:"Mipangilio"}};
+function changeLanguage(language){currentLanguage=language;document.documentElement.lang=language;document.documentElement.dir=language==="ar"?"rtl":"ltr";const t=translations[language]||translations.en;document.querySelectorAll("[data-page]").forEach(b=>{const k=b.dataset.page,icon=b.querySelector("i"),label=t[k];if(label&&icon){b.innerHTML="";b.append(icon);b.append(document.createTextNode(label))}});toast(language==="ar"?"تم تغيير اللغة":language==="sw"?"Lugha imebadilishwa":"Language changed");refreshIcons()}
+async function initializeApp(){$("currencySelect").value=localStorage.getItem("jaom_currency")||"SSP";const{data,error}=await db.auth.getSession();if(error)console.error(error);currentUser=data.session?.user||null;if(currentUser){await ensureProfile();await loadProfile()}await loadListings();db.auth.onAuthStateChange((_event,session)=>{setTimeout(async()=>{currentUser=session?.user||null;if(currentUser){await ensureProfile();await loadProfile()}else{profile=null;$("profileEmail").textContent="Sign in to manage your profile";$("profileAvatar").src="https://placehold.co/120x120?text=JAOM"}await loadListings()},0)});refreshIcons()}
 $("listingForm").addEventListener("submit",publishListing);
+setInterval(()=>{if(!$("page-home").classList.contains("hidden"))renderListings()},60000);
 initializeApp();
 </script>
-
+</body>
 </html>
